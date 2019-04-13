@@ -198,7 +198,8 @@ typedef struct{
 	SceUInt size;   //!< 0x1B8 for Vita 1.x
 	SceUID handle; //!< kernel module handle?
 	uint16_t flags;  //!< some bits. could be priority or whatnot
-	uint8_t unk0A[2];
+	uint8_t minor;
+	uint8_t major;
 
 	// 0xC
 	char module_name[0x1C];
@@ -285,7 +286,8 @@ typedef struct SceKernelModuleInfoObj_t {
 
 	// 0x20
 	uint16_t flags;
-	uint8_t unk22[2];
+	uint8_t minor;
+	uint8_t major;
 	const char *module_name;
 	int data_0x28;
 	int data_0x2C;
@@ -359,9 +361,9 @@ int func_0x81007790(SceUID pid, SceUID modid, SceKernelModuleInfo_fix_t *info){
 
 			info->handle = (pid == 0x10005) ? modid : info_obj->modid_user;
 
-			info->flags	= info_obj->flags;
-			info->unk0A[0]	= info_obj->unk22[0];
-			info->unk0A[1]	= info_obj->unk22[1];
+			info->flags = info_obj->flags;
+			info->minor = info_obj->minor;
+			info->major = info_obj->major;
 
 			strncpy(info->module_name, info_obj->module_name, 28-1);
 
