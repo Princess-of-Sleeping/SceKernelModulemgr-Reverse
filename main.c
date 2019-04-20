@@ -29,7 +29,7 @@ int write_file(const char *path, const void *data, size_t length){
 int __stack_chk_fail();
 
 // return value is previous value
-int sceKernelSetPermissionForDriver(int value);
+int ksceKernelSetPermission(int value);
 
 // return value is previous value
 SceUID ksceKernelSetProcessId(SceUID pid);
@@ -454,18 +454,6 @@ int __ksceKernelGetModuleInfo(SceUID pid, SceUID modid, SceKernelModuleInfo *inf
 	return func_0x81007790(pid, modid, (SceKernelModuleInfo_fix_t *)info);
 }
 
-// sceKernelFinalizeKblForKernel
-int SceModulemgrForKernel_FDD7F646(void){
-
-	SceUID modid;
-	modid = *(uint32_t *)(*(uint32_t *)(SceKernelModulemgr_data + 0x38)) + 0xA8);
-	if(modid <= 0){
-		return 0;
-	}
-
-	return module_stop_unload_for_pid(0x10005, modid, 0, 0, 0, 0, 0);
-}
-
 // sub_810021EC
 SceUID module_load_for_pid(SceUID pid, const char *path, int flags, SceKernelLMOption *option){
 	// yet not Reversed
@@ -508,9 +496,23 @@ SceUID module_load_start_shared_for_pid(SceUID pid, const char *path, SceSize ar
 	return 0;
 }
 
+
+
+// sceKernelFinalizeKblForKernel
+int SceModulemgrForKernel_FDD7F646(void){
+
+	SceUID modid;
+	modid = *(uint32_t *)(*(uint32_t *)(SceKernelModulemgr_data + 0x38) + 0xA8);
+	if(modid <= 0){
+		return 0;
+	}
+
+	return module_stop_unload_for_pid(0x10005, modid, 0, 0, 0, 0, 0);
+}
+
 SceUID ksceKernelLoadModule(const char *path, int flags, SceKernelLMOption *option){
 
-	if(((a2 & ~0x7D800) & ~0x1F0) != 0)
+	if(((flags & ~0x7D800) & ~0x1F0) != 0)
 		return 0x8002000A;
 
 	return module_load_for_pid(0x10005, path, flags, option);
@@ -548,7 +550,6 @@ int ksceKernelStartModuleForPid(SceUID pid, SceUID modid, SceSize args, void *ar
 
 	if(pid == 0)
 		return 0x8002D017;
-		goto loc_81002B34;
 
 	if(flags != 0)
 		return 0x8002000A;
