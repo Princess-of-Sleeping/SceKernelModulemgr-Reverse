@@ -664,7 +664,7 @@ void SceModulemgrForKernel_B427025E(int syscall_id, const void *func){
 }
 
 // non export
-int ksceKernelUnregisterSyscall(int syscall_id){
+void ksceKernelUnregisterSyscall(int syscall_id){
 
 	int dacr;
 
