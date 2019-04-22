@@ -156,6 +156,17 @@ int func_0x810021c0(SceUID pid){
 	return 0;
 }
 
+void *func_0x8100498c(SceUID pid, int len){
+	void *res;
+
+	if (pid != 0x10005) {
+		res = SceProcessmgrForDriver_00B1CA0F(pid, len);
+	}else{
+		res = ksceKernelSysrootAlloc(len);
+	}
+	return res;
+}
+
 int func_0x810049fc(const char *path){
 	const char **pPath;
 	int r0;
@@ -182,6 +193,44 @@ int func_0x810049fc(const char *path){
 int func_0x81004a54(void){
 	*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 4) = 0xffffffff;
 	return 0;
+}
+
+int func_0x81005a70(void *r0, const char *path, int flags){
+
+	int res = 0;
+	int path_len;
+	void *pPath;
+	uint16_t uVar1;
+
+	uVar1 = *(uint16_t *)(r0 + 4);
+	if((uVar1 & 0x500) != 0){
+		*(uint32_t *)(r0 + 0x68) = *(uint32_t *)(*(uint32_t *)(*(uint32_t *)(r0 + 0xD4) + 4) + 0x68);
+		return 0;
+	}
+
+	path_len = strnlen(path, 0xff);
+	if(((int)((uint32_t)uVar1 << 0x16) < 0) && (0xfe < path_len)){
+		res = 0x8002d01f;
+	}else{
+		pPath = func_0x8100498c(*(uint32_t *)(r0 + 0x14), path_len + 1);
+		*(int *)(r0 + 0x68) = pPath;
+		if(pPath == NULL){
+			res = 0x8002d008;
+		}else{
+			memcpy(pPath, path, path_len);
+			*(uint8_t *)(*(uint32_t *)(r0 + 0x68) + path_len) = 0;
+			if((flags & 0x800) != 0){
+				memcpy((void *)*(uint32_t *)(r0 + 0x68), "bootfs:", 7);
+			/*
+				*(uint32_t *)(*(uint32_t *)(r0 + 0x68) + 0) = 0x746f6f62;
+				*(uint16_t *)(*(uint32_t *)(r0 + 0x68) + 4) = 0x7366;
+				*(uint8_t  *)(*(uint32_t *)(r0 + 0x68) + 6) = 0x3a;
+			*/
+				return 0;
+			}
+		}
+	}
+	return res;
 }
 
 void func_0x81005b04(void *r0){
@@ -636,14 +685,43 @@ SceUID module_load_for_pid(SceUID pid, const char *path, int flags, SceKernelLMO
 	return 0;
 }
 
-// sub_81002EDC
-SceUID module_load_start_for_pid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status){
+// sub_8100286C
+int module_start_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status){
 	// yet not Reversed
 	return 0;
 }
 
-// sub_8100286C
-int module_start_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status){
+// sub_81002EDC
+SceUID module_load_start_for_pid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status){
+
+	int res;
+	int start_res;
+
+	res = module_load_for_pid(pid, path, flags, option);
+	if(res < 0)
+		goto end;
+
+	start_res = module_start_for_pid(pid, res, args, argp, flags, NULL, status);
+
+	if(start_res == 0)
+		goto end;
+
+	if(start_res == 1){
+		res = 0;
+		goto end;
+	}
+
+	if(1 < (0x7FFD7FD4 + res))
+		goto end;
+
+	module_stop_unload_for_pid(pid, res, 0, NULL, 0x40000000, NULL, NULL);
+
+end:
+	return res;
+}
+
+// sub_81002B40
+int module_stop_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status){
 	// yet not Reversed
 	return 0;
 }
@@ -654,25 +732,59 @@ int module_unload_for_pid(SceUID pid, SceUID modid, int flags, SceKernelULMOptio
 	return 0;
 }
 
-// sub_81002B40
-int module_stop_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status){
-	// yet not Reversed
-	return 0;
-}
-
 // sub_81002EB0
 int module_stop_unload_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status){
-	// yet not Reversed
-	return 0;
+
+	int res;
+
+	res = module_stop_for_pid(pid, modid, args, argp, flags, NULL, status);
+	if(res < 0)
+		goto end;
+
+	res = module_unload_for_pid(pid, modid, flags, option);
+
+end:
+	return res;
 }
 
 // sub_81003000
 SceUID module_load_start_shared_for_pid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status){
-	// yet not Reversed
-	return 0;
+	int res;
+	int start_res;
+	SceUID res_uid;
+  
+	res = module_load_for_pid(pid, path, flags | 1, NULL);
+
+	if(res < 0){
+		goto end;
+	}
+
+	if((flags & 0x100000) != 0){	// load only flag?
+		goto end;
+	}
+
+	start_res = module_start_for_pid(pid, path, args, argp, flags, NULL, status);
+	if (start_res == 0)
+		goto end;
+
+	if (start_res == 1){
+		res = 0;
+		goto end;
+	}
+
+	if(start_res == 0x8002D000){
+		// res = 0;	// ?
+		goto end;
+	}
+
+	if (1 < (0x7FFD7FD4 + res))
+		goto end;
+
+	module_stop_unload_for_pid(pid, res, 0, NULL, 0x48000000, NULL, NULL);
+
+end:
+	return res;
 }
-
-
 
 // sceKernelFinalizeKblForKernel
 int SceModulemgrForKernel_FDD7F646(void){
