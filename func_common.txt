@@ -1,0 +1,26 @@
+
+
+
+void func_0x810014a8(void);
+int func_0x81001ec4(SceUID pid);
+void *func_0x81001f0c(SceUID modid);
+
+
+int func_0x810021b8(SceUID pid);
+int func_0x810021c0(SceUID pid);
+int func_0x810021d8(SceUID pid);
+
+
+int func_0x810049fc(const char *path);
+int func_0x81004a54(void);
+
+
+int func_0x81005648(SceUID pid, int flags, void *dst);
+
+
+module_tree_top_t *func_0x81006e60(SceUID pid, int *cpu_suspend_intr);
+int func_0x81006e90(module_tree_top_t *module_tree_top, int cpu_suspend_intr);
+
+
+int func_0x81007790(SceUID pid, SceUID modid, SceKernelModuleInfo_fix_t *info)
+SceUID func_0x81007c5c(SceUID pid, const char *module_name);
