@@ -16,7 +16,7 @@ int ksceKernelStopUnloadModuleForPid(SceUID pid, SceUID modid, SceSize args, voi
 SceUID ksceKernelLoadStartSharedModuleForPid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
 
 void SceModulemgrForKernel_B427025E(int syscall_id, const void *func);	// ksceKernelRegisterSyscall
-void ksceKernelUnregisterSyscall(int syscall_id);						// // non export
+void ksceKernelUnregisterSyscall(int syscall_id);						// non export
 
 
 
