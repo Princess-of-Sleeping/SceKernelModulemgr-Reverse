@@ -1183,6 +1183,21 @@ label_0x81003242:
 	return res;
 }
 
+void *SceModulemgrForKernel_66606301(int a1){
+
+	void *res;
+
+	res = func_0x81001F0C(a1);
+	if(res == NULL)
+		goto label_0x810032CA;
+
+	res = *(uint32_t *)(res + 0xBC);
+	ksceKernelUidRelease(a1);
+
+label_0x810032CA:
+	return res;
+}
+
 void _start() __attribute__ ((weak, alias("module_start")));
 int module_start(SceSize args, void *argp){
 
