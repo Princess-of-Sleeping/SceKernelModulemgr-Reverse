@@ -1247,6 +1247,49 @@ int SceModulemgrForKernel_3AD26B43(int a1, int a2, int a3){
 	return 0;
 }
 
+int SceModulemgrForKernel_432DCC7A(SceUID pid){
+
+	int res;
+	int modnum = 0xF;
+	SceUID modlist[0x10];
+	void *pRes;
+
+	if(ksceKernelGetModuleList(pid, 0x80, 1, modlist, &modnum) < 0)
+		goto label_0x810036A4;
+
+	if(modnum == 0)
+		goto label_0x810036A4;
+
+	goto label_0x81003644;
+
+label_0x8100363E:
+	if(modnum == 0)
+		goto label_0x810036B0;
+
+label_0x81003644:
+	modnum -= 1;
+	pRes = func_0x81001F0C(modlist[modnum]);
+	if(pRes == NULL)
+		goto label_0x8100363E;
+
+	res = func_0x8100286C(pid, modlist[modnum], 0, 0, (ksceSysrootUseExternalStorage() != 0) ? 0x4000000 : 0, 0, 0);
+
+	ksceKernelUidRelease(modlist[modnum]);
+
+	if(res >= 0)
+		goto label_0x8100363E;
+
+	if(ksceSysrootUseExternalStorage() != 0)
+		goto label_0x8100363E;
+
+label_0x810036A4:
+	return res;
+
+label_0x810036B0:
+	res = 0;
+	goto label_0x810036A4;
+}
+
 void _start() __attribute__ ((weak, alias("module_start")));
 int module_start(SceSize args, void *argp){
 
@@ -1261,8 +1304,8 @@ int module_start(SceSize args, void *argp){
 	uid = _ksceKernelSearchModuleByName("SceKernelModulemgr");
 	write_file("ur0:data/module_rev_SceKernelModulemgr_uid.bin", &uid, 4);
 
-	void *data = func_0x81001f0c(uid);
-	write_file("ur0:data/module_rev_SceKernelModulemgr_data.bin", data, 0x400);
+	//void *data = func_0x81001f0c(uid);
+	//write_file("ur0:data/module_rev_SceKernelModulemgr_data.bin", data, 0x400);
 
 	// You can check the hash to see if the function is correct :)
 	SceKernelModuleInfo info;
