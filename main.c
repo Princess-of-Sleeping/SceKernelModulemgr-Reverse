@@ -14,485 +14,6 @@
 #include <stdio.h>
 #include <string.h>
 
-int write_file(const char *path, const void *data, size_t length){
-
-	SceUID fd = ksceIoOpen(path, SCE_O_WRONLY | SCE_O_CREAT | SCE_O_TRUNC, 6);
-	if (fd < 0)
-		return fd;
-
-	ksceIoWrite(fd, data, length);
-	ksceIoClose(fd);
-
-	return 0;
-}
-
-int __stack_chk_fail();
-
-// return value is previous value
-int ksceKernelSetPermission(int value);
-
-// return value is previous value
-SceUID ksceKernelSetProcessId(SceUID pid);
-
-SceClass *ksceKernelGetClassForUid(SceUID uid, SceClass **cls);
-
-int module_get_export_func(SceUID pid, const char *modname, uint32_t libnid, uint32_t funcnid, uintptr_t *func);
-
-#define GetExport(modname, libnid, funcnid, func) module_get_export_func(0x10005, modname, libnid, funcnid, (uintptr_t *)func)
-
-
-
-void *(* SceProcessmgrForKernel_C1C91BB2)(SceUID pid);
-int (* _ksceKernelGetModuleInfo)(SceUID pid, SceUID modid, SceKernelModuleInfo *info) = NULL;
-
-
-
-void *SceKernelModulemgr_text = NULL;
-void *SceKernelModulemgr_data = NULL;
-
-
-
-int get_function(void){
-
-	GetExport("SceProcessmgr", 0xFFFFFFFF, 0xC1C91BB2, &SceProcessmgrForKernel_C1C91BB2);
-
-	if(GetExport("SceKernelModulemgr", 0xC445FA63, 0xD269F915, &_ksceKernelGetModuleInfo) < 0)
-	if(GetExport("SceKernelModulemgr", 0x92C9FFC2, 0xDAA90093, &_ksceKernelGetModuleInfo) < 0)
-		return 1;
-
-	return 0;
-}
-
-int get_data(void){
-
-	tai_module_info_t tai_info;
-	tai_info.size = sizeof(tai_module_info_t);
-
-	SceKernelModuleInfo sce_info;
-	sce_info.size = sizeof(SceKernelModuleInfo);
-
-	taiGetModuleInfoForKernel(KERNEL_PID, "SceKernelModulemgr", &tai_info);
-
-	_ksceKernelGetModuleInfo(KERNEL_PID, tai_info.modid, &sce_info);
-
-	SceKernelModulemgr_text = sce_info.segments[0].vaddr;
-	SceKernelModulemgr_data = sce_info.segments[1].vaddr;
-
-	return 0;
-}
-
-typedef struct module_tree_t{
-	struct module_tree_t *next;
-	int data_0x04;		// ex : 0x28000 (flags?)
-	uint32_t version;	// ex : 0x03600011, -1, etc...
-	SceUID modid;
-	int data_0x10;
-	SceUID pid;
-	int data_0x18;		// ex : 0x1
-	const char *module_name;
-
-	// maybe more
-} module_tree_t;
-
-typedef struct module_tree_top_t{
-	SceUID pid;
-	void *data_0x04;
-	int data_0x08;
-	void *data_0x0C;
-	module_tree_t *module_tree;
-	int data_0x14;
-	int data_0x18;		// ex : 0x52
-	int data_0x1C;
-	int cpu_addr;
-	int data_0x24;		// ex : 0x1009B(modid?)
-	int data_0x28;
-	int data_0x2C;		// ex : 0x19D42EA0(void* ?)
-
-	// maybe more
-} module_tree_top_t;
-
-
-
-
-
-void func_0x810014a8(void){
-	int r0 = 1;
-	int r1 = 0;
-  
-	do{
-		if ((r0 & *(uint32_t *)(SceKernelModulemgr_data + 0x30)) != 0) {
-			*(int *)(SceKernelModulemgr_data + r1) += 1;
-		}
-		r0 <<= 1;
-		r1 += 4;
-	}while(r1 != 0x30);
-	*(uint32_t *)(SceKernelModulemgr_data + 0x30) = 0;
-	return;
-}
-
-int func_0x81001ec4(SceUID pid){
-	SceClass *cls;
-
-	cls = ksceKernelGetClassForUid(pid, NULL);
-	return ksceKernelGetObjForUid(pid, cls, 0);
-}
-
-int func_0x810021b8(SceUID pid){
-	ksceKernelUidRelease(pid);
-	return 0;
-}
-
-int func_0x810021d8(SceUID pid){
-	if (pid != 0x10005) {
-		ksceKernelUidRelease(pid);
-	}
-	return 0;
-}
-
-int func_0x810021c0(SceUID pid){
-	if (pid != 0x10005) {
-		return func_0x81001ec4(pid);
-	}
-	return 0;
-}
-
-void *func_0x8100498c(SceUID pid, int len){
-	void *res;
-
-	if (pid != 0x10005) {
-		res = SceProcessmgrForDriver_00B1CA0F(pid, len);
-	}else{
-		res = ksceKernelSysrootAlloc(len);
-	}
-	return res;
-}
-
-int func_0x810049fc(const char *path){
-	const char **pPath;
-	int r0;
-	int r1;
-
-	if(
-	  (*(uint32_t *)(SceKernelModulemgr_data + 0x304) != 0) && (*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 8) > 0)
-	){
-		r0 = 0;
-		r1 = 0;
-		do{
-			pPath = (const char **)(*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 0xc) + r0);
-			r0 += 0xC;
-			if(strncmp(path, *pPath, 0xFF) == 0){
-				*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 4) = r1;
-				return 0x7f7f7f7f;
-			}
-			r1 += 1;
-		}while(r1 != *(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 8));
-	}
-	return 0x80010002;
-}
-
-int func_0x81004a54(void){
-	*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 4) = 0xffffffff;
-	return 0;
-}
-
-int func_0x81005a70(void *r0, const char *path, int flags){
-
-	int res = 0;
-	int path_len;
-	void *pPath;
-	uint16_t uVar1;
-
-	uVar1 = *(uint16_t *)(r0 + 4);
-	if((uVar1 & 0x500) != 0){
-		*(uint32_t *)(r0 + 0x68) = *(uint32_t *)(*(uint32_t *)(*(uint32_t *)(r0 + 0xD4) + 4) + 0x68);
-		return 0;
-	}
-
-	path_len = strnlen(path, 0xff);
-	if(((int)((uint32_t)uVar1 << 0x16) < 0) && (0xfe < path_len)){
-		res = 0x8002d01f;
-	}else{
-		pPath = func_0x8100498c(*(uint32_t *)(r0 + 0x14), path_len + 1);
-		*(int *)(r0 + 0x68) = pPath;
-		if(pPath == NULL){
-			res = 0x8002d008;
-		}else{
-			memcpy(pPath, path, path_len);
-			*(uint8_t *)(*(uint32_t *)(r0 + 0x68) + path_len) = 0;
-			if((flags & 0x800) != 0){
-				memcpy((void *)*(uint32_t *)(r0 + 0x68), "bootfs:", 7);
-			/*
-				*(uint32_t *)(*(uint32_t *)(r0 + 0x68) + 0) = 0x746f6f62;
-				*(uint16_t *)(*(uint32_t *)(r0 + 0x68) + 4) = 0x7366;
-				*(uint8_t  *)(*(uint32_t *)(r0 + 0x68) + 6) = 0x3a;
-			*/
-				return 0;
-			}
-		}
-	}
-	return res;
-}
-
-void func_0x81005b04(void *r0){
-
-	if(SceQafMgrForDriver_382C71E8() != 0) {
-		if (*(int *)(r0 + 0x6c) < 2) {
-			ksceDebugPrintf2(0, (void *)(SceKernelModulemgr_text + 0xD90C), "[%-27s]:text=%p(0x%08x), (no data)\n",
-				*(int *)(r0 + 0x1c), *(int *)(r0 + 0x7c), *(int *)(r0 + 0x74)
-			);
-		}else{
-			ksceDebugPrintf2(0, (void *)(SceKernelModulemgr_text + 0xD8F4), "[%-27s]:text=%p(0x%08x), data=%p(0x%08x/0x%08x)\n",
-				*(int *)(r0 + 0x1c), *(int *)(r0 + 0x7c), *(int *)(r0 + 0x74),
-				*(int *)(r0 + 0x90), *(int *)(r0 + 0x84), *(int *)(r0 + 0x88)
-			);
-		}
-	}
-}
-
-
-
-
-/*
- * get_module_obj_for_pid
- *
- * pid			[in]
- * cpu_suspend_intr	[out]
- */
-module_tree_top_t *func_0x81006e60(SceUID pid, int *cpu_suspend_intr){
-	int r0, r1;
-	module_tree_top_t *r2;
-
-	r0 = func_0x810021c0(pid);
-	if (r0 < 0) {
-		r2 = NULL;
-	}else{
-		r2 = SceProcessmgrForKernel_C1C91BB2(pid);
-		if (r2 != NULL) {
-			r1 = ksceKernelCpuSuspendIntr((int *)(&r2->cpu_addr));
-			*cpu_suspend_intr = r1;
-		}
-
-		func_0x810021d8(pid);
-	}
-
-	return r2;
-}
-
-int func_0x81006e90(module_tree_top_t *module_tree_top, int cpu_suspend_intr){
-	return ksceKernelCpuResumeIntr((int *)(&module_tree_top->cpu_addr), cpu_suspend_intr);
-}
-
-int func_0x81007148(const char *path){
-
-	int cpu_suspend_intr;
-
-	int *piVar3;
-  
-	cpu_suspend_intr = ksceKernelCpuSuspendIntr((int *)(SceKernelModulemgr_data + 0x310));
-
-	piVar3 = (int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x30C));
-
-	while(1){
-		if(piVar3 == (int *)0x0){
-			ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_suspend_intr);
-			return 0;
-		}
-		if(strncmp(*(uint32_t *)(piVar3[1] + 0x68), path, 0x100) == 0)
-			break;
-		piVar3 = (int *)piVar3[0];
-	}
-	piVar3[2] += 1;
-	ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_suspend_intr);
-	return (int)piVar3;
-}
-
-int func_0x810071a8(void *r0){
-	int cpu_suspend_intr;
-  
-	cpu_suspend_intr = ksceKernelCpuSuspendIntr((int *)(SceKernelModulemgr_data + 0x310));
-	*(int *)(r0 + 8) += -1;
-	ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_suspend_intr);
-	return 0;
-}
-
-SceUID func_0x81007c5c(SceUID pid, const char *module_name){
-	module_tree_top_t *module_tree_top;
-	module_tree_t *module_tree;
-	SceUID uid;
-	int cpu_suspend_intr;
-	int stack_check;
-
-	stack_check = 0;
-
-	module_tree_top = func_0x81006e60(pid, &cpu_suspend_intr);
-	if(module_tree_top == NULL){
-		uid = 0x8002d080;
-	}else{
-
-		module_tree = module_tree_top->module_tree;
- 		while(module_tree != NULL){
-
-			if(strncmp(module_tree->module_name, module_name, 0x1a) == 0){
-				uid = module_tree->modid;
-				goto loc_81007c9a;
-			}
-			module_tree = module_tree->next;
-		}
-		uid = 0x8002d082;
-loc_81007c9a:
-		ksceKernelCpuResumeIntr((int *)(&module_tree_top->cpu_addr), cpu_suspend_intr);
-	}
-
-	if(stack_check != 0){
-		__stack_chk_fail();
-	}
-
-	return uid;
-}
-
-int func_0x81007f00(SceUID pid){
-	return *(uint16_t *)(SceProcessmgrForKernel_C1C91BB2(pid) + 0x1A) & 1;
-}
-
-int func_0x81005648(SceUID pid, int flags, void *dst){
-
-	int res;
-	int stack_check;
-	SceObjectBase *local_44;
-	SceCreateUidObjOpt local_40;
-
-	stack_check = 0;
-
-	if(pid == 0x10005){
-		res = ksceKernelCreateUidObj(
-			(SceClass *)*(uint32_t *)(SceKernelModulemgr_data + 0x48),
-			"SceModuleMgrNewModule",
-			0,
-			&local_44
-		);
-
-		if (res < 0)
-			goto loc_810056c8;
-
-		*(uint32_t *)(((char *)local_44) + 0x10) = 0xffffffff;
-		*(uint32_t *)(((char *)local_44) + 0x1c) = 0x10005;
-		*(uint32_t *)(((char *)local_44) + 0x14) = res;
-
-	}else{
-
-		local_40.field_10 = ((flags & 0x10) != 0) ? 1 : 0;
-
-		local_40.flags = 8;
-		local_40.field_4 = 0;
-		local_40.field_8 = 0;
-		local_40.pid = pid;
-		local_40.field_14 = 0;
-		local_40.field_18 = 0;
-
-		res = SceProcessmgrForKernel_B75FB970(pid);
-		if(res < 0)
-			goto loc_810056c8;
-
-		res = ksceKernelCreateUidObj(
-			(SceClass *)*(uint32_t *)(SceKernelModulemgr_data + 0x48),
-			"SceModuleMgrNewModule",
-			&local_40,
-			&local_44
-		);
-
-		if(res < 0){
-			SceProcessmgrForKernel_0A5A2CF1(pid, local_40.field_10);
-			goto loc_810056c8;
-		}
-		*(uint32_t *)(((char *)local_44) + 0x10) = 0x03600011;
-		*(uint32_t *)(((char *)local_44) + 0x1c) = pid;
-		*(uint32_t *)(((char *)local_44) + 0x14) = res;
-	}
-	res = (int)dst;
-	if(dst != NULL){
-		*(uint32_t *)dst = local_44;
-		res = 0;
-	}
-loc_810056c8:
-	if(stack_check != 0){
-		__stack_chk_fail();
-	}
-
-	return res;
-}
-
-SceUID _ksceKernelSearchModuleByName(const char *module_name){
-	return func_0x81007c5c(0x10005, module_name);
-}
-
-typedef struct{
-	SceUInt size;   //!< 0x1B8 for Vita 1.x
-	SceUID handle; //!< kernel module handle?
-	uint16_t flags;  //!< some bits. could be priority or whatnot
-	uint8_t minor;
-	uint8_t major;
-
-	// 0xC
-	char module_name[0x1C];
-
-	// 0x28
-	SceUInt unk28;
-	void *module_start;
-
-	// 0x30
-	SceUInt unk30;
-	void *module_stop;
-
-	void *exidxTop;
-	void *exidxBtm;
-	SceUInt unk40;
-	SceUInt unk44;
-
-	void *tlsInit;
-	SceSize tlsInitSize;
-	SceSize tlsAreaSize;
-	char path[256];
-	SceKernelSegmentInfo segments[4];
-	SceUInt type;   //!< 6 = user-mode PRX?
-} SceKernelModuleInfo_fix_t;
-
-void *func_0x81001f0c(SceUID modid){
-
-	int r0;
-	void *obj_base;
-	int stack_check;
-  
-	stack_check = 0;
-	r0 = ksceKernelGetObjForUid(modid, (SceClass *)*(uint32_t *)(SceKernelModulemgr_data + 0x48), (SceObjectBase **)&obj_base);
-	if (r0 < 0) {
-		obj_base = NULL;
-	}
-	if (stack_check != 0) {
-		__stack_chk_fail();
-	}
-
-	return obj_base;
-}
-
-int _ksceKernelGetModuleInternal(SceUID modid, void **module){
-
-	void *r0 = func_0x81001f0c(modid);
-	if (r0 == NULL)
-		goto loc_810032EA;
-
-	if (module == NULL)
-		goto loc_810032E0;
-
-	*(uint32_t *)(module) = (uint32_t)(r0 + 8);
-
-loc_810032E0:
-	ksceKernelUidRelease(modid);
-	return 0;
-
-loc_810032EA:
-	return 0x8002D011;
-}
-
 typedef struct{
 	SceUInt flags;
 	SceUInt memsz;
@@ -564,6 +85,419 @@ typedef struct SceKernelModuleInfoObj_t {
 	// more
 
 } SceKernelModuleInfoObj_t; // sizeof == 0x100
+
+typedef struct{
+	SceUInt size;   //!< 0x1B8 for Vita 1.x
+	SceUID handle; //!< kernel module handle?
+	uint16_t flags;  //!< some bits. could be priority or whatnot
+	uint8_t minor;
+	uint8_t major;
+
+	// 0xC
+	char module_name[0x1C];
+
+	// 0x28
+	SceUInt unk28;
+	void *module_start;
+
+	// 0x30
+	SceUInt unk30;
+	void *module_stop;
+
+	void *exidxTop;
+	void *exidxBtm;
+	SceUInt unk40;
+	SceUInt unk44;
+
+	void *tlsInit;
+	SceSize tlsInitSize;
+	SceSize tlsAreaSize;
+	char path[256];
+	SceKernelSegmentInfo segments[4];
+	SceUInt type;   //!< 6 = user-mode PRX?
+} SceKernelModuleInfo_fix_t;
+
+typedef struct module_tree_t{
+	struct module_tree_t *next;
+	int data_0x04;		// ex : 0x28000 (flags?)
+	uint32_t version;	// ex : 0x03600011, -1, etc...
+	SceUID modid;
+	int data_0x10;
+	SceUID pid;
+	int data_0x18;		// ex : 0x1
+	const char *module_name;
+
+	// maybe more
+} module_tree_t;
+
+typedef struct module_tree_top_t{
+	SceUID pid;
+	void *data_0x04;
+	int data_0x08;
+	void *data_0x0C;
+	module_tree_t *module_tree;
+	int data_0x14;
+	int data_0x18;		// ex : 0x52
+	int data_0x1C;
+	int cpu_addr;
+	int data_0x24;		// ex : 0x1009B(modid?)
+	int data_0x28;
+	int data_0x2C;		// ex : 0x19D42EA0(void* ?)
+
+	// maybe more
+} module_tree_top_t;
+
+int write_file(const char *path, const void *data, size_t length){
+
+	SceUID fd = ksceIoOpen(path, SCE_O_WRONLY | SCE_O_CREAT | SCE_O_TRUNC, 6);
+	if (fd < 0)
+		return fd;
+
+	ksceIoWrite(fd, data, length);
+	ksceIoClose(fd);
+
+	return 0;
+}
+
+int __stack_chk_fail();
+
+// return value is previous value
+int ksceKernelSetPermission(int value);
+
+// return value is previous value
+SceUID ksceKernelSetProcessId(SceUID pid);
+
+// SceSysmem
+SceClass *ksceKernelGetClassForUid(SceUID uid, SceClass **cls);
+
+int module_get_export_func(SceUID pid, const char *modname, uint32_t libnid, uint32_t funcnid, uintptr_t *func);
+
+#define GetExport(modname, libnid, funcnid, func) module_get_export_func(0x10005, modname, libnid, funcnid, (uintptr_t *)func)
+
+
+void *(* sceKernelGetProcessClassForKernel)(void);
+void *(* SceProcessmgrForKernel_C1C91BB2)(SceUID pid);
+int (* _ksceKernelGetModuleInfo)(SceUID pid, SceUID modid, SceKernelModuleInfo *info) = NULL;
+
+
+
+void *SceKernelModulemgr_text = NULL;
+void *SceKernelModulemgr_data = NULL;
+
+
+
+int get_function(void){
+
+	GetExport("SceProcessmgr", 0xFFFFFFFF, 0xC1C91BB2, &SceProcessmgrForKernel_C1C91BB2);
+	GetExport("SceProcessmgr", 0xFFFFFFFF, 0xC6820972, &sceKernelGetProcessClassForKernel);
+
+	if(GetExport("SceKernelModulemgr", 0xC445FA63, 0xD269F915, &_ksceKernelGetModuleInfo) < 0)
+	if(GetExport("SceKernelModulemgr", 0x92C9FFC2, 0xDAA90093, &_ksceKernelGetModuleInfo) < 0)
+		return 1;
+
+	return 0;
+}
+
+int get_data(void){
+
+	tai_module_info_t tai_info;
+	tai_info.size = sizeof(tai_module_info_t);
+
+	SceKernelModuleInfo sce_info;
+	sce_info.size = sizeof(SceKernelModuleInfo);
+
+	taiGetModuleInfoForKernel(KERNEL_PID, "SceKernelModulemgr", &tai_info);
+
+	_ksceKernelGetModuleInfo(KERNEL_PID, tai_info.modid, &sce_info);
+
+	SceKernelModulemgr_text = sce_info.segments[0].vaddr;
+	SceKernelModulemgr_data = sce_info.segments[1].vaddr;
+
+	return 0;
+}
+
+
+
+
+
+void func_0x810014a8(void){
+	int r0 = 1;
+	int r1 = 0;
+  
+	do{
+		if ((r0 & *(uint32_t *)(SceKernelModulemgr_data + 0x30)) != 0) {
+			*(int *)(SceKernelModulemgr_data + r1) += 1;
+		}
+		r0 <<= 1;
+		r1 += 4;
+	}while(r1 != 0x30);
+	*(uint32_t *)(SceKernelModulemgr_data + 0x30) = 0;
+	return;
+}
+
+int func_0x81001ec4(SceUID pid){
+	return ksceKernelGetObjForUid(pid, sceKernelGetProcessClassForKernel(), 0);
+}
+
+void *func_0x81001f0c(SceUID modid){
+
+	int r0;
+	void *obj_base;
+	int stack_check;
+  
+	stack_check = 0;
+	r0 = ksceKernelGetObjForUid(modid, (SceClass *)*(uint32_t *)(SceKernelModulemgr_data + 0x48), (SceObjectBase **)&obj_base);
+	if (r0 < 0) {
+		obj_base = NULL;
+	}
+	if (stack_check != 0) {
+		__stack_chk_fail();
+	}
+
+	return obj_base;
+}
+
+int func_0x810021b8(SceUID pid){
+	ksceKernelUidRelease(pid);
+	return 0;
+}
+
+int func_0x810021d8(SceUID pid){
+	if (pid != 0x10005) {
+		ksceKernelUidRelease(pid);
+	}
+	return 0;
+}
+
+int func_0x810021c0(SceUID pid){
+	if (pid != 0x10005) {
+		return func_0x81001ec4(pid);
+	}
+	return 0;
+}
+
+void *func_0x8100498c(SceUID pid, int len){
+	void *res;
+
+	if (pid != 0x10005) {
+		res = SceProcessmgrForDriver_00B1CA0F(pid, len);
+	}else{
+		res = ksceKernelSysrootAlloc(len);
+	}
+	return res;
+}
+
+int func_0x810049fc(const char *path){
+	const char **pPath;
+	int r0;
+	int r1;
+
+	if(
+	  (*(uint32_t *)(SceKernelModulemgr_data + 0x304) != 0) && (*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 8) > 0)
+	){
+		r0 = 0;
+		r1 = 0;
+		do{
+			pPath = (const char **)(*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 0xc) + r0);
+			r0 += 0xC;
+			if(strncmp(path, *pPath, 0xFF) == 0){
+				*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 4) = r1;
+				return 0x7f7f7f7f;
+			}
+			r1 += 1;
+		}while(r1 != *(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 8));
+	}
+	return 0x80010002;
+}
+
+int func_0x81004a54(void){
+	*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 4) = 0xffffffff;
+	return 0;
+}
+
+int func_0x81005648(SceUID pid, int flags, void *dst){
+
+	int res;
+	int stack_check;
+	SceObjectBase *local_44;
+	SceCreateUidObjOpt local_40;
+
+	stack_check = 0;
+
+	if(pid == 0x10005){
+		res = ksceKernelCreateUidObj(
+			(SceClass *)*(uint32_t *)(SceKernelModulemgr_data + 0x48),
+			"SceModuleMgrNewModule",
+			0,
+			&local_44
+		);
+
+		if (res < 0)
+			goto loc_810056c8;
+
+		*(uint32_t *)(((char *)local_44) + 0x10) = 0xffffffff;
+		*(uint32_t *)(((char *)local_44) + 0x1c) = 0x10005;
+		*(uint32_t *)(((char *)local_44) + 0x14) = res;
+
+	}else{
+
+		local_40.field_10 = ((flags & 0x10) != 0) ? 1 : 0;
+
+		local_40.flags = 8;
+		local_40.field_4 = 0;
+		local_40.field_8 = 0;
+		local_40.pid = pid;
+		local_40.field_14 = 0;
+		local_40.field_18 = 0;
+
+		res = SceProcessmgrForKernel_B75FB970(pid);
+		if(res < 0)
+			goto loc_810056c8;
+
+		res = ksceKernelCreateUidObj(
+			(SceClass *)*(uint32_t *)(SceKernelModulemgr_data + 0x48),
+			"SceModuleMgrNewModule",
+			&local_40,
+			&local_44
+		);
+
+		if(res < 0){
+			SceProcessmgrForKernel_0A5A2CF1(pid, local_40.field_10);
+			goto loc_810056c8;
+		}
+		*(uint32_t *)(((char *)local_44) + 0x10) = 0x03600011;
+		*(uint32_t *)(((char *)local_44) + 0x1c) = pid;
+		*(uint32_t *)(((char *)local_44) + 0x14) = res;
+	}
+	res = (int)dst;
+	if(dst != NULL){
+		*(uint32_t *)dst = local_44;
+		res = 0;
+	}
+loc_810056c8:
+	if(stack_check != 0){
+		__stack_chk_fail();
+	}
+
+	return res;
+}
+
+int func_0x81005a70(void *r0, const char *path, int flags){
+
+	int res = 0;
+	int path_len;
+	void *pPath;
+	uint16_t uVar1;
+
+	uVar1 = *(uint16_t *)(r0 + 4);
+	if((uVar1 & 0x500) != 0){
+		*(uint32_t *)(r0 + 0x68) = *(uint32_t *)(*(uint32_t *)(*(uint32_t *)(r0 + 0xD4) + 4) + 0x68);
+		return 0;
+	}
+
+	path_len = strnlen(path, 0xff);
+	if(((int)((uint32_t)uVar1 << 0x16) < 0) && (0xfe < path_len)){
+		res = 0x8002d01f;
+	}else{
+		pPath = func_0x8100498c(*(uint32_t *)(r0 + 0x14), path_len + 1);
+		*(int *)(r0 + 0x68) = pPath;
+		if(pPath == NULL){
+			res = 0x8002d008;
+		}else{
+			memcpy(pPath, path, path_len);
+			*(uint8_t *)(*(uint32_t *)(r0 + 0x68) + path_len) = 0;
+			if((flags & 0x800) != 0){
+				memcpy((void *)*(uint32_t *)(r0 + 0x68), "bootfs:", 7);
+			/*
+				*(uint32_t *)(*(uint32_t *)(r0 + 0x68) + 0) = 0x746f6f62;
+				*(uint16_t *)(*(uint32_t *)(r0 + 0x68) + 4) = 0x7366;
+				*(uint8_t  *)(*(uint32_t *)(r0 + 0x68) + 6) = 0x3a;
+			*/
+				return 0;
+			}
+		}
+	}
+	return res;
+}
+
+void func_0x81005b04(void *r0){
+
+	if(SceQafMgrForDriver_382C71E8() != 0) {
+		if (*(int *)(r0 + 0x6c) < 2) {
+			ksceDebugPrintf2(0, (void *)(SceKernelModulemgr_text + 0xD90C), "[%-27s]:text=%p(0x%08x), (no data)\n",
+				*(int *)(r0 + 0x1c), *(int *)(r0 + 0x7c), *(int *)(r0 + 0x74)
+			);
+		}else{
+			ksceDebugPrintf2(0, (void *)(SceKernelModulemgr_text + 0xD8F4), "[%-27s]:text=%p(0x%08x), data=%p(0x%08x/0x%08x)\n",
+				*(int *)(r0 + 0x1c), *(int *)(r0 + 0x7c), *(int *)(r0 + 0x74),
+				*(int *)(r0 + 0x90), *(int *)(r0 + 0x84), *(int *)(r0 + 0x88)
+			);
+		}
+	}
+}
+
+/*
+ * get_module_obj_for_pid
+ *
+ * pid			[in]
+ * cpu_suspend_intr	[out]
+ */
+module_tree_top_t *func_0x81006e60(SceUID pid, int *cpu_suspend_intr){
+	int r0, r1;
+	module_tree_top_t *r2;
+
+	r0 = func_0x810021c0(pid);
+	if (r0 < 0) {
+		r2 = NULL;
+	}else{
+		r2 = SceProcessmgrForKernel_C1C91BB2(pid);
+		if (r2 != NULL) {
+			r1 = ksceKernelCpuSuspendIntr((int *)(&r2->cpu_addr));
+			*cpu_suspend_intr = r1;
+		}
+
+		func_0x810021d8(pid);
+	}
+
+	return r2;
+}
+
+int func_0x81006e90(module_tree_top_t *module_tree_top, int cpu_suspend_intr){
+	return ksceKernelCpuResumeIntr((int *)(&module_tree_top->cpu_addr), cpu_suspend_intr);
+}
+
+int func_0x81007148(const char *path){
+
+	int cpu_suspend_intr;
+
+	int *piVar3;
+  
+	cpu_suspend_intr = ksceKernelCpuSuspendIntr((int *)(SceKernelModulemgr_data + 0x310));
+
+	piVar3 = (int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x30C));
+
+	while(1){
+		if(piVar3 == (int *)0x0){
+			ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_suspend_intr);
+			return 0;
+		}
+		if(strncmp(*(uint32_t *)(piVar3[1] + 0x68), path, 0x100) == 0)
+			break;
+		piVar3 = (int *)piVar3[0];
+	}
+	piVar3[2] += 1;
+	ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_suspend_intr);
+	return (int)piVar3;
+}
+
+int func_0x810071a8(void *r0){
+	int cpu_suspend_intr;
+  
+	cpu_suspend_intr = ksceKernelCpuSuspendIntr((int *)(SceKernelModulemgr_data + 0x310));
+	*(int *)(r0 + 8) += -1;
+	ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_suspend_intr);
+	return 0;
+}
 
 int func_0x81007790(SceUID pid, SceUID modid, SceKernelModuleInfo_fix_t *info){
 
@@ -669,6 +603,68 @@ loc_810077e6:
 	}
 
 	return res;
+}
+
+SceUID func_0x81007c5c(SceUID pid, const char *module_name){
+	module_tree_top_t *module_tree_top;
+	module_tree_t *module_tree;
+	SceUID uid;
+	int cpu_suspend_intr;
+	int stack_check;
+
+	stack_check = 0;
+
+	module_tree_top = func_0x81006e60(pid, &cpu_suspend_intr);
+	if(module_tree_top == NULL){
+		uid = 0x8002d080;
+	}else{
+
+		module_tree = module_tree_top->module_tree;
+ 		while(module_tree != NULL){
+
+			if(strncmp(module_tree->module_name, module_name, 0x1a) == 0){
+				uid = module_tree->modid;
+				goto loc_81007c9a;
+			}
+			module_tree = module_tree->next;
+		}
+		uid = 0x8002d082;
+loc_81007c9a:
+		ksceKernelCpuResumeIntr((int *)(&module_tree_top->cpu_addr), cpu_suspend_intr);
+	}
+
+	if(stack_check != 0){
+		__stack_chk_fail();
+	}
+
+	return uid;
+}
+
+int func_0x81007f00(SceUID pid){
+	return *(uint16_t *)(SceProcessmgrForKernel_C1C91BB2(pid) + 0x1A) & 1;
+}
+
+SceUID _ksceKernelSearchModuleByName(const char *module_name){
+	return func_0x81007c5c(0x10005, module_name);
+}
+
+int _ksceKernelGetModuleInternal(SceUID modid, void **module){
+
+	void *r0 = func_0x81001f0c(modid);
+	if (r0 == NULL)
+		goto loc_810032EA;
+
+	if (module == NULL)
+		goto loc_810032E0;
+
+	*(uint32_t *)(module) = (uint32_t)(r0 + 8);
+
+loc_810032E0:
+	ksceKernelUidRelease(modid);
+	return 0;
+
+loc_810032EA:
+	return 0x8002D011;
 }
 
 int __ksceKernelGetModuleInfo(SceUID pid, SceUID modid, SceKernelModuleInfo *info){
