@@ -1240,6 +1240,8 @@ label_0x81003350:
 }
 
 // Bigger function
+// sceKernelLoadPreloadingModulesForKernel
+// https://wiki.henkaku.xyz/vita/SceKernelModulemgr#sceKernelLoadPreloadingModulesForKernel
 int SceModulemgrForKernel_3AD26B43(int a1, int a2, int a3){
 	// yet not Reversed
 	return 0;
