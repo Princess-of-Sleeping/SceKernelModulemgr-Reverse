@@ -1194,6 +1194,51 @@ label_0x810032CA:
 	return res;
 }
 
+int SceModulemgrForKernel_78DBC027(SceUID pid, SceUID UserUid, void *a3, void *a4){
+
+	void *res1;
+
+	if(pid != 0x10005)
+		goto label_0x81003316;
+
+label_0x8100330A:
+	return 0x8002D012;
+
+label_0x81003316:
+	if(func_0x81001EC4(pid) < 0)
+		goto label_0x8100330A;
+
+	KernelUid = ksceKernelKernelUidForUserUid(pid, UserUid);
+
+	if(KernelUid >= 0)
+		goto label_0x81003336;
+
+	ksceKernelUidRelease(pid);
+
+	return KernelUid;
+
+label_0x81003336:
+	res1 = func_0x81001F0C(KernelUid);
+	if(res1 != 0)
+		goto label_0x81003350;
+
+	ksceKernelUidRelease(pid);
+
+	return 0x8002D011;
+
+label_0x81003350:
+	*(uint32_t *)(a3) = *(uint32_t *)(res1 + 0xB4);
+	*(uint32_t *)(a4) = *(uint32_t *)(res1 + 0xB8);
+	ksceKernelUidRelease(KernelUid);
+	ksceKernelUidRelease(pid);
+
+	if(*(uint32_t *)(a3) == 0){
+		return 0x8002D01C;
+	}else{
+		return 0;
+	}
+}
+
 void _start() __attribute__ ((weak, alias("module_start")));
 int module_start(SceSize args, void *argp){
 
