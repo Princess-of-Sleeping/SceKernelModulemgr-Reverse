@@ -1157,6 +1157,31 @@ int SceModulemgrForKernel_F95D09C2(const char *path, void *a2, void *a3){
 	return 0;
 }
 
+int SceModulemgrForDriver_861638AD(int a1){
+
+	int res;
+	int some_uid;
+	void *arg1;
+
+	some_uid = func_0x81007C10(0x10005, a1);
+	if(some_uid < 0)
+		return some_uid;
+
+	arg1 = func_0x81001F0C(some_uid);
+	if(arg1 == NULL)
+		return 0x8002D011;
+
+	res = func_0x81005FEC(arg1 + 8, a1);
+	if(res < 0)
+		goto label_0x81003242;
+
+	res = func_0x81004198(arg1 + 8, res, 1);
+
+label_0x81003242:
+	ksceKernelUidRelease(some_uid);
+	ksceKernelCpuIcacheInvalidateAll();
+	return res;
+}
 
 void _start() __attribute__ ((weak, alias("module_start")));
 int module_start(SceSize args, void *argp){
