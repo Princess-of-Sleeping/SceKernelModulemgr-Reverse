@@ -764,41 +764,60 @@ end:
 
 // sub_81003000
 SceUID module_load_start_shared_for_pid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status){
-	int res;
-	int start_res;
-	SceUID res_uid;
-  
-	res = module_load_for_pid(pid, path, flags | 1, NULL);
+	SceUID res;
+	SceUID modid;
+	int mod_start_res;
 
-	if(res < 0){
-		goto end;
-	}
+	modid = module_load_for_pid(pid, path, flags | 1, NULL);
 
-	if((flags & 0x100000) != 0){	// load only flag?
-		goto end;
-	}
+	if(modid < 0)
+		goto label_0x81003022;
 
-	start_res = module_start_for_pid(pid, path, args, argp, flags, NULL, status);
-	if (start_res == 0)
-		goto end;
+	if((flags & 0x100000) == 0) // not set load only flag
+		goto label_0x8100302A;
 
-	if (start_res == 1){
-		res = 0;
-		goto end;
-	}
+label_0x81003022:
+	res = modid;
 
-	if(start_res == 0x8002D000){
-		// res = 0;	// ?
-		goto end;
-	}
-
-	if (1 < (0x7FFD7FD4 + res))
-		goto end;
-
-	module_stop_unload_for_pid(pid, res, 0, NULL, 0x48000000, NULL, NULL);
-
-end:
+label_0x81003024:
 	return res;
+
+label_0x8100302A:
+
+	mod_start_res = module_start_for_pid(pid, modid, args, argp, flags, NULL, status);
+
+	if(mod_start_res == 0)
+		goto label_0x81003022;
+
+	if(mod_start_res == 1){
+		res = 0;
+		goto label_0x81003024;
+	}
+
+	/*
+	 * 0x8002D000(SCE_KERNEL_ERROR_MODULEMGR_START_FAILED)
+	 */
+	if(mod_start_res == 0x8002D000)
+		goto label_0x81003082;
+
+	/*
+	 * 0x8002802C(SCE_KERNEL_ERROR_THREAD_STOPPED)
+	 * 0x8002802D(SCE_KERNEL_ERROR_THREAD_SUSPENDED)
+	 *
+	 * The above error code does not unload module
+	 */
+	if((uint32_t)(0x7FFD7FD4 + mod_start_res) <= 1){
+		goto label_0x81003082;
+	}
+
+	module_stop_unload_for_pid(pid, modid, 0, 0, 0x48000000, 0, 0);
+
+	res = mod_start_res;
+	goto label_0x81003024;
+
+label_0x81003082:
+	res = mod_start_res;
+	goto label_0x81003024;
 }
 
 // sceKernelFinalizeKblForKernel
