@@ -694,29 +694,44 @@ int module_start_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int
 // sub_81002EDC
 SceUID module_load_start_for_pid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status){
 
-	int res;
-	int start_res;
+	SceUID res;
+	SceUID modid;
+	int mod_start_res;
 
-	res = module_load_for_pid(pid, path, flags, option);
-	if(res < 0)
-		goto end;
+	modid = module_load_for_pid(pid, path, flags, option);
 
-	start_res = module_start_for_pid(pid, res, args, argp, flags, NULL, status);
+	if(modid < 0)
+		goto label_0x81002F4A;
 
-	if(start_res == 0)
-		goto end;
+	mod_start_res = module_start_for_pid(pid, modid, args, argp, flags, 0, status);
 
-	if(start_res == 1){
+	if(mod_start_res == 0)
+		goto label_0x81002F4A;
+
+	if(mod_start_res == 1){
 		res = 0;
-		goto end;
+		goto label_0x81002F4C;
 	}
 
-	if(1 < (0x7FFD7FD4 + res))
-		goto end;
+	/*
+	 * 0x8002802C(SCE_KERNEL_ERROR_THREAD_STOPPED)
+	 * 0x8002802D(SCE_KERNEL_ERROR_THREAD_SUSPENDED)
+	 *
+	 * The above error code does not unload module
+	 */
+	if((uint32_t)(0x7FFD7FD4 + mod_start_res) <= 1){
+		res = mod_start_res;
+		goto label_0x81002F4C;
+	}
 
-	module_stop_unload_for_pid(pid, res, 0, NULL, 0x40000000, NULL, NULL);
+	module_stop_unload_for_pid(pid, modid, 0, 0, 0x40000000, 0, 0);
 
-end:
+	return mod_start_res;
+
+label_0x81002F4A:
+	res = modid;
+
+label_0x81002F4C:
 	return res;
 }
 
