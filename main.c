@@ -1290,6 +1290,25 @@ label_0x810036B0:
 	goto label_0x810036A4;
 }
 
+int SceModulemgrForKernel_2A69385E(){
+
+	int res;
+
+	func_0x810014D4(...);
+	*(uint32_t *)(SceKernelModulemgr_data + 0x2F8) = ksceKernelGetThreadId();
+	*(uint32_t *)(SceKernelModulemgr_data + 0x2FC) = func_0x81007C10(0x10005, lr);
+
+	res = SceThreadmgrForDriver_E50E1185(0x10023, "SceKernelUnloadMySelf", (void *)(SceKernelModulemgr_text + 0x3155), (void *)(SceKernelModulemgr_data + 0x2F8));
+	if(res < 0)
+		goto label_0x81003706;
+
+	res = ksceKernelExitDeleteThread(0);
+	res = res & (res >> 31);
+
+label_0x81003706:
+	return res;
+}
+
 void _start() __attribute__ ((weak, alias("module_start")));
 int module_start(SceSize args, void *argp){
 
