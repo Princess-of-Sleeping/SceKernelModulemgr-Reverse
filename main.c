@@ -1309,6 +1309,45 @@ label_0x81003706:
 	return res;
 }
 
+int ksceKernelGetSystemSwVersion(SceKernelFwInfo *data){
+
+	int res;
+	int sysver;
+	SceKernelFwInfo *info_internal = (SceKernelFwInfo *)(SceKernelModulemgr_data + 0x2D0);
+
+	if(data->size != 0x28)
+		goto label_0x81003DB2;
+
+	if(*(uint32_t *)(SceKernelModulemgr_data + 0x34) == 0)
+		goto label_0x81003D5E;
+
+label_0x81003D28:
+	memcpy(data, info_internal, sizeof(SceKernelFwInfo));
+
+	res = 0;
+
+label_0x81003D58:
+	return res;
+
+label_0x81003D5E:
+	sysver = SceSysrootForDriver_67AAB627();
+
+	info_internal->size    = sizeof(SceKernelFwInfo);
+	info_internal->version = sysver;
+	info_internal->unk_24  = 0;
+	snprintf(info_internal->versionString, 0x1C, "%d.%02d",
+		((sysver >> 0x18) & ((1 << 4) - 1)) + (((sysver >> 0x1C) + ((sysver >> 0x1C) << 0x2)) << 0x1),
+		(((sysver >> 0x10) & ((1 << 4) - 1)) + ((((sysver >> 0x14) & ((1 << 4) - 1)) + (((sysver >> 0x14) & ((1 << 4) - 1)) << 0x2)) << 0x1))
+	);
+
+	*(uint32_t *)(SceKernelModulemgr_data + 0x34) += 1;
+	goto label_0x81003D28;
+
+label_0x81003DB2:
+	res = 0x80020005;
+	goto label_0x81003D58;
+}
+
 void _start() __attribute__ ((weak, alias("module_start")));
 int module_start(SceSize args, void *argp){
 
