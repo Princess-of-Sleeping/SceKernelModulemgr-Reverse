@@ -235,6 +235,32 @@ void func_0x810014a8(void){
 	return;
 }
 
+void func_0x810014D4(void){
+
+	void *ptr = (void *)(SceKernelModulemgr_data);
+	*(uint32_t *)(ptr + 0x0) = 0;
+	*(uint32_t *)(ptr + 0x4) = 0;
+	ptr += 8;
+	*(uint32_t *)(ptr + 0x0) = 0;
+	*(uint32_t *)(ptr + 0x4) = 0;
+	ptr += 8;
+	*(uint32_t *)(ptr + 0x0) = 0;
+	*(uint32_t *)(ptr + 0x4) = 0;
+	ptr += 8;
+	*(uint32_t *)(ptr + 0x0) = 0;
+	*(uint32_t *)(ptr + 0x4) = 0;
+	ptr += 8;
+	*(uint32_t *)(ptr + 0x0) = 0;
+	*(uint32_t *)(ptr + 0x4) = 0;
+	ptr += 8;
+	*(uint32_t *)(ptr + 0x0) = 0;
+	*(uint32_t *)(ptr + 0x4) = 0;
+	ptr += 8;
+	*(uint32_t *)(ptr + 0x0) = 0;
+
+	return;
+}
+
 int func_0x81001ec4(SceUID pid){
 	return ksceKernelGetObjForUid(pid, sceKernelGetProcessClassForKernel(), 0);
 }
@@ -1290,11 +1316,12 @@ label_0x810036B0:
 	goto label_0x810036A4;
 }
 
-int SceModulemgrForKernel_2A69385E(){
+int SceModulemgrForKernel_2A69385E(void){
 
 	int res;
-
-	func_0x810014D4(...);
+	void *lr;
+	__asm__ volatile ("mov %0, lr" : "=r" (lr));
+	func_0x810014D4();
 	*(uint32_t *)(SceKernelModulemgr_data + 0x2F8) = ksceKernelGetThreadId();
 	*(uint32_t *)(SceKernelModulemgr_data + 0x2FC) = func_0x81007C10(0x10005, lr);
 
