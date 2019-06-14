@@ -1348,6 +1348,41 @@ label_0x81003DB2:
 	goto label_0x81003D58;
 }
 
+int ksceKernelMountBootfs(const char *bootImagePath){
+
+	int res;
+	void *pRes;
+	SceUID modid;
+
+	void *BootfsMountInfo = (void *)(SceKernelModulemgr_data + 0x304);
+
+	if(*(uint32_t *)(BootfsMountInfo) != 0)
+		goto label_0x81004AF6;
+
+	modid = ksceKernelLoadStartModule(bootImagePath, 0, 0, 0x100, 0, 0);
+	if(modid < 0){
+		res = modid;
+		goto label_0x81004AF2;
+	}
+
+	pRes = SceSysmemForKernel_C0A4D2F3(0x10);
+	*(uint32_t *)(BootfsMountInfo) = pRes;
+	*(uint32_t *)(pRes + 0x00) = modid;
+	*(uint32_t *)(pRes + 0x04) = 0xFFFFFFFF;
+	*(uint32_t *)(pRes + 0x08) = 0;
+	*(uint32_t *)(pRes + 0x0C) = 0;
+	func_0x81001F0C(modid);
+	func_0x810021B8(modid);
+	res = 0;
+
+label_0x81004AF2:
+
+	return res;
+
+label_0x81004AF6:
+	return 0x8002D021;
+}
+
 void _start() __attribute__ ((weak, alias("module_start")));
 int module_start(SceSize args, void *argp){
 
