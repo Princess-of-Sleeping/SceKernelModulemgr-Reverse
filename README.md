@@ -20,7 +20,7 @@ ksceKernelUnloadModuleForPid<br>
 ksceKernelStopModuleForPid<br>
 SceModulemgrForKernel_FDD7F646(sceKernelFinalizeKblForKernel)<br>
 SceModulemgrForKernel_F95D09C2<br>
-SceModulemgrForKernel_2A69385E(Unknown argument)<br>
+SceModulemgrForKernel_2A69385E<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
 SceModulemgrForKernel_3AD26B43(sceKernelLoadPreloadingModulesForKernel)<br>
