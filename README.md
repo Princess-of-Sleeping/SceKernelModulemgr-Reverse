@@ -7,6 +7,7 @@ ksceKernelGetModuleInternal<br>
 SceModulemgrForKernel_B427025E(ksceKernelRegisterSyscall)<br>
 
 ### SceModulemgrForDriver
+ksceKernelGetSystemSwVersion<br>
 ksceKernelSearchModuleByName<br>
 
 ## List of only frame(prototype) reversed
@@ -39,8 +40,10 @@ SceModulemgrForDriver_861638AD<br>
 ## yet not Reversed List
 
 ### SceModulemgrForDriver
-ksceKernelGetSystemSwVersion<br>
-more...<br>
+SceModulemgrForDriver_02D3D0C1<br>
+SceModulemgrForDriver_0975B104<br>
+SceModulemgrForDriver_1D9E0F7E<br>
+more...?<br>
 
 ### SceModulemgrForKernel
 SceModulemgrForKernel_0E33258E<br>
