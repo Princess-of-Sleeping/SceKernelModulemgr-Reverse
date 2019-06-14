@@ -13,11 +13,8 @@ ksceKernelSearchModuleByName<br>
 ### SceModulemgrForKernel
 ksceKernelLoadModuleForPid<br>
 ksceKernelStartModuleForPid<br>
-ksceKernelLoadStartModuleForPid<br>
 ksceKernelUnloadModuleForPid<br>
 ksceKernelStopModuleForPid<br>
-ksceKernelStopUnloadModuleForPid<br>
-ksceKernelLoadStartSharedModuleForPid<br>
 SceModulemgrForKernel_FDD7F646(sceKernelFinalizeKblForKernel)<br>
 SceModulemgrForKernel_F95D09C2<br>
 SceModulemgrForKernel_2A69385E(Unknown argument)<br>
@@ -31,9 +28,12 @@ SceModulemgrForKernel_2A69385E<br>
 ksceKernelLoadModule<br>
 ksceKernelStartModule<br>
 ksceKernelLoadStartModule<br>
+ksceKernelLoadStartModuleForPid<br>
 ksceKernelUnloadModule<br>
 ksceKernelStopModule<br>
 ksceKernelStopUnloadModule<br>
+ksceKernelStopUnloadModuleForPid<br>
+ksceKernelLoadStartSharedModuleForPid<br>
 SceModulemgrForDriver_861638AD<br>
 
 ## yet not Reversed List
