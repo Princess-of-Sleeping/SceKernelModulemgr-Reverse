@@ -12,6 +12,9 @@ SceModulemgrForKernel_B427025E(ksceKernelRegisterSyscall)<br>
 ksceKernelGetSystemSwVersion<br>
 ksceKernelSearchModuleByName<br>
 
+### SceModulemgr
+sceKernelInhibitLoadingModule<br>
+
 ## List of only frame(prototype) reversed
 ### SceModulemgrForKernel
 ksceKernelLoadModuleForPid<br>
@@ -80,3 +83,21 @@ SceModulemgrForKernel_F3CD647F<br>
 SceModulemgrForKernel_FB251B7A<br>
 SceModulemgrForKernel_FF2264BB<br>
 maybe more...<br>
+
+### SceModulemgr
+sceKernelGetModuleList
+sceKernelGetModuleInfo
+sceKernelGetAllowedSdkVersionOnSystem
+sceKernelGetSystemSwVersion
+sceKernelIsCalledFromSysModule
+sceKernelGetLibraryInfoByNID
+sceKernelGetModuleIdByAddr
+SceModulemgr_086867A8
+SceModulemgr_60647592
+SceModulemgr_72CD301F
+SceModulemgr_849E78BE
+SceModulemgr_86EAEA0A
+SceModulemgr_8E4A7716
+SceModulemgr_9D674F45
+SceModulemgr_B4C5EF9E
+
