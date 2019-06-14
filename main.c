@@ -1354,9 +1354,9 @@ int ksceKernelMountBootfs(const char *bootImagePath){
 	void *pRes;
 	SceUID modid;
 
-	void *BootfsMountInfo = (void *)(SceKernelModulemgr_data + 0x304);
+	void *pBootfsMountInfo = (void *)(SceKernelModulemgr_data + 0x304);
 
-	if(*(uint32_t *)(BootfsMountInfo) != 0)
+	if(*(uint32_t *)(pBootfsMountInfo) != 0)
 		goto label_0x81004AF6;
 
 	modid = ksceKernelLoadStartModule(bootImagePath, 0, 0, 0x100, 0, 0);
@@ -1366,7 +1366,7 @@ int ksceKernelMountBootfs(const char *bootImagePath){
 	}
 
 	pRes = SceSysmemForKernel_C0A4D2F3(0x10);
-	*(uint32_t *)(BootfsMountInfo) = pRes;
+	*(uint32_t *)(pBootfsMountInfo) = pRes;
 	*(uint32_t *)(pRes + 0x00) = modid;
 	*(uint32_t *)(pRes + 0x04) = 0xFFFFFFFF;
 	*(uint32_t *)(pRes + 0x08) = 0;
@@ -1381,6 +1381,30 @@ label_0x81004AF2:
 
 label_0x81004AF6:
 	return 0x8002D021;
+}
+
+int ksceKernelUmountBootfs(void){
+
+	int res;
+	SceUID modid;
+	void *pBootfsMountInfo = (void *)(SceKernelModulemgr_data + 0x304);
+
+	if(*(uint32_t *)(pBootfsMountInfo) == 0)
+		goto label_0x81004B34;
+
+	modid = *(SceUID *)(*(uint32_t *)(pBootfsMountInfo));
+
+	ksceKernelStopUnloadModule(modid, 0, 0, 0, 0, 0);
+	SceSysmemForKernel_ABAB0FAB(*(uint32_t *)(pBootfsMountInfo));
+	res = 0;
+	*(uint32_t *)(pBootfsMountInfo) = 0;
+
+label_0x81004B30:
+	return res;
+
+label_0x81004B34:
+	res = 0x8002D001;
+	goto label_0x81004B30;
 }
 
 void _start() __attribute__ ((weak, alias("module_start")));
