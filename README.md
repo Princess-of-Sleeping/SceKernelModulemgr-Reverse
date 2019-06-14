@@ -1,5 +1,10 @@
 # SceKernelModulemgr-Reverse
 
+# List of only frame(prototype) reversed
+## SceModulemgrForKernel
+SceModulemgrForKernel_F95D09C2<br>
+SceModulemgrForKernel_2A69385E(Unknown argument)<br>
+
 # yet not Reversed List
 
 ## SceModulemgrForDriver
