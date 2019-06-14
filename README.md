@@ -1,17 +1,48 @@
 # SceKernelModulemgr-Reverse
 
-# List of only frame(prototype) reversed
-## SceModulemgrForKernel
+## Reverse Completed
+### SceModulemgrForKernel
+ksceKernelGetModuleInfo<br>
+ksceKernelGetModuleInternal<br>
+SceModulemgrForKernel_B427025E(ksceKernelRegisterSyscall)<br>
+
+### SceModulemgrForDriver
+ksceKernelSearchModuleByName<br>
+
+## List of only frame(prototype) reversed
+### SceModulemgrForKernel
+ksceKernelLoadModuleForPid<br>
+ksceKernelStartModuleForPid<br>
+ksceKernelLoadStartModuleForPid<br>
+ksceKernelUnloadModuleForPid<br>
+ksceKernelStopModuleForPid<br>
+ksceKernelStopUnloadModuleForPid<br>
+ksceKernelLoadStartSharedModuleForPid<br>
+SceModulemgrForKernel_FDD7F646(sceKernelFinalizeKblForKernel)<br>
 SceModulemgrForKernel_F95D09C2<br>
 SceModulemgrForKernel_2A69385E(Unknown argument)<br>
+SceModulemgrForKernel_66606301<br>
+SceModulemgrForKernel_78DBC027<br>
+SceModulemgrForKernel_3AD26B43(sceKernelLoadPreloadingModulesForKernel)<br>
+SceModulemgrForKernel_432DCC7A(maybe sceKernelStartPreloadingModulesForKernel)<br>
+SceModulemgrForKernel_2A69385E<br>
 
-# yet not Reversed List
+### SceModulemgrForDriver
+ksceKernelLoadModule<br>
+ksceKernelStartModule<br>
+ksceKernelLoadStartModule<br>
+ksceKernelUnloadModule<br>
+ksceKernelStopModule<br>
+ksceKernelStopUnloadModule<br>
+SceModulemgrForDriver_861638AD<br>
 
-## SceModulemgrForDriver
+## yet not Reversed List
+
+### SceModulemgrForDriver
 ksceKernelGetSystemSwVersion<br>
 more...<br>
 
-## SceModulemgrForKernel
+### SceModulemgrForKernel
 SceModulemgrForKernel_0E33258E<br>
 SceModulemgrForKernel_AC4EABDB<br>
 SceModulemgrForKernel_29CB2771<br>
