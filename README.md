@@ -85,19 +85,19 @@ SceModulemgrForKernel_FF2264BB<br>
 maybe more...<br>
 
 ### SceModulemgr
-sceKernelGetModuleList
-sceKernelGetModuleInfo
-sceKernelGetAllowedSdkVersionOnSystem
-sceKernelGetSystemSwVersion
-sceKernelIsCalledFromSysModule
-sceKernelGetLibraryInfoByNID
-sceKernelGetModuleIdByAddr
-SceModulemgr_086867A8
-SceModulemgr_60647592
-SceModulemgr_72CD301F
-SceModulemgr_849E78BE
-SceModulemgr_86EAEA0A
-SceModulemgr_8E4A7716
-SceModulemgr_9D674F45
-SceModulemgr_B4C5EF9E
+sceKernelGetModuleList<br>
+sceKernelGetModuleInfo<br>
+sceKernelGetAllowedSdkVersionOnSystem<br>
+sceKernelGetSystemSwVersion<br>
+sceKernelIsCalledFromSysModule<br>
+sceKernelGetLibraryInfoByNID<br>
+sceKernelGetModuleIdByAddr<br>
+SceModulemgr_086867A8<br>
+SceModulemgr_60647592<br>
+SceModulemgr_72CD301F<br>
+SceModulemgr_849E78BE<br>
+SceModulemgr_86EAEA0A<br>
+SceModulemgr_8E4A7716<br>
+SceModulemgr_9D674F45<br>
+SceModulemgr_B4C5EF9E<br>
 
