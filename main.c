@@ -631,6 +631,41 @@ loc_810077e6:
 	return res;
 }
 
+int func_0x81007C10(SceUID pid, const void *lr){
+
+	int res;
+	void *pRes;
+
+	if(pid == 0)
+		pid = ksceKernelGetProcessId();
+
+label_0x81007C22:
+	modid = func_0x81007BBC(pid, lr);
+	if(pid == 0x10005)
+		goto label_0x81007C4A;
+
+	if(modid <= 0)
+		goto label_0x81007C4A;
+
+	pRes = func_0x81001F0C(modid);
+	if(pRes == 0)
+		goto label_0x81007C4E;
+
+	func_0x810021B8(modid);
+	res = *(uint32_t *)(pRes + 0x18);
+	got label_0x81007C56;
+
+label_0x81007C4A:
+	res = modid;
+	got label_0x81007C56;
+
+label_0x81007C4E:
+	res = 0x8002D011;
+
+label_0x81007C56:
+	return res;
+}
+
 SceUID func_0x81007c5c(SceUID pid, const char *module_name){
 	module_tree_top_t *module_tree_top;
 	module_tree_t *module_tree;
