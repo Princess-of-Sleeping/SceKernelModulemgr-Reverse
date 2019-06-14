@@ -304,6 +304,53 @@ int func_0x810021c0(SceUID pid){
 	return 0;
 }
 
+int func_0x81003708(uint16_t flag){
+
+	int res;
+	void *pRes;
+	SceUID pid;
+	int *cpu_suspend_intr;
+
+	if((flag & ~0x30) != 0)
+		goto label_0x8100375C;
+
+	pid = ksceKernelGetProcessId();
+	if(pid == 0x10005)
+		goto label_0x81003764;
+
+	pRes = func_0x81006E60(pid, &cpu_suspend_intr);
+	if(pRes == NULL)
+		goto label_0x8100377C;
+
+	if(flag <= (*(uint16_t *)(pRes + 0x1A) & 0x30))
+		goto label_0x8100376E;
+
+	*(uint16_t *)(pRes + 0x1A) = (flag | (*(uint16_t *)(pRes + 0x1A) & ~0x30));
+	func_0x81006E90(pRes, cpu_suspend_intr);
+
+	res = 0;
+
+label_0x8100374E:
+	return res;
+
+label_0x8100375C:
+	res = 0x80020005;
+	goto label_0x8100374E;
+
+label_0x81003764:
+	res = 0x8002D017;
+	goto label_0x8100374E;
+
+label_0x8100376E:
+	func_0x81006E90(pRes, cpu_suspend_intr);
+	res = 0x80020005;
+	goto label_0x8100374E;
+
+label_0x8100377C:
+	res = 0x8002D080;
+	goto label_0x8100374E;
+}
+
 void *func_0x8100498c(SceUID pid, int len){
 	void *res;
 
@@ -1398,6 +1445,18 @@ label_0x81004B30:
 label_0x81004B34:
 	res = 0x8002D001;
 	goto label_0x81004B30;
+}
+
+int sceKernelInhibitLoadingModule(uint16_t flag){
+
+	int res;
+	uint32_t state;
+
+	ENTER_SYSCALL(state);
+	res = sub_81003708(flag);
+	EXIT_SYSCALL(state);
+
+	return res;
 }
 
 void _start() __attribute__ ((weak, alias("module_start")));
