@@ -4,6 +4,8 @@
 ### SceModulemgrForKernel
 ksceKernelGetModuleInfo<br>
 ksceKernelGetModuleInternal<br>
+ksceKernelMountBootfs<br>
+ksceKernelUmountBootfs<br>
 SceModulemgrForKernel_B427025E(ksceKernelRegisterSyscall)<br>
 
 ### SceModulemgrForDriver
