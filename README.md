@@ -52,7 +52,6 @@ SceModulemgrForDriver_861638AD<br>
 maybe n/a<br>
 
 ### SceModulemgrForKernel
-SceModulemgrForKernel_0053BA4A<br>
 SceModulemgrForKernel_0E33258E<br>
 SceModulemgrForKernel_1BDE2ED2<br>
 SceModulemgrForKernel_1D341231<br>
