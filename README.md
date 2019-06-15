@@ -47,6 +47,14 @@ SceModulemgrForDriver_0975B104<br>
 SceModulemgrForDriver_1D9E0F7E<br>
 SceModulemgrForDriver_861638AD<br>
 
+### SceModulemgr
+sceKernelGetModuleInfo<br>
+sceKernelGetAllowedSdkVersionOnSystem<br>
+sceKernelGetSystemSwVersion<br>
+sceKernelIsCalledFromSysModule<br>
+sceKernelGetLibraryInfoByNID<br>
+sceKernelGetModuleIdByAddr<br>
+
 ## yet not Reversed List
 
 ### SceModulemgrForDriver
@@ -86,12 +94,6 @@ maybe more...<br>
 
 ### SceModulemgr
 sceKernelGetModuleList<br>
-sceKernelGetModuleInfo<br>
-sceKernelGetAllowedSdkVersionOnSystem<br>
-sceKernelGetSystemSwVersion<br>
-sceKernelIsCalledFromSysModule<br>
-sceKernelGetLibraryInfoByNID<br>
-sceKernelGetModuleIdByAddr<br>
 SceModulemgr_086867A8<br>
 SceModulemgr_60647592<br>
 SceModulemgr_72CD301F<br>
