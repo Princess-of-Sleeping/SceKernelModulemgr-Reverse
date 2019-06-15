@@ -25,6 +25,7 @@ ksceKernelStartModuleForPid<br>
 ksceKernelUnloadModuleForPid<br>
 ksceKernelStopModuleForPid<br>
 SceModulemgrForKernel_0053BA4A<br>
+SceModulemgrForKernel_0E33258E<br>
 SceModulemgrForKernel_2A69385E<br>
 SceModulemgrForKernel_3AD26B43(sceKernelLoadPreloadingModulesForKernel)<br>
 SceModulemgrForKernel_432DCC7A(maybe sceKernelStartPreloadingModulesForKernel)<br>
@@ -52,7 +53,6 @@ SceModulemgrForDriver_861638AD<br>
 maybe n/a<br>
 
 ### SceModulemgrForKernel
-SceModulemgrForKernel_0E33258E<br>
 SceModulemgrForKernel_1BDE2ED2<br>
 SceModulemgrForKernel_1D341231<br>
 SceModulemgrForKernel_1FDEAE16<br>
