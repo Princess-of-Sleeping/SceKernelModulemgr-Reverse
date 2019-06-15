@@ -16,14 +16,20 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
 
 add_executable(SceKernelModulemgr_Reverse
   main.c
+  modulemgr.c
+  modulemgr_for_driver.c
+  modulemgr_for_kernel.c
 )
 
 target_link_libraries(SceKernelModulemgr_Reverse
+  SceDebugForDriver_stub
   SceIofilemgrForDriver_stub
   SceThreadmgrForDriver_stub
   SceSysmemForDriver_stub
   SceSysclibForDriver_stub
+  SceSysrootForKernel_stub
   SceCpuForDriver_stub
+  SceCpuForKernel_stub
 
   taihenForKernel_stub
   taihenModuleUtils_stub
