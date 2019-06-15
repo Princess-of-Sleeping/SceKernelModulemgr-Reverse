@@ -1,9 +1,13 @@
 # SceKernelModulemgr-Reverse
 There is nothing to guarantee perfect operation<br>
 
+## Tested functions
+ksceKernelGetModuleInfo<br>
+ksceKernelSearchModuleByName<br>
+
 ## Reverse Completed
 ### SceModulemgrForKernel
-ksceKernelGetModuleInfo(It certainly worked)<br>
+ksceKernelGetModuleInfo<br>
 ksceKernelGetModuleInternal<br>
 ksceKernelMountBootfs<br>
 ksceKernelUmountBootfs<br>
@@ -13,7 +17,7 @@ SceModulemgrForKernel_B427025E(ksceKernelRegisterSyscall)<br>
 
 ### SceModulemgrForDriver
 ksceKernelGetSystemSwVersion<br>
-ksceKernelSearchModuleByName(It certainly worked)<br>
+ksceKernelSearchModuleByName<br>
 
 ### SceModulemgr
 sceKernelInhibitLoadingModule<br>
