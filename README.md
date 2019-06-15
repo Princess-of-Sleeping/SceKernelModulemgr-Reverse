@@ -42,12 +42,12 @@ ksceKernelStopUnloadModule<br>
 ksceKernelStopUnloadModuleForPid<br>
 ksceKernelLoadStartSharedModuleForPid<br>
 SceModulemgrForDriver_02D3D0C1(ksceKernelStopUnloadSharedModuleForPid)<br>
+SceModulemgrForDriver_0975B104<br>
 SceModulemgrForDriver_861638AD<br>
 
 ## yet not Reversed List
 
 ### SceModulemgrForDriver
-SceModulemgrForDriver_0975B104<br>
 SceModulemgrForDriver_1D9E0F7E<br>
 more...?<br>
 
