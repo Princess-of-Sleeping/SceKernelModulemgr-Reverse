@@ -27,6 +27,9 @@ SceModulemgrForDriver_1D9E0F7E(ksceKernelGetModuleInfoByAddr)<br>
 
 ### SceModulemgr
 sceKernelInhibitLoadingModule<br>
+sceKernelGetModuleInfo<br>
+sceKernelGetSystemSwVersion<br>
+sceKernelGetModuleIdByAddr<br>
 
 ## List of only frame(prototype) reversed
 ### SceModulemgrForKernel
@@ -55,12 +58,9 @@ SceModulemgrForDriver_0975B104<br>
 SceModulemgrForDriver_861638AD<br>
 
 ### SceModulemgr
-sceKernelGetModuleInfo<br>
 sceKernelGetAllowedSdkVersionOnSystem<br>
-sceKernelGetSystemSwVersion<br>
 sceKernelIsCalledFromSysModule<br>
 sceKernelGetLibraryInfoByNID<br>
-sceKernelGetModuleIdByAddr<br>
 
 ## yet not Reversed List
 
