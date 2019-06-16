@@ -54,8 +54,8 @@ ksceKernelStopUnloadModule<br>
 ksceKernelStopUnloadModuleForPid<br>
 ksceKernelLoadStartSharedModuleForPid<br>
 SceModulemgrForDriver_02D3D0C1(ksceKernelStopUnloadSharedModuleForPid)<br>
-SceModulemgrForDriver_0975B104<br>
-SceModulemgrForDriver_861638AD<br>
+SceModulemgrForDriver_0975B104(ksceKernelReleaseLibary)<br>
+SceModulemgrForDriver_861638AD(ksceKernelRegisterLibary)<br>
 
 ### SceModulemgr
 sceKernelGetAllowedSdkVersionOnSystem<br>
