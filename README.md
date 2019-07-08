@@ -40,6 +40,7 @@ ksceKernelStopModuleForPid<br>
 SceModulemgrForKernel_0E33258E<br>
 SceModulemgrForKernel_3AD26B43(sceKernelLoadPreloadingModulesForKernel)<br>
 SceModulemgrForKernel_432DCC7A(maybe sceKernelStartPreloadingModulesForKernel)<br>
+SceModulemgrForKernel_448810D5(sceKernelDecryptSelfByPathForKernel)<br>
 SceModulemgrForKernel_AC4EABDB<br>
 SceModulemgrForKernel_F95D09C2<br>
 SceModulemgrForKernel_FDD7F646(sceKernelFinalizeKblForKernel)<br>
