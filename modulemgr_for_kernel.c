@@ -132,6 +132,12 @@ label_0x810036B0:
 	goto label_0x810036A4;
 }
 
+// sceKernelDecryptSelfByPathForKernel
+int SceModulemgrForKernel_448810D5(int a1, int a2, int a3, int a4, int a5, int a6){
+	// yet not Reversed
+	return 0;
+}
+
 void *SceModulemgrForKernel_66606301(SceUID modid){
 
 	void *res;
