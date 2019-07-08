@@ -40,6 +40,7 @@ ksceKernelStopModuleForPid<br>
 SceModulemgrForKernel_0E33258E<br>
 SceModulemgrForKernel_3AD26B43(sceKernelLoadPreloadingModulesForKernel)<br>
 SceModulemgrForKernel_432DCC7A(maybe sceKernelStartPreloadingModulesForKernel)<br>
+SceModulemgrForKernel_AC4EABDB<br>
 SceModulemgrForKernel_F95D09C2<br>
 SceModulemgrForKernel_FDD7F646(sceKernelFinalizeKblForKernel)<br>
 
@@ -89,7 +90,6 @@ SceModulemgrForKernel_8D1AA624<br>
 SceModulemgrForKernel_952535A3<br>
 SceModulemgrForKernel_99890202<br>
 SceModulemgrForKernel_9D20C9BB<br>
-SceModulemgrForKernel_AC4EABDB<br>
 SceModulemgrForKernel_B427025E<br>
 SceModulemgrForKernel_B73BE671<br>
 SceModulemgrForKernel_D4BF409C<br>
