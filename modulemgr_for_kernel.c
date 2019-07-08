@@ -198,6 +198,12 @@ int SceModulemgrForKernel_99890202(SceUID pid, int a1){
 	return 0;
 }
 
+// sceKernelLoadProcessImageForKernel
+int SceModulemgrForKernel_AC4EABDB(SceUID pid, void *a2, int a3, void *a4, void *a5, int a6){
+	// yet not Reversed
+	return 0;
+}
+
 //  SceModulemgrForKernel_F95D09C2("os0:ue/cui_setupper.self", sp + 0x60, sp + 0x70);
 int SceModulemgrForKernel_F95D09C2(const char *path, void *a2, void *a3){
 	// yet not Reversed
