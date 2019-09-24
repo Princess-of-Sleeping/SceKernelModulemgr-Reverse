@@ -15,10 +15,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -nostdlib")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
 
 add_executable(SceKernelModulemgr_Reverse
-  main.c
-  modulemgr.c
-  modulemgr_for_driver.c
-  modulemgr_for_kernel.c
+  src/main.c
+  src/modulemgr.c
+  src/modulemgr_for_driver.c
+  src/modulemgr_for_kernel.c
 )
 
 target_link_libraries(SceKernelModulemgr_Reverse
