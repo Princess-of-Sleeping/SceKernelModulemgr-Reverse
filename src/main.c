@@ -1083,8 +1083,7 @@ SceUID ksceKernelSysrootGetShellPid(void);
 int threadFunc(SceSize args, void *argp){
 
 	int res;
-	SceUID shell_pid, shell_uid;
-	SceUID t_shell_uid;
+	SceUID shell_pid, shell_uid, t_shell_uid;
 	SceKernelModuleInfo info;
 
 	ksceKernelDelayThread(15 * 1000 * 1000);
@@ -1096,13 +1095,8 @@ int threadFunc(SceSize args, void *argp){
 	ksceDebugPrintf("shell_pid : 0x%X\n", shell_pid);
 	ksceDebugPrintf("shell_uid : 0x%X\n", shell_uid);
 
-
 	memset(&info, 0, sizeof(info));
 
-	//SceModulemgrForDriver_1D9E0F7E((void *)(0x81010000), &info);
-
-
-	// ksceKernelGetModuleIdByAddr
 	t_shell_uid = get_module_id_by_addr(shell_pid, (const void *)(0x81010000));
 	if(t_shell_uid < 0)
 		t_shell_uid = get_module_id_by_addr(shell_pid, (const void *)(0x81080000));
@@ -1111,10 +1105,10 @@ int threadFunc(SceSize args, void *argp){
 
 
 
-
 	t_shell_uid = ksceKernelKernelUidForUserUid(shell_pid, t_shell_uid);
 
 	ksceDebugPrintf("ksceKernelKernelUidForUserUid : 0x%X\n", t_shell_uid);
+
 
 
 	res = ksceKernelGetModuleInfo(shell_pid, t_shell_uid, &info); // reverse
@@ -1122,29 +1116,17 @@ int threadFunc(SceSize args, void *argp){
 	ksceDebugPrintf("ksceKernelGetModuleInfo : 0x%X\n", res);
 
 
-	write_file("ur0:data/module_rev_SceKernelModulemgr_1D9E0F7E_rev_shell.bin", &info, sizeof(info));
 
+	write_file("ur0:data/module_rev_SceKernelModulemgr_1D9E0F7E_rev_shell.bin", &info, sizeof(info));
 
 	return ksceKernelExitDeleteThread(0);
 }
 
-
 void _start() __attribute__ ((weak, alias("module_start")));
 int module_start(SceSize args, void *argp){
 
-	SceUID uid;
-
 	get_function();
 	get_data();
-
-	//uid = sceKernelSearchModuleByNameForDriver("SceSysmem");
-	//write_file("ur0:data/module_rev_SceSysmem_uid.bin", &uid, 4);
-
-	uid = sceKernelSearchModuleByNameForDriver("SceKernelModulemgr");
-	//write_file("ur0:data/module_rev_SceKernelModulemgr_uid.bin", &uid, 4);
-
-	//void *data = func_0x81001f0c(uid);
-	//write_file("ur0:data/module_rev_SceKernelModulemgr_data.bin", data, 0x400);
 
 /*
 	// You can check the hash to see if the function is correct :)
@@ -1159,7 +1141,7 @@ int module_start(SceSize args, void *argp){
 	write_file("ur0:data/module_rev_SceKernelModulemgr_Info_rev.bin", &info, sizeof(info));
 
 	memset(&info, 0, sizeof(info));
-	SceModulemgrForDriver_1D9E0F7E(_ksceKernelSearchModuleByName, &info);
+	SceModulemgrForDriver_1D9E0F7E(get_module_id_by_addr, &info);
 	write_file("ur0:data/module_rev_SceKernelModulemgr_1D9E0F7E_rev.bin", &info, sizeof(info));
 */
 
