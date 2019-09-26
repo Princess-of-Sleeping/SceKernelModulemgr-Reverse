@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "modulemgr.h"
 #include "modulemgr_common.h"
 
 extern void (* SceSysrootForDriver_6E0BC27C)(void);
@@ -172,3 +173,39 @@ int sceKernelInhibitLoadingModule(uint16_t flag){
 
 	return res;
 }
+
+SceUID _sceKernelOpenModule(const char *path, SceSize args, void *argp, SceKernelModuleOpen_t *module_open){
+	return 0;
+}
+
+int _sceKernelCloseModule(SceUID modid, SceSize args, void *argp, SceKernelModuleClose_t *module_close){
+	return 0;
+}
+
+SceUID _sceKernelLoadModule(const char *path, int flags, SceKernelLMOption *option){
+	return 0;
+}
+
+int _sceKernelStartModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStart_t *module_start){
+	return 0;
+}
+
+SceUID _sceKernelLoadStartModule(const char *path, SceSize args, void *argp, SceKernelModuleLoadStart_t *module_load_start){
+	return 0;
+}
+
+int _sceKernelStopModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStop_t *module_stop){
+	return 0;
+}
+
+int _sceKernelUnloadModule(SceUID modid, int flags, SceKernelULMOption *option){
+	return 0;
+}
+
+int _sceKernelStopUnloadModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStopUnload_t *module_stop_unload){
+	return 0;
+}
+
+
+
+
