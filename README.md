@@ -63,6 +63,14 @@ SceModulemgrForDriver_861638AD(ksceKernelRegisterLibary)<br>
 sceKernelGetAllowedSdkVersionOnSystem<br>
 sceKernelIsCalledFromSysModule<br>
 sceKernelGetLibraryInfoByNID<br>
+_sceKernelOpenModule<br>
+_sceKernelCloseModule<br>
+_sceKernelLoadModule<br>
+_sceKernelStartModule<br>
+_sceKernelLoadStartModule<br>
+_sceKernelStopModule<br>
+_sceKernelUnloadModule<br>
+_sceKernelStopUnloadModule<br>
 
 ## yet not Reversed List
 
@@ -102,12 +110,4 @@ maybe more...<br>
 
 ### SceModulemgr
 sceKernelGetModuleList<br>
-_sceKernelOpenModule<br>
-_sceKernelCloseModule<br>
-_sceKernelLoadModule<br>
-_sceKernelStartModule<br>
-_sceKernelLoadStartModule<br>
-_sceKernelStopModule<br>
-_sceKernelUnloadModule<br>
-_sceKernelStopUnloadModule<br>
 
