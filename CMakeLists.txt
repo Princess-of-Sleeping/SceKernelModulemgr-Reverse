@@ -19,6 +19,7 @@ add_executable(SceKernelModulemgr_Reverse
   src/modulemgr.c
   src/modulemgr_for_driver.c
   src/modulemgr_for_kernel.c
+  src/libkernel.c
 )
 
 target_link_libraries(SceKernelModulemgr_Reverse
@@ -27,6 +28,7 @@ target_link_libraries(SceKernelModulemgr_Reverse
   SceThreadmgrForDriver_stub
   SceSysmemForDriver_stub
   SceSysclibForDriver_stub
+  SceSysrootForDriver_stub
   SceSysrootForKernel_stub
   SceCpuForDriver_stub
   SceCpuForKernel_stub
