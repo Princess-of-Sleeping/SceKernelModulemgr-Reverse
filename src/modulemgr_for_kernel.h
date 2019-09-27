@@ -4,7 +4,7 @@
 #include "modulemgr_types.h"
 #include "modulemgr_internal.h"
 
-// ksceKernelModuleGetProcessMainModuleXXXXX
+// sceKernelModuleGetProcessMainModuleXXXXXForKernel
 int SceModulemgrForKernel_EEA92F1F(SceUID pid, void *a2);
 
 int sceKernelLoadProcessImageForKernel(int a1, int a2, int a3, int a4, int a5, int a6);
