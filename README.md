@@ -17,6 +17,7 @@ ksceKernelMountBootfs<br>
 ksceKernelUmountBootfs<br>
 SceModulemgrForKernel_0053BA4A(ksceKernelGetModuleIdByAddr)<br>
 SceModulemgrForKernel_2A69385E(maybe ksceKernelModuleUnloadMySelf)<br>
+SceModulemgrForKernel_2C2618D9<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
 SceModulemgrForKernel_B427025E(ksceKernelRegisterSyscall)<br>
@@ -46,6 +47,7 @@ SceModulemgrForKernel_448810D5(sceKernelDecryptSelfByPathForKernel)<br>
 SceModulemgrForKernel_AC4EABDB<br>
 SceModulemgrForKernel_F95D09C2<br>
 SceModulemgrForKernel_FDD7F646(sceKernelFinalizeKblForKernel)<br>
+SceModulemgrForKernel_FF2264BB<br>
 
 ### SceModulemgrForDriver
 ksceKernelLoadModule<br>
@@ -85,7 +87,6 @@ SceModulemgrForKernel_1D341231<br>
 SceModulemgrForKernel_1FDEAE16<br>
 SceModulemgrForKernel_20A27FA9<br>
 SceModulemgrForKernel_29CB2771<br>
-SceModulemgrForKernel_2C2618D9<br>
 SceModulemgrForKernel_2DD3B511<br>
 SceModulemgrForKernel_3382952B<br>
 SceModulemgrForKernel_3B93CF88<br>
@@ -105,7 +106,6 @@ SceModulemgrForKernel_B73BE671<br>
 SceModulemgrForKernel_D4BF409C<br>
 SceModulemgrForKernel_F3CD647F<br>
 SceModulemgrForKernel_FB251B7A<br>
-SceModulemgrForKernel_FF2264BB<br>
 maybe more...<br>
 
 ### SceModulemgr
