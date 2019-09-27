@@ -101,8 +101,9 @@ SceModulemgrForDriver_861638AD(ksceKernelRegisterLibary)<br>
 
 ### SceModulemgr
 sceKernelGetAllowedSdkVersionOnSystem<br>
-sceKernelIsCalledFromSysModule<br>
 sceKernelGetLibraryInfoByNID<br>
+sceKernelGetModuleList<br>
+sceKernelIsCalledFromSysModule<br>
 _sceKernelOpenModule<br>
 _sceKernelCloseModule<br>
 _sceKernelLoadModule<br>
@@ -121,5 +122,5 @@ maybe n/a<br>
 n/a<br>
 
 ### SceModulemgr
-sceKernelGetModuleList<br>
+n/a<br>
 
