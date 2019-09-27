@@ -183,6 +183,7 @@ int func_0x810021d8(SceUID pid){
 	return 0;
 }
 
+// get_proc_obj_for_user (for check?)
 int func_0x810021c0(SceUID pid){
 	if (pid != 0x10005) {
 		return func_0x81001ec4(pid);
