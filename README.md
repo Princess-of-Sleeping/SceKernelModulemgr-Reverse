@@ -84,7 +84,7 @@ maybe n/a<br>
 ### SceModulemgrForKernel
 SceModulemgrForKernel_1BDE2ED2<br>
 SceModulemgrForKernel_1D341231<br>
-SceModulemgrForKernel_1FDEAE16<br>
+ksceKernelGetModuleUidList<br>
 ksceKernelGetProcessMainModule<br>
 SceModulemgrForKernel_29CB2771<br>
 SceModulemgrForKernel_2DD3B511<br>
