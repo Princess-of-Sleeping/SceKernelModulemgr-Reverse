@@ -12,33 +12,6 @@ extern void *SceKernelModulemgr_data;
 
 extern int (* SceSysrootForDriver_67AAB627)(void);
 
-// ksceKernelReleaseLibary
-int SceModulemgrForDriver_0975B104(void *addr){
-
-	int res;
-	SceUID modid;
-	void *pRes;
-
-	modid = get_module_id_by_addr(0x10005, addr);
-	if(modid < 0)
-		return modid;
-
-	pRes = func_0x81001f0c(modid);
-	if(pRes == 0)
-		return 0x8002D011;
-
-	res = func_0x81005fec(pRes + 8, addr);
-	if(res < 0)
-		goto label_0x81003296;
-
-	res = func_0x8100428c(pRes + 8, res, 0);
-
-label_0x81003296:
-	ksceKernelUidRelease(modid);
-	ksceKernelCpuIcacheInvalidateAll();
-	return res;
-}
-
 // ksceKernelGetModuleInfoByAddr
 int SceModulemgrForDriver_1D9E0F7E(const void *addr, SceKernelModuleInfo *info){
 
@@ -51,14 +24,41 @@ int SceModulemgrForDriver_1D9E0F7E(const void *addr, SceKernelModuleInfo *info){
 	return get_module_info(0x10005, modid, (SceKernelModuleInfo_fix_t *)info);
 }
 
+// ksceKernelReleaseLibary
+int SceModulemgrForDriver_0975B104(const void *module_addr){
+
+	int res;
+	SceUID modid;
+	void *pRes;
+
+	modid = get_module_id_by_addr(0x10005, module_addr);
+	if(modid < 0)
+		return modid;
+
+	pRes = func_0x81001f0c(modid);
+	if(pRes == 0)
+		return 0x8002D011;
+
+	res = func_0x81005fec(pRes + 8, module_addr);
+	if(res < 0)
+		goto label_0x81003296;
+
+	res = func_0x8100428c(pRes + 8, res, 0);
+
+label_0x81003296:
+	ksceKernelUidRelease(modid);
+	ksceKernelCpuIcacheInvalidateAll();
+	return res;
+}
+
 // ksceKernelRegisterLibary
-int SceModulemgrForDriver_861638AD(void *addr){
+int SceModulemgrForDriver_861638AD(const void *module_addr){
 
 	int res;
 	int some_uid;
 	void *arg1;
 
-	some_uid = get_module_id_by_addr(0x10005, addr);
+	some_uid = get_module_id_by_addr(0x10005, module_addr);
 	if(some_uid < 0)
 		return some_uid;
 
@@ -66,7 +66,7 @@ int SceModulemgrForDriver_861638AD(void *addr){
 	if(arg1 == NULL)
 		return 0x8002D011;
 
-	res = func_0x81005fec(arg1 + 8, addr);
+	res = func_0x81005fec(arg1 + 8, module_addr);
 	if(res < 0)
 		goto label_0x81003242;
 
