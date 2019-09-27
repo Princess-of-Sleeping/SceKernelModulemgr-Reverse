@@ -1,4 +1,3 @@
-
 #ifndef _PSP2_KERNEL_MODULEMGR_INTERNAL_H_
 #define _PSP2_KERNEL_MODULEMGR_INTERNAL_H_
 
@@ -102,7 +101,7 @@ typedef struct {
 	void *tlsInit;
 	SceSize tlsInitSize;
 	SceSize tlsAreaSize;
-	char path[256];
+	char path[0x100];
 	SceKernelSegmentInfo segments[4];
 	SceUInt type;   //!< 6 = user-mode PRX?
 } SceKernelModuleInfo_fix_t;
