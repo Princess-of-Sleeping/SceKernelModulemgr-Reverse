@@ -15,7 +15,7 @@ ksceKernelGetModuleInternal<br>
 ksceKernelMountBootfs<br>
 ksceKernelUmountBootfs<br>
 SceModulemgrForKernel_0053BA4A(ksceKernelGetModuleIdByAddr)<br>
-SceModulemgrForKernel_2A69385E<br>
+SceModulemgrForKernel_2A69385E(maybe ksceKernelModuleUnloadMySelf)<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
 SceModulemgrForKernel_B427025E(ksceKernelRegisterSyscall)<br>
