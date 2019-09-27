@@ -103,7 +103,7 @@ SceModulemgrForKernel_99890202<br>
 SceModulemgrForKernel_9D20C9BB<br>
 SceModulemgrForKernel_B427025E<br>
 SceModulemgrForKernel_B73BE671<br>
-SceModulemgrForKernel_D4BF409C<br>
+ksceKernelGetModuleLibraryInfo<br>
 SceModulemgrForKernel_F3CD647F<br>
 SceModulemgrForKernel_FB251B7A<br>
 maybe more...<br>
