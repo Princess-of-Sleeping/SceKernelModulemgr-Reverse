@@ -121,7 +121,7 @@ int sceKernelGetProcessMainModulePathForKernel(SceUID pid, char *path, int pathl
 	return 0;
 }
 
-// ksceKernelModuleGetProcessMainModuleXXXXX
+// sceKernelModuleGetProcessMainModuleXXXXXForKernel
 int SceModulemgrForKernel_EEA92F1F(SceUID pid, void *a2)
 {
 	void *dat;
