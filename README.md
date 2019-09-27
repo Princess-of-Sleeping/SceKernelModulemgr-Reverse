@@ -101,7 +101,6 @@ SceModulemgrForKernel_8D1AA624<br>
 SceModulemgrForKernel_952535A3<br>
 SceModulemgrForKernel_99890202<br>
 SceModulemgrForKernel_9D20C9BB<br>
-SceModulemgrForKernel_B427025E<br>
 SceModulemgrForKernel_B73BE671<br>
 ksceKernelGetModuleLibraryInfo<br>
 SceModulemgrForKernel_F3CD647F<br>
