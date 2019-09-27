@@ -80,6 +80,33 @@ label_0x81003706:
 	return res;
 }
 
+int ksceKernelGetProcessMainModulePath(SceUID pid, char *path, int pathlen)
+{
+	void *dat;
+
+	dat = func_0x81001f0c(pid);
+	if (dat == NULL)
+		return 0x8002D082;
+
+	strncpy(path, *(uint32_t *)(dat + 0x70), pathlen);
+	sub_810021b8(pid); // Release Uid
+	return 0;
+}
+
+// ksceKernelModuleGetProcessMainModuleXXXXX
+int SceModulemgrForKernel_EEA92F1F(SceUID pid, void *a2)
+{
+	void *dat;
+
+	dat = func_0x81001f0c(pid);
+	if (dat == NULL)
+		return 0x8002D082;
+
+	*(uint32_t *)(a2) = *(uint32_t *)(dat + 0x38);
+	sub_810021b8(pid);
+	return 0;
+}
+
 // Bigger function
 // sceKernelLoadPreloadingModulesForKernel
 // https://wiki.henkaku.xyz/vita/SceKernelModulemgr#sceKernelLoadPreloadingModulesForKernel
@@ -130,21 +157,6 @@ label_0x810036A4:
 label_0x810036B0:
 	res = 0;
 	goto label_0x810036A4;
-}
-
-void *SceModulemgrForKernel_66606301(SceUID modid){
-
-	void *res;
-
-	res = func_0x81001f0c(modid);
-	if(res == NULL)
-		goto label_0x810032CA;
-
-	res = (void *)(*(uint32_t *)(res + 0xBC));
-	ksceKernelUidRelease(modid);
-
-label_0x810032CA:
-	return res;
 }
 
 int SceModulemgrForKernel_78DBC027(SceUID pid, SceUID UserUid, void *a3, void *a4){
@@ -213,7 +225,7 @@ void SceModulemgrForKernel_B427025E(int syscall_id, const void *func){
 
 	int dacr;
 
-	if (syscall_id >= 0x1000)
+	if ((uint32_t)syscall_id >= 0x1000)
 		return;
 
 	asm volatile ("mrc p15, 0, %0, c3, c0, 0" : "=r" (dacr));
@@ -231,7 +243,7 @@ void ksceKernelUnregisterSyscall(int syscall_id){
 
 	int dacr;
 
-	if (syscall_id >= 0x1000)
+	if ((uint32_t)syscall_id >= 0x1000)
 		return;
 
 	asm volatile ("mrc p15, 0, %0, c3, c0, 0" : "=r" (dacr));
@@ -242,6 +254,21 @@ void ksceKernelUnregisterSyscall(int syscall_id){
 	asm volatile ("mcr p15, 0, %0, c3, c0, 0" :: "r" (dacr));
 
 	return;
+}
+
+void *SceModulemgrForKernel_66606301(SceUID modid){
+
+	void *res;
+
+	res = func_0x81001f0c(modid);
+	if(res == NULL)
+		goto label_0x810032CA;
+
+	res = (void *)(*(uint32_t *)(res + 0xBC));
+	ksceKernelUidRelease(modid);
+
+label_0x810032CA:
+	return res;
 }
 
 int ksceKernelGetModuleInternal(SceUID modid, void **module){
