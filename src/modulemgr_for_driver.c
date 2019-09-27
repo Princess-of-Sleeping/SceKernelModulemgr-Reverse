@@ -24,35 +24,11 @@ int SceModulemgrForDriver_1D9E0F7E(const void *addr, SceKernelModuleInfo *info){
 	return get_module_info(0x10005, modid, (SceKernelModuleInfo_fix_t *)info);
 }
 
-// ksceKernelReleaseLibary
-int SceModulemgrForDriver_0975B104(const void *module_addr){
-
-	int res;
-	SceUID modid;
-	void *pRes;
-
-	modid = get_module_id_by_addr(0x10005, module_addr);
-	if(modid < 0)
-		return modid;
-
-	pRes = func_0x81001f0c(modid);
-	if(pRes == 0)
-		return 0x8002D011;
-
-	res = func_0x81005fec(pRes + 8, module_addr);
-	if(res < 0)
-		goto label_0x81003296;
-
-	res = func_0x8100428c(pRes + 8, res, 0);
-
-label_0x81003296:
-	ksceKernelUidRelease(modid);
-	ksceKernelCpuIcacheInvalidateAll();
-	return res;
+SceUID sceKernelSearchModuleByNameForDriver(const char *module_name){
+	return search_module_by_name(0x10005, module_name);
 }
 
-// ksceKernelRegisterLibary
-int SceModulemgrForDriver_861638AD(const void *module_addr){
+int sceKernelRegisterLibaryForDriver(const void *module_addr){
 
 	int res;
 	int some_uid;
@@ -78,11 +54,33 @@ label_0x81003242:
 	return res;
 }
 
-SceUID sceKernelSearchModuleByNameForDriver(const char *module_name){
-	return search_module_by_name(0x10005, module_name);
+int sceKernelReleaseLibaryForDriver(const void *module_addr){
+
+	int res;
+	SceUID modid;
+	void *pRes;
+
+	modid = get_module_id_by_addr(0x10005, module_addr);
+	if(modid < 0)
+		return modid;
+
+	pRes = func_0x81001f0c(modid);
+	if(pRes == 0)
+		return 0x8002D011;
+
+	res = func_0x81005fec(pRes + 8, module_addr);
+	if(res < 0)
+		goto label_0x81003296;
+
+	res = func_0x8100428c(pRes + 8, res, 0);
+
+label_0x81003296:
+	ksceKernelUidRelease(modid);
+	ksceKernelCpuIcacheInvalidateAll();
+	return res;
 }
 
-int ksceKernelGetSystemSwVersion(SceKernelFwInfo *data){
+int sceKernelGetSystemSwVersionForDriver(SceKernelFwInfo *data){
 
 	int res;
 	int sysver;
@@ -200,8 +198,7 @@ SceUID ksceKernelLoadStartSharedModuleForPid(SceUID pid, const char *path, SceSi
 	return module_load_start_shared_for_pid(pid, path, args, argp, flags | 0x8000000, option, status);
 }
 
-// ksceKernelStopUnloadSharedModuleForPid
-int SceModulemgrForDriver_02D3D0C1(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status){
+int ksceKernelStopUnloadSharedModuleForPid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status){
 
 	if(pid == 0)
 		return 0x8002D017;
