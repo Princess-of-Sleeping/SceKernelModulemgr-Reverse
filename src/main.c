@@ -740,6 +740,9 @@ loc_810077e6:
 	return res;
 }
 
+/*
+ * maybe module_tree_t *out
+ */
 int func_0x81007a84(void *a1, const void *addr, void *out){
 
 	int res;
