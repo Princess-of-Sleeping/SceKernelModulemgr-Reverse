@@ -8,6 +8,9 @@
 #include <string.h>
 
 #include "modulemgr.h"
+#include "modulemgr_types.h"
+#include "modulemgr_for_driver.h"
+#include "modulemgr_for_kernel.h"
 #include "modulemgr_common.h"
 
 extern void (* SceSysrootForDriver_6E0BC27C)(void);
@@ -27,7 +30,7 @@ int sceKernelGetAllowedSdkVersionOnSystem(){
 	memset(&kdata, 0, sizeof(SceKernelFwInfo));
 	kdata.size = sizeof(SceKernelFwInfo);
 
-	res = ksceKernelGetSystemSwVersion(&kdata);
+	res = sceKernelGetSystemSwVersionForDriver(&kdata);
 	if(res != 0)
 		goto loc_8100A280;
 
@@ -56,7 +59,7 @@ int sceKernelGetSystemSwVersion(SceKernelFwInfo *data){
 	if (res < 0)
 		goto loc_8100A214;
 
-	res = ksceKernelGetSystemSwVersion(&kdata);
+	res = sceKernelGetSystemSwVersionForDriver(&kdata);
 	if (res < 0)
 		goto loc_8100A214;
 	res = ksceKernelMemcpyKernelToUser((uintptr_t)data, &kdata, sizeof(SceKernelFwInfo));
@@ -156,7 +159,7 @@ int sceKernelIsCalledFromSysModule(int a1){
 	uint32_t state;
 
 	ENTER_SYSCALL(state);
-	res = SceModulemgrForKernel_99890202(ksceKernelGetProcessId(), a1);
+	res = SceModulemgrForKernel_99890202(ksceKernelGetProcessId(), (const void *)a1);
 	EXIT_SYSCALL(state);
 
 	return res;
