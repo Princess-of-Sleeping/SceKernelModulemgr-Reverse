@@ -80,6 +80,32 @@ label_0x81003706:
 	return res;
 }
 
+int SceModulemgrForKernel_2C2618D9(SceUID pid, int a2, int a3)
+{
+
+	int res;
+	int cpu_intr;
+	module_tree_top_t *mod_tree;
+
+	if (pid == 0)
+		pid = ksceKernelGetProcessId();
+
+	mod_tree = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
+	if (mod_tree == NULL){
+		res = 0x8002D080;
+	}else{
+		res = func_0x81007a84(mod_tree, a2, a3);
+		ksceKernelCpuResumeIntr((int *)(&mod_tree->cpu_addr), cpu_intr);
+	}
+
+	return res;
+}
+
+int SceModulemgrForKernel_FF2264BB(SceUID a1, int a2, int a3, int a4)
+{
+	return 0;
+}
+
 int ksceKernelGetProcessMainModulePath(SceUID pid, char *path, int pathlen)
 {
 	void *dat;
