@@ -1,4 +1,3 @@
-
 #include <psp2kern/kernel/modulemgr.h>
 #include <psp2kern/kernel/threadmgr.h>
 #include <psp2kern/kernel/sysmem.h>
@@ -17,7 +16,8 @@ extern void (* SceSysrootForDriver_6E0BC27C)(void);
 
 
 
-int sceKernelGetAllowedSdkVersionOnSystem(){
+int sceKernelGetAllowedSdkVersionOnSystem(void)
+{
 
 	int res;
 	uint32_t state;
@@ -45,7 +45,8 @@ loc_8100A280:
 	goto loc_8100A270;
 }
 
-int sceKernelGetSystemSwVersion(SceKernelFwInfo *data){
+int sceKernelGetSystemSwVersion(SceKernelFwInfo *data)
+{
 
 	int res;
 	uint32_t state;
@@ -70,7 +71,8 @@ loc_8100A214:
 	return res;
 }
 
-int sceKernelGetModuleIdByAddr(const void *addr){
+int sceKernelGetModuleIdByAddr(const void *addr)
+{
 	int res;
 	uint32_t state;
 
@@ -81,7 +83,8 @@ int sceKernelGetModuleIdByAddr(const void *addr){
 	return res;
 }
 
-int sceKernelGetLibraryInfoByNID(SceUID uid, int a2, SceKernelLibraryInfo *info){
+int sceKernelGetLibraryInfoByNID(SceUID uid, int a2, SceKernelLibraryInfo *info)
+{
 
 	int res;
 	SceUID kuid;
@@ -119,7 +122,14 @@ loc_8100A2F6:
 	goto loc_8100A2E8;
 }
 
-int sceKernelGetModuleInfo(SceUID modid, SceKernelModuleInfo *info){
+int sceKernelGetModuleList(int flags, SceUID *modids, int *num)
+{
+	// yet not Reversed
+	return 0;
+}
+
+int sceKernelGetModuleInfo(SceUID modid, SceKernelModuleInfo *info)
+{
 
 	int res;
 	SceUID kuid;
@@ -153,7 +163,8 @@ loc_8100A194:
 	goto loc_8100A186;
 }
 
-int sceKernelIsCalledFromSysModule(int a1){
+int sceKernelIsCalledFromSysModule(int a1)
+{
 
 	int res;
 	uint32_t state;
@@ -165,7 +176,8 @@ int sceKernelIsCalledFromSysModule(int a1){
 	return res;
 }
 
-int sceKernelInhibitLoadingModule(uint16_t flag){
+int sceKernelInhibitLoadingModule(uint16_t flag)
+{
 
 	int res;
 	uint32_t state;
@@ -177,35 +189,51 @@ int sceKernelInhibitLoadingModule(uint16_t flag){
 	return res;
 }
 
-SceUID _sceKernelOpenModule(const char *path, SceSize args, void *argp, SceKernelModuleOpen_t *module_open){
+SceUID _sceKernelOpenModule(const char *path, SceSize args, void *argp, SceKernelModuleOpen_t *module_open)
+{
+	// yet not Reversed
 	return 0;
 }
 
-int _sceKernelCloseModule(SceUID modid, SceSize args, void *argp, SceKernelModuleClose_t *module_close){
+int _sceKernelCloseModule(SceUID modid, SceSize args, void *argp, SceKernelModuleClose_t *module_close)
+{
+	// yet not Reversed
 	return 0;
 }
 
-SceUID _sceKernelLoadModule(const char *path, int flags, SceKernelLMOption *option){
+SceUID _sceKernelLoadModule(const char *path, int flags, SceKernelLMOption *option)
+{
+	// yet not Reversed
 	return 0;
 }
 
-int _sceKernelStartModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStart_t *module_start){
+int _sceKernelStartModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStart_t *module_start)
+{
+	// yet not Reversed
 	return 0;
 }
 
-SceUID _sceKernelLoadStartModule(const char *path, SceSize args, void *argp, SceKernelModuleLoadStart_t *module_load_start){
+SceUID _sceKernelLoadStartModule(const char *path, SceSize args, void *argp, SceKernelModuleLoadStart_t *module_load_start)
+{
+	// yet not Reversed
 	return 0;
 }
 
-int _sceKernelStopModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStop_t *module_stop){
+int _sceKernelStopModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStop_t *module_stop)
+{
+	// yet not Reversed
 	return 0;
 }
 
-int _sceKernelUnloadModule(SceUID modid, int flags, SceKernelULMOption *option){
+int _sceKernelUnloadModule(SceUID modid, int flags, SceKernelULMOption *option)
+{
+	// yet not Reversed
 	return 0;
 }
 
-int _sceKernelStopUnloadModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStopUnload_t *module_stop_unload){
+int _sceKernelStopUnloadModule(SceUID modid, SceSize args, void *argp, SceKernelModuleStopUnload_t *module_stop_unload)
+{
+	// yet not Reversed
 	return 0;
 }
 
