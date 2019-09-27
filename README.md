@@ -4,31 +4,31 @@ There is nothing to guarantee perfect operation<br>
 ## Tested functions
 sceKernelGetModuleIdByAddrForKernel<br>
 
-ksceKernelGetModuleInfo<br>
-ksceKernelSearchModuleByName<br>
+sceKernelGetModuleInfoForKernel<br>
+sceKernelSearchModuleByNameForDriver<br>
 SceModulemgrForDriver_1D9E0F7E(ksceKernelGetModuleInfoByAddr)<br>
 
 ## Reverse Completed
 ### SceModulemgrForKernel
-sceKernelFinalizeKblForKernel<br>
-sceKernelGetModuleIdByAddrForKernel<br>
-sceKernelGetModuleInfoForKernel<br>
-sceKernelGetModuleInfoMinByAddrForKernel<br>
-sceKernelGetModuleInternalForKernel<br>
-sceKernelGetProcessMainModulePathForKernel<br>
-sceKernelModuleUnloadMySelfForKernel<br>
-sceKernelMountBootfsForKernel<br>
-sceKernelUmountBootfsForKernel<br>
-sceKernelRegisterSyscallForKernel<br>
+0xFDD7F646 : sceKernelFinalizeKblForKernel<br>
+0x0053BA4A : sceKernelGetModuleIdByAddrForKernel<br>
+0xD269F915 : sceKernelGetModuleInfoForKernel<br>
+0x8309E043 : sceKernelGetModuleInfoMinByAddrForKernel<br>
+0xFE303863 : sceKernelGetModuleInternalForKernel<br>
+0x779A1025 : sceKernelGetProcessMainModulePathForKernel<br>
+0x2A69385E : sceKernelModuleUnloadMySelfForKernel<br>
+0x01360661 : sceKernelMountBootfsForKernel<br>
+0x9C838A6B : sceKernelUmountBootfsForKernel<br>
+0xB427025E : sceKernelRegisterSyscallForKernel<br>
 SceModulemgrForKernel_2C2618D9<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
 SceModulemgrForKernel_EEA92F1F(sceKernelModuleGetProcessMainModuleXXXXXForKernel)<br>
 
 ### SceModulemgrForDriver
-ksceKernelGetSystemSwVersion<br>
-ksceKernelSearchModuleByName<br>
-SceModulemgrForDriver_1D9E0F7E(ksceKernelGetModuleInfoByAddr)<br>
+0x5182E212 : sceKernelGetSystemSwVersionForDriver<br>
+0xBBE1771C : sceKernelSearchModuleByNameForDriver<br>
+0x1D9E0F7E : sceKernelGetModuleInfoByAddrForDriver<br>
 
 ### SceModulemgr
 sceKernelInhibitLoadingModule<br>
@@ -38,30 +38,24 @@ sceKernelGetModuleIdByAddr<br>
 
 ## List of only frame(prototype) reversed
 ### SceModulemgrForKernel
+0x6A655255 : sceKernelGetModuleInfo2ForKernel<br>
 
-sceKernelLoadModuleForPidForKernel<br>
-sceKernelStartModuleForPidForKernel<br>
-sceKernelStopModuleForPidForKernel<br>
-sceKernelUnloadModuleForPidForKernel<br>
+0xD4BF409C : sceKernelGetModuleLibraryInfoForKernel<br>
+0x3B93CF88 : sceKernelGetModuleUidForKernel<br>
+0x1FDEAE16 : sceKernelGetModuleUidListForKernel<br>
+0x97CF7B4E : sceKernelGetModuleListForKernel<br>
+0x410E1D2E : sceKernelGetModuleList2ForKernel<br>
 
-sceKernelGetModuleInfo2ForKernel<br>
+0x20A27FA9 : sceKernelGetProcessMainModuleForKernel<br>
 
-sceKernelGetModuleLibraryInfoForKernel<br>
-sceKernelGetModuleUidForKernel<br>
-sceKernelGetModuleUidListForKernel<br>
-sceKernelGetModuleListForKernel<br>
-sceKernelGetModuleList2ForKernel<br>
+0x448810D5 : sceKernelLoadPtLoadSegForFwloaderForKernel<br>
 
-sceKernelGetProcessMainModuleForKernel<br>
+0xAC4EABDB : sceKernelLoadProcessImageForKernel<br>
+0x3AD26B43 : sceKernelLoadPreloadingModulesForKernel<br>
+0x432DCC7A : sceKernelStartPreloadingModulesForKernel<br>
+0x0E33258E : sceKernelUnloadProcessModulesForKernel<br>
 
-sceKernelLoadPtLoadSegForFwloaderForKernel<br>
-
-sceKernelLoadProcessImageForKernel<br>
-sceKernelLoadPreloadingModulesForKernel<br>
-sceKernelStartPreloadingModulesForKernel<br>
-sceKernelStopUnloadProcessModulesForKernel<br>
-
-sceKernelSetupForModulemgrForKernel<br>
+0x3382952B : sceKernelSetupForModulemgrForKernel<br>
 
 SceModulemgrForKernel_1BDE2ED2<br>
 SceModulemgrForKernel_1D341231<br>
