@@ -90,7 +90,7 @@ SceModulemgrForKernel_29CB2771<br>
 SceModulemgrForKernel_2DD3B511<br>
 SceModulemgrForKernel_3382952B<br>
 SceModulemgrForKernel_3B93CF88<br>
-SceModulemgrForKernel_410E1D2E<br>
+ksceKernelGetModuleList2<br>
 SceModulemgrForKernel_4865C72C<br>
 SceModulemgrForKernel_60E176C8<br>
 SceModulemgrForKernel_619925F1<br>
