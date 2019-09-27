@@ -23,7 +23,7 @@ typedef struct SceKernelModuleInfoObj_t {
 	// 0x10
 	uint32_t version;	// ex : 0x03600011
 	SceUID modid_kernel;	// This is only used by kernel modules
-	SceUID modid_user;	// This is only used by user modules
+	SceUID modid_user;	// This is only used by   user modules
 	SceUID pid;
 
 	// 0x20
@@ -76,9 +76,9 @@ typedef struct SceKernelModuleInfoObj_t {
 
 } SceKernelModuleInfoObj_t; // sizeof == 0x100
 
-typedef struct{
-	SceUInt size;   //!< 0x1B8 for Vita 1.x
-	SceUID handle; //!< kernel module handle?
+typedef struct {
+	SceUInt size;    //!< 0x1B8 for Vita 1.x
+	SceUID handle;   //!< kernel module handle?
 	uint16_t flags;  //!< some bits. could be priority or whatnot
 	uint8_t minor;
 	uint8_t major;
@@ -107,7 +107,7 @@ typedef struct{
 	SceUInt type;   //!< 6 = user-mode PRX?
 } SceKernelModuleInfo_fix_t;
 
-typedef struct module_tree_t{
+typedef struct module_tree_t {
 	// 0x00
 	struct module_tree_t *next;
 	int data_0x04;		// ex : 0x28000 (flags?)
@@ -123,7 +123,7 @@ typedef struct module_tree_t{
 	// maybe more
 } module_tree_t;
 
-typedef struct module_tree_top_t{
+typedef struct module_tree_top_t {
 	SceUID pid;
 	void *data_0x04;
 	int data_0x08;
