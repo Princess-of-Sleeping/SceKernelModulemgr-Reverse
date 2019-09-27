@@ -158,13 +158,13 @@ int func_0x81001ec4(SceUID pid){
 	return ksceKernelGetObjForUid(pid, sceKernelGetProcessClassForKernel(), 0);
 }
 
-void *func_0x81001f0c(SceUID modid){
+SceKernelModuleInfoObj_t *func_0x81001f0c(SceUID modid){
 
-	int r0;
-	void *obj_base;
+	int res;
+	SceKernelModuleInfoObj_t *obj_base;
 
-	r0 = ksceKernelGetObjForUid(modid, (SceClass *)*(uint32_t *)(SceKernelModulemgr_data + 0x48), (SceObjectBase **)&obj_base);
-	if (r0 < 0) {
+	res = ksceKernelGetObjForUid(modid, (SceClass *)*(uint32_t *)(SceKernelModulemgr_data + 0x48), (SceObjectBase **)&obj_base);
+	if (res < 0) {
 		obj_base = NULL;
 	}
 
