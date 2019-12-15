@@ -4,8 +4,8 @@
 #include <psp2kern/kernel/modulemgr.h>
 
 typedef struct {
-  char module_name[0x1C];
-} SceKernelModuleName;
+  char s[0x1C];
+} SceKernelModuleName_fix;
 
 typedef struct {
   SceSize size; //!< sizeof(SceKernelModuleInfo2) : 0x120
