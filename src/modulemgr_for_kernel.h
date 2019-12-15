@@ -31,7 +31,12 @@ int sceKernelGetModuleIdByAddrForKernel(SceUID pid, const void *module_addr);
 
 int sceKernelGetModuleInfoForKernel(SceUID pid, SceUID modid, SceKernelModuleInfo *info);
 int sceKernelGetModuleInfo2ForKernel(SceUID pid, SceUID modid, SceKernelModuleInfo2_fix *info);
-int sceKernelGetModuleInfoMinByAddrForKernel(SceUID pid, const void *module_addr, int *a3, int *a4, SceKernelModuleName *module_name);
+int sceKernelGetModuleInfoMinByAddrForKernel(
+	SceUID pid,
+	const void *module_addr,
+	uint32_t *module_nid,
+	const void **program_text_addr,
+	SceKernelModuleName_fix *module_name);
 int sceKernelGetModuleInternalForKernel(SceUID modid, void **module);
 
 int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID modid, void *unk1, const void *unk2, int unk3);
