@@ -611,7 +611,9 @@ int SceModulemgrForKernel_7A1E882D(SceUID pid, int *a2)
 	return 0;
 }
 
-int sceKernelGetModuleInfoMinByAddrForKernel(SceUID pid, const void *module_addr, int *a3, int *a4, SceKernelModuleName *module_name)
+int sceKernelGetModuleInfoMinByAddrForKernel(
+	SceUID pid, const void *module_addr, uint32_t *module_nid, const void **program_text_addr, SceKernelModuleName_fix *module_name
+)
 {
 	int res;
 	int cpu_intr;
@@ -625,14 +627,14 @@ int sceKernelGetModuleInfoMinByAddrForKernel(SceUID pid, const void *module_addr
 	if (res < 0)
 		goto loc_81007ED6;
 
-	if (a3 != NULL)
-		*(uint32_t *)(a3) = *(uint32_t *)(some_addr + 0x30);
+	if (module_nid != NULL)
+		*(uint32_t *)(module_nid) = *(uint32_t *)(some_addr + 0x30);
 
-	if (a4 != NULL)
-		*(uint32_t *)(a4) = *(uint32_t *)(some_addr + 0x7C);
+	if (program_text_addr != NULL)
+		*(uint32_t *)(program_text_addr) = *(uint32_t *)(some_addr + 0x7C);
 
 	if (module_name != NULL)
-		strncpy(module_name->module_name, (const char *)(*(uint32_t *)(some_addr + 0x1C)), 0x1B);
+		strncpy(module_name->s, (const char *)(*(uint32_t *)(some_addr + 0x1C)), 0x1B);
 
 loc_81007ED6:
 	ksceKernelCpuResumeIntr(&((module_tree_top_t *)dat)->cpu_addr, cpu_intr);
