@@ -1,3 +1,4 @@
+
 #ifndef _PSP2_KERNEL_MODULEMGR_INTERNAL_H_
 #define _PSP2_KERNEL_MODULEMGR_INTERNAL_H_
 
@@ -26,7 +27,7 @@ typedef struct SceKernelModuleInfoObj_t {
 	SceUID pid;
 
 	// 0x20
-	uint16_t flags;
+	uint16_t attr;
 	uint8_t minor;
 	uint8_t major;
 	const char *module_name;
@@ -46,8 +47,8 @@ typedef struct SceKernelModuleInfoObj_t {
 	void *exidxBtm;
 
 	// 0x50
-	SceUInt unk50;
-	SceUInt unk54;
+	void *extabTop;
+	void *extabBtm;
 	int data_0x58;		// ex : 0x190006
 	int data_0x5C;		// ex : 0x9020D8
 
@@ -68,8 +69,8 @@ typedef struct SceKernelModuleInfoObj_t {
 	void *module_start;
 
 	// 0xC0
-	SceUInt unkC0;
 	void *module_stop;
+	void *module_exit;
 
 	// more
 
@@ -77,8 +78,8 @@ typedef struct SceKernelModuleInfoObj_t {
 
 typedef struct {
 	SceUInt size;    //!< 0x1B8 for Vita 1.x
-	SceUID handle;   //!< kernel module handle?
-	uint16_t flags;  //!< some bits. could be priority or whatnot
+	SceUID modid;
+	uint16_t attr;
 	uint8_t minor;
 	uint8_t major;
 
@@ -90,13 +91,13 @@ typedef struct {
 	void *module_start;
 
 	// 0x30
-	SceUInt unk30;
 	void *module_stop;
+	void *module_exit;
 
 	void *exidxTop;
 	void *exidxBtm;
-	SceUInt unk40;
-	SceUInt unk44;
+	void *extabTop;
+	void *extabBtm;
 
 	void *tlsInit;
 	SceSize tlsInitSize;
@@ -129,7 +130,8 @@ typedef struct module_tree_top_t {
 	void *data_0x0C;
 	module_tree_t *module_tree;
 	int data_0x14;
-	int data_0x18;		// ex : 0x52
+	uint16_t data_0x18;		// ex : 0x52
+	uint16_t data_0x1A;
 	int data_0x1C;
 	int cpu_addr;
 	int data_0x24;		// ex : 0x1009B(modid?)
