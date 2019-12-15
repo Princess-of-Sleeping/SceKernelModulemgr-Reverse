@@ -58,7 +58,7 @@ sceKernelGetModuleIdByAddr<br>
 
 0x3382952B : sceKernelSetupForModulemgrForKernel<br>
 
-SceModulemgrForKernel_1BDE2ED2<br>
+SceModulemgrForKernel_1BDE2ED2 (sceKernelModuleGetLibraryImportNID)<br>
 SceModulemgrForKernel_1D341231<br>
 SceModulemgrForKernel_29CB2771<br>
 SceModulemgrForKernel_2C2618D9<br>
