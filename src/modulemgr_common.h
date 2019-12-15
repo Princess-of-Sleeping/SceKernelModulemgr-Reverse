@@ -39,9 +39,10 @@ int func_0x81004198(void *a1, int a2, int a3);			// yet not Reversed
 int func_0x8100428c(void *a1, int a2, int a3);			// yet not Reversed
 void *func_0x8100498c(SceUID pid, int len);
 int func_0x810049fc(const char *path);
-int func_0x81004a54(void);
+int func_0x81004a54(SceUID fd);
 
-int func_0x81005648(SceUID pid, int flags, void *dst);
+// int func_0x81005648(SceUID pid, int flags, void *dst);
+int func_0x81005648(SceUID pid, int flags, SceKernelModuleInfoObj_t **dst);
 int func_0x81005a70(void *r0, const char *path, int flags);
 void print_module_load_info(void *r0);
 int func_0x81005fec(void *a1, const void *a2);			// yet not Reversed
