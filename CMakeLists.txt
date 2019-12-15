@@ -24,15 +24,17 @@ add_executable(SceKernelModulemgr_Reverse
 
 target_link_libraries(SceKernelModulemgr_Reverse
   SceDebugForDriver_stub
+  SceDipswForDriver_stub
   SceIofilemgrForDriver_stub
   SceThreadmgrForDriver_stub
   SceSysmemForDriver_stub
   SceSysclibForDriver_stub
   SceSysrootForDriver_stub
   SceSysrootForKernel_stub
+  SceKernelUtilsForDriver_stub
   SceCpuForDriver_stub
   SceCpuForKernel_stub
-
+  SceQafMgrForDriver_stub
   taihenForKernel_stub
   taihenModuleUtils_stub
 )
