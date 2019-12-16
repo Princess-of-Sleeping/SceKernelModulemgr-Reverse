@@ -18,7 +18,6 @@ extern void (* SceSysrootForDriver_6E0BC27C)(void);
 
 int sceKernelGetAllowedSdkVersionOnSystem(void)
 {
-
 	int res;
 	uint32_t state;
 	SceKernelFwInfo kdata;
@@ -47,7 +46,6 @@ loc_8100A280:
 
 int sceKernelGetSystemSwVersion(SceKernelFwInfo *data)
 {
-
 	int res;
 	uint32_t state;
 	SceKernelFwInfo kdata;
@@ -85,7 +83,6 @@ int sceKernelGetModuleIdByAddr(const void *addr)
 
 int sceKernelGetLibraryInfoByNID(SceUID uid, int a2, SceKernelLibraryInfo *info)
 {
-
 	int res;
 	SceUID kuid;
 	uint32_t state;
@@ -130,7 +127,6 @@ int sceKernelGetModuleList(int flags, SceUID *modids, int *num)
 
 int sceKernelGetModuleInfo(SceUID modid, SceKernelModuleInfo *info)
 {
-
 	int res;
 	SceUID kuid;
 	uint32_t state;
@@ -165,7 +161,6 @@ loc_8100A194:
 
 int sceKernelIsCalledFromSysModule(int a1)
 {
-
 	int res;
 	uint32_t state;
 
@@ -178,7 +173,6 @@ int sceKernelIsCalledFromSysModule(int a1)
 
 int sceKernelInhibitLoadingModule(uint16_t flag)
 {
-
 	int res;
 	uint32_t state;
 
