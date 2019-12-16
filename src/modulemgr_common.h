@@ -26,7 +26,7 @@ int syscall_stub();
 void func_0x810014a8(void);
 void func_0x810014d4(void);
 int func_0x81001ec4(SceUID pid);
-void *func_0x81001f0c(SceUID modid);
+SceKernelModuleInfoObj_t *func_0x81001f0c(SceUID modid);
 
 int func_0x810021b8(SceUID pid);
 int func_0x810021c0(SceUID pid);
@@ -44,7 +44,7 @@ int func_0x81004a54(SceUID fd);
 // int func_0x81005648(SceUID pid, int flags, void *dst);
 int func_0x81005648(SceUID pid, int flags, SceKernelModuleInfoObj_t **dst);
 int func_0x81005a70(void *r0, const char *path, int flags);
-void print_module_load_info(void *r0);
+void print_module_load_info(SceKernelModuleInfoObjBase_t *obj);
 int func_0x81005fec(void *a1, const void *a2);			// yet not Reversed
 
 //int func_0x81006cf4(int a1, int a2, int a3, void *a4);
@@ -59,7 +59,7 @@ int func_0x81007148(const char *path);
 int func_0x810071a8(void *r0);
 int func_0x810076b0(SceUID pid, SceUID uid, int a2, SceKernelLibraryInfo *info); // yet not Reversed
 int get_module_info(SceUID pid, SceUID modid, SceKernelModuleInfo_fix_t *info);
-int func_0x81007a84(void *a1, const void *a2, void *a3);
+int func_0x81007a84(void *a1, const void *module_addr, void *dst);
 
 int syacall_init(void);
 
