@@ -50,10 +50,10 @@ sceKernelGetModuleIdByAddr<br>
 
 ## List of only frame(prototype) reversed
 ### SceModulemgrForKernel
-0xFA21D8CB : sceKernelLoadModuleForPidForKernel
-0x6DF745D5 : sceKernelStartModuleForPidForKernel
-0x7BB4CE54 : sceKernelStopModuleForPidForKernel
-0x5972E2CC : sceKernelUnloadModuleForPidForKernel
+0xFA21D8CB : sceKernelLoadModuleForPidForKernel<br>
+0x6DF745D5 : sceKernelStartModuleForPidForKernel<br>
+0x7BB4CE54 : sceKernelStopModuleForPidForKernel<br>
+0x5972E2CC : sceKernelUnloadModuleForPidForKernel<br>
 
 0x6A655255 : sceKernelGetModuleInfo2ForKernel<br>
 
