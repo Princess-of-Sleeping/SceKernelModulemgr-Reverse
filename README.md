@@ -24,7 +24,7 @@ SceModulemgrForDriver_1D9E0F7E(ksceKernelGetModuleInfoByAddr)<br>
 SceModulemgrForKernel_2C2618D9<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
-SceModulemgrForKernel_EEA92F1F(sceKernelModuleGetProcessMainModuleXXXXXForKernel)<br>
+SceModulemgrForKernel_EEA92F1F(sceKernelGetModuleNIDForKernel)<br>
 
 ### SceModulemgrForDriver
 0x5182E212 : sceKernelGetSystemSwVersionForDriver<br>
