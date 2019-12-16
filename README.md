@@ -4,10 +4,13 @@ There is nothing to guarantee perfect operation<br>
 
 ## Tested functions
 sceKernelGetModuleIdByAddrForKernel<br>
-
 sceKernelGetModuleInfoForKernel<br>
+sceKernelGetModulePathForKernel<br>
+sceKernelGetModuleNIDForKernel<br>
+sceKernelModuleGetNonlinkedImportInfoForKernel<br>
+
+sceKernelGetModuleInfoByAddrForDriver<br>
 sceKernelSearchModuleByNameForDriver<br>
-SceModulemgrForDriver_1D9E0F7E(ksceKernelGetModuleInfoByAddr)<br>
 
 ## Reverse Completed
 ### SceModulemgrForKernel
@@ -17,14 +20,16 @@ SceModulemgrForDriver_1D9E0F7E(ksceKernelGetModuleInfoByAddr)<br>
 0x8309E043 : sceKernelGetModuleInfoMinByAddrForKernel<br>
 0xFE303863 : sceKernelGetModuleInternalForKernel<br>
 0x779A1025 : sceKernelGetModulePathForKernel<br>
+0xEEA92F1F : sceKernelGetModuleNIDForKernel<br>
 0x2A69385E : sceKernelModuleUnloadMySelfForKernel<br>
 0x01360661 : sceKernelMountBootfsForKernel<br>
 0x9C838A6B : sceKernelUmountBootfsForKernel<br>
 0xB427025E : sceKernelRegisterSyscallForKernel<br>
+0x1BDE2ED2 : sceKernelModuleGetNonlinkedImportInfoForKernel<br>
 SceModulemgrForKernel_2C2618D9<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
-SceModulemgrForKernel_EEA92F1F(sceKernelGetModuleNIDForKernel)<br>
+SceModulemgrForKernel_7A1E882D (sceKernelGetModuleInhibitState)<br>
 
 ### SceModulemgrForDriver
 0x5182E212 : sceKernelGetSystemSwVersionForDriver<br>
@@ -58,7 +63,6 @@ sceKernelGetModuleIdByAddr<br>
 
 0x3382952B : sceKernelSetupForModulemgrForKernel<br>
 
-SceModulemgrForKernel_1BDE2ED2 (sceKernelModuleGetNonlinkedImportInfo)<br>
 SceModulemgrForKernel_1D341231<br>
 SceModulemgrForKernel_29CB2771<br>
 SceModulemgrForKernel_2C2618D9<br>
@@ -66,15 +70,11 @@ SceModulemgrForKernel_2DD3B511<br>
 SceModulemgrForKernel_4865C72C<br>
 SceModulemgrForKernel_60E176C8<br>
 SceModulemgrForKernel_619925F1<br>
-SceModulemgrForKernel_66606301<br>
-SceModulemgrForKernel_78DBC027<br>
-SceModulemgrForKernel_7A1E882D (sceKernelGetModuleInhibitState)<br>
 SceModulemgrForKernel_8D1AA624<br>
 SceModulemgrForKernel_952535A3<br>
 SceModulemgrForKernel_99890202<br>
 SceModulemgrForKernel_9D20C9BB<br>
 SceModulemgrForKernel_B73BE671<br>
-SceModulemgrForKernel_EEA92F1F<br>
 SceModulemgrForKernel_F3CD647F<br>
 SceModulemgrForKernel_F95D09C2<br>
 SceModulemgrForKernel_FB251B7A<br>
