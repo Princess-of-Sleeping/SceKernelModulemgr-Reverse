@@ -22,6 +22,8 @@ sceKernelUnloadModuleForPidForKernel<br>
 ## Reverse Completed
 ### SceModulemgrForKernel
 0xFDD7F646 : sceKernelFinalizeKblForKernel<br>
+0x66606301 : sceKernelGetModuleEntryPoint<br>
+0x78DBC027 : sceKernelGetModuleEntryPointForUserForKernel<br>
 0x0053BA4A : sceKernelGetModuleIdByAddrForKernel<br>
 0xD269F915 : sceKernelGetModuleInfoForKernel<br>
 0x8309E043 : sceKernelGetModuleInfoMinByAddrForKernel<br>
@@ -36,8 +38,6 @@ sceKernelUnloadModuleForPidForKernel<br>
 0x9C838A6B : sceKernelUmountBootfsForKernel<br>
 0xB427025E : sceKernelRegisterSyscallForKernel<br>
 SceModulemgrForKernel_2C2618D9<br>
-SceModulemgrForKernel_66606301<br>
-SceModulemgrForKernel_78DBC027<br>
 
 ### SceModulemgrForDriver
 0x5182E212 : sceKernelGetSystemSwVersionForDriver<br>
