@@ -8,6 +8,11 @@ typedef struct {
 } SceKernelModuleName_fix;
 
 typedef struct {
+	SceUID modid;
+	uint32_t library_nid;
+} SceKernelModuleImportNID;
+
+typedef struct {
   SceSize size; //!< sizeof(SceKernelModuleInfo2) : 0x120
   SceUID modid1;
   uint32_t unk_0x08;
