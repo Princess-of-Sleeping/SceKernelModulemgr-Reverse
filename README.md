@@ -68,7 +68,7 @@ SceModulemgrForKernel_60E176C8<br>
 SceModulemgrForKernel_619925F1<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
-SceModulemgrForKernel_7A1E882D<br>
+SceModulemgrForKernel_7A1E882D (sceKernelGetModuleInhibitState)<br>
 SceModulemgrForKernel_8D1AA624<br>
 SceModulemgrForKernel_952535A3<br>
 SceModulemgrForKernel_99890202<br>
