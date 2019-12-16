@@ -3,6 +3,7 @@ target version : 3.60<br>
 There is nothing to guarantee perfect operation<br>
 
 ## Tested functions
+```
 sceKernelGetModuleIdByAddrForKernel<br>
 sceKernelGetModuleInfoForKernel<br>
 sceKernelGetModulePathForKernel<br>
@@ -12,15 +13,19 @@ sceKernelGetProcessMainModuleForKernel<br>
 
 sceKernelGetModuleInfoByAddrForDriver<br>
 sceKernelSearchModuleByNameForDriver<br>
+```
 
 ## Partially working function
+```
 sceKernelLoadModuleForKernel<br>
 sceKernelUnloadModuleForKernel<br>
 sceKernelLoadModuleForPidForKernel<br>
 sceKernelUnloadModuleForPidForKernel<br>
+```
 
 ## Reverse Completed
 ### SceModulemgrForKernel
+```
 0xFDD7F646 : sceKernelFinalizeKblForKernel<br>
 0x66606301 : sceKernelGetModuleEntryPoint<br>
 0x78DBC027 : sceKernelGetModuleEntryPointForUserForKernel<br>
@@ -38,20 +43,26 @@ sceKernelUnloadModuleForPidForKernel<br>
 0x9C838A6B : sceKernelUmountBootfsForKernel<br>
 0xB427025E : sceKernelRegisterSyscallForKernel<br>
 SceModulemgrForKernel_2C2618D9<br>
+```
 
 ### SceModulemgrForDriver
+```
 0x5182E212 : sceKernelGetSystemSwVersionForDriver<br>
 0xBBE1771C : sceKernelSearchModuleByNameForDriver<br>
 0x1D9E0F7E : sceKernelGetModuleInfoByAddrForDriver<br>
+```
 
 ### SceModulemgr
+```
 sceKernelInhibitLoadingModule<br>
 sceKernelGetModuleInfo<br>
 sceKernelGetSystemSwVersion<br>
 sceKernelGetModuleIdByAddr<br>
+```
 
 ## List of only frame(prototype) reversed
 ### SceModulemgrForKernel
+```
 0xFA21D8CB : sceKernelLoadModuleForPidForKernel<br>
 0x6DF745D5 : sceKernelStartModuleForPidForKernel<br>
 0x7BB4CE54 : sceKernelStopModuleForPidForKernel<br>
@@ -90,8 +101,10 @@ SceModulemgrForKernel_F3CD647F<br>
 SceModulemgrForKernel_F95D09C2<br>
 SceModulemgrForKernel_FB251B7A<br>
 SceModulemgrForKernel_FF2264BB<br>
+```
 
 ### SceModulemgrForDriver
+```
 ksceKernelLoadModule<br>
 ksceKernelStartModule<br>
 ksceKernelLoadStartModule<br>
@@ -104,8 +117,10 @@ ksceKernelLoadStartSharedModuleForPid<br>
 SceModulemgrForDriver_02D3D0C1(ksceKernelStopUnloadSharedModuleForPid)<br>
 SceModulemgrForDriver_0975B104(ksceKernelReleaseLibary)<br>
 SceModulemgrForDriver_861638AD(ksceKernelRegisterLibary)<br>
+```
 
 ### SceModulemgr
+```
 sceKernelGetAllowedSdkVersionOnSystem<br>
 sceKernelGetLibraryInfoByNID<br>
 sceKernelGetModuleList<br>
@@ -118,6 +133,7 @@ _sceKernelLoadStartModule<br>
 _sceKernelStopModule<br>
 _sceKernelUnloadModule<br>
 _sceKernelStopUnloadModule<br>
+```
 
 ## yet not Reversed List
 
