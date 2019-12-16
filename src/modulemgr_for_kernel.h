@@ -47,6 +47,9 @@ int sceKernelGetModuleList2ForKernel(SceUID pid, SceKernelModuleListInfo *infoli
 int sceKernelGetModuleUidForKernel(SceUID pid, SceUID modid, SceUID *modid_out, const void *unk1, int unk2);
 int sceKernelGetModuleUidListForKernel(SceUID pid, SceUID *modids, size_t *num);
 
+// sceKernelGetModuleInhibitStateForKernel
+int SceModulemgrForKernel_7A1E882D(SceUID pid, int *a2);
+
 int SceModulemgrForKernel_2C2618D9(SceUID pid, const void *module_addr, int *dst);
 
 int SceModulemgrForKernel_1BDE2ED2(SceUID pid, SceKernelModuleImportNID *a2, SceSize *num);
@@ -57,38 +60,24 @@ int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, vo
 
 
 
-int SceModulemgrForKernel_2A69385E(void);
-
-int SceModulemgrForKernel_FF2264BB(SceUID a1, int a2, int a3, int a4);
-
-int SceModulemgrForKernel_99890202(SceUID pid, const void *module_addr);
-
-int SceModulemgrForKernel_F95D09C2(const char *path, void *a2, void *a3);
-
 int SceModulemgrForKernel_1D341231(SceUID pid, void *a2, int *num);
-
 int SceModulemgrForKernel_29CB2771(SceUID pid);
-
+int SceModulemgrForKernel_2A69385E(void);
 int SceModulemgrForKernel_2DD3B511(SceUID pid, int a2, int a3, int a4);
-
 int SceModulemgrForKernel_4865C72C(int a1, int a2);
 
-int SceModulemgrForKernel_619925F1(SceUID pid, int a2, int a3, int a4);
-
-int SceModulemgrForKernel_7A1E882D(SceUID pid, int *a2);
-
-int SceModulemgrForKernel_8D1AA624(void *a1, void *a2);
-
-int SceModulemgrForKernel_952535A3(SceUID a1, int a2, int a3, int a4);
-
 int SceModulemgrForKernel_60E176C8(int a1);
+int SceModulemgrForKernel_619925F1(SceUID pid, int a2, int a3, int a4);
+int SceModulemgrForKernel_8D1AA624(void *a1, void *a2);
+int SceModulemgrForKernel_952535A3(SceUID a1, int a2, int a3, int a4);
+int SceModulemgrForKernel_99890202(SceUID pid, const void *module_addr);
 
 int SceModulemgrForKernel_9D20C9BB(int a1);
-
 int SceModulemgrForKernel_B73BE671(int a1, int a2, int a3);
-
 void SceModulemgrForKernel_F3CD647F(int a1, int a2);
-
+int SceModulemgrForKernel_F95D09C2(const char *path, void *a2, void *a3);
 int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID a2, int a3, int a4, int a5);
+
+int SceModulemgrForKernel_FF2264BB(SceUID a1, int a2, int a3, int a4);
 
 #endif /* _PSP2_KERNEL_MODULEMGR_FOR_KERNEL_H_ */
