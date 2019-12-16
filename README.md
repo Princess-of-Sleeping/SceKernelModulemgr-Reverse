@@ -7,8 +7,8 @@ sceKernelGetModuleIdByAddrForKernel<br>
 sceKernelGetModuleInfoForKernel<br>
 sceKernelGetModulePathForKernel<br>
 sceKernelGetModuleNIDForKernel<br>
+sceKernelGetModuleNonlinkedImportInfoForKernel<br>
 sceKernelGetProcessMainModuleForKernel<br>
-sceKernelModuleGetNonlinkedImportInfoForKernel<br>
 
 sceKernelGetModuleInfoByAddrForDriver<br>
 sceKernelSearchModuleByNameForDriver<br>
@@ -29,12 +29,12 @@ sceKernelUnloadModuleForPidForKernel<br>
 0xFE303863 : sceKernelGetModuleInternalForKernel<br>
 0x779A1025 : sceKernelGetModulePathForKernel<br>
 0xEEA92F1F : sceKernelGetModuleNIDForKernel<br>
+0x1BDE2ED2 : sceKernelGetModuleNonlinkedImportInfoForKernel<br>
 0x20A27FA9 : sceKernelGetProcessMainModuleForKernel<br>
 0x2A69385E : sceKernelModuleUnloadMySelfForKernel<br>
 0x01360661 : sceKernelMountBootfsForKernel<br>
 0x9C838A6B : sceKernelUmountBootfsForKernel<br>
 0xB427025E : sceKernelRegisterSyscallForKernel<br>
-0x1BDE2ED2 : sceKernelModuleGetNonlinkedImportInfoForKernel<br>
 SceModulemgrForKernel_2C2618D9<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
