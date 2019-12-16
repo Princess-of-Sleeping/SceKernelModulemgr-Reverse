@@ -25,6 +25,7 @@ sceKernelUnloadModuleForPidForKernel<br>
 0x0053BA4A : sceKernelGetModuleIdByAddrForKernel<br>
 0xD269F915 : sceKernelGetModuleInfoForKernel<br>
 0x8309E043 : sceKernelGetModuleInfoMinByAddrForKernel<br>
+0x7A1E882D : sceKernelGetModuleInhibitStateForKernel<br>
 0xFE303863 : sceKernelGetModuleInternalForKernel<br>
 0x779A1025 : sceKernelGetModulePathForKernel<br>
 0xEEA92F1F : sceKernelGetModuleNIDForKernel<br>
@@ -37,7 +38,6 @@ sceKernelUnloadModuleForPidForKernel<br>
 SceModulemgrForKernel_2C2618D9<br>
 SceModulemgrForKernel_66606301<br>
 SceModulemgrForKernel_78DBC027<br>
-SceModulemgrForKernel_7A1E882D (sceKernelGetModuleInhibitState)<br>
 
 ### SceModulemgrForDriver
 0x5182E212 : sceKernelGetSystemSwVersionForDriver<br>
