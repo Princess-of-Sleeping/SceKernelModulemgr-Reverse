@@ -16,7 +16,7 @@ SceModulemgrForDriver_1D9E0F7E(ksceKernelGetModuleInfoByAddr)<br>
 0xD269F915 : sceKernelGetModuleInfoForKernel<br>
 0x8309E043 : sceKernelGetModuleInfoMinByAddrForKernel<br>
 0xFE303863 : sceKernelGetModuleInternalForKernel<br>
-0x779A1025 : sceKernelGetProcessMainModulePathForKernel<br>
+0x779A1025 : sceKernelGetModulePathForKernel<br>
 0x2A69385E : sceKernelModuleUnloadMySelfForKernel<br>
 0x01360661 : sceKernelMountBootfsForKernel<br>
 0x9C838A6B : sceKernelUmountBootfsForKernel<br>
