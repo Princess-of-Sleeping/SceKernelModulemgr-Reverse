@@ -27,7 +27,7 @@ sceKernelUnloadModuleForPidForKernel<br>
 ### SceModulemgrForKernel
 ```
 0xFDD7F646 : sceKernelFinalizeKblForKernel<br>
-0x66606301 : sceKernelGetModuleEntryPoint<br>
+0x66606301 : sceKernelGetModuleEntryPointForKernel<br>
 0x78DBC027 : sceKernelGetModuleEntryPointForUserForKernel<br>
 0x0053BA4A : sceKernelGetModuleIdByAddrForKernel<br>
 0xD269F915 : sceKernelGetModuleInfoForKernel<br>
