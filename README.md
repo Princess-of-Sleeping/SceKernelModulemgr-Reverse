@@ -13,6 +13,8 @@ sceKernelGetProcessMainModuleForKernel<br>
 
 sceKernelGetModuleInfoByAddrForDriver<br>
 sceKernelSearchModuleByNameForDriver<br>
+
+sceKernelGetLibraryInfoByNID
 ```
 
 ## Partially working function
@@ -54,10 +56,11 @@ SceModulemgrForKernel_2C2618D9<br>
 
 ### SceModulemgr
 ```
-sceKernelInhibitLoadingModule<br>
-sceKernelGetModuleInfo<br>
-sceKernelGetSystemSwVersion<br>
 sceKernelGetModuleIdByAddr<br>
+sceKernelGetModuleInfo<br>
+sceKernelGetLibraryInfoByNID<br>
+sceKernelGetSystemSwVersion<br>
+sceKernelInhibitLoadingModule<br>
 ```
 
 ## List of only frame(prototype) reversed
@@ -122,7 +125,6 @@ SceModulemgrForDriver_861638AD(ksceKernelRegisterLibary)<br>
 ### SceModulemgr
 ```
 sceKernelGetAllowedSdkVersionOnSystem<br>
-sceKernelGetLibraryInfoByNID<br>
 sceKernelGetModuleList<br>
 sceKernelIsCalledFromSysModule<br>
 _sceKernelOpenModule<br>
