@@ -44,7 +44,7 @@ sceKernelUnloadModuleForPidForKernel<br>
 0x01360661 : sceKernelMountBootfsForKernel<br>
 0x9C838A6B : sceKernelUmountBootfsForKernel<br>
 0xB427025E : sceKernelRegisterSyscallForKernel<br>
-SceModulemgrForKernel_2C2618D9<br>
+SceModulemgrForKernel_2C2618D9 (maybe sceKernelGetModuleInternalByAddrForKernel)<br>
 ```
 
 ### SceModulemgrForDriver
