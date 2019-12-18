@@ -1,3 +1,8 @@
+/*
+ * PS Vita kernel module manager RE
+ * Copyright (C) 2019, Princess of Sleeping
+ */
+
 #include <psp2kern/kernel/modulemgr.h>
 #include <psp2kern/kernel/sysmem.h>
 #include <psp2kern/kernel/cpu.h>
