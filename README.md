@@ -90,7 +90,6 @@ sceKernelInhibitLoadingModule<br>
 
 SceModulemgrForKernel_1D341231<br>
 SceModulemgrForKernel_29CB2771<br>
-SceModulemgrForKernel_2C2618D9<br>
 SceModulemgrForKernel_2DD3B511<br>
 SceModulemgrForKernel_4865C72C<br>
 SceModulemgrForKernel_60E176C8<br>
