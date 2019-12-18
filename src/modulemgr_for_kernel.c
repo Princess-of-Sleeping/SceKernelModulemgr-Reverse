@@ -1,3 +1,7 @@
+/*
+ * PS Vita kernel module manager RE
+ * Copyright (C) 2019, Princess of Sleeping
+ */
 
 #include <psp2kern/kernel/modulemgr.h>
 #include <psp2kern/kernel/threadmgr.h>
@@ -87,7 +91,7 @@ int SceModulemgrForKernel_2C2618D9(SceUID pid, const void *module_addr, int *dst
 {
 	int res;
 	int cpu_intr;
-	module_tree_top_t *mod_tree;
+	SceKernelModuleProcInfo_t *mod_tree;
 
 	if (pid == 0)
 		pid = ksceKernelGetProcessId();
@@ -108,11 +112,10 @@ int SceModulemgrForKernel_FF2264BB(SceUID a1, int a2, int a3, int a4)
 	return 0;
 }
 
-// sceKernelGetModuleInhibitState
-int SceModulemgrForKernel_7A1E882D(SceUID pid, int *a2)
+int sceKernelGetModuleInhibitStateForKernel(SceUID pid, int *a2)
 {
 	int cpu_intr;
-	module_tree_top_t *module_tree_top;
+	SceKernelModuleProcInfo_t *module_tree_top;
 
 	module_tree_top = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
 	if (module_tree_top == NULL)
@@ -154,20 +157,20 @@ int sceKernelGetModulePathForKernel(SceUID modid, char *path, int pathlen)
 	return 0;
 }
 
-void *SceModulemgrForKernel_66606301(SceUID modid)
+SceKernelModuleEntry sceKernelGetModuleEntryPointForKernel(SceUID modid)
 {
 	SceKernelModuleInfoObj_t *modobj;
 
 	modobj = func_0x81001f0c(modid);
 	if (modobj == NULL)
-		return modobj;
+		return NULL;
 
 	ksceKernelUidRelease(modid);
 
-	return modobj->obj_base.data_0xB4;
+	return modobj->obj_base.module_start;
 }
 
-int SceModulemgrForKernel_78DBC027(SceUID pid, SceUID UserUid, uint32_t *a3, uint32_t *a4)
+int sceKernelGetModuleEntryPointForUserForKernel(SceUID pid, SceUID UserUid, SceKernelModuleEntry *start, SceKernelModuleEntry *stop)
 {
 	SceUID KernelUid;
 	SceKernelModuleInfoObj_t *modobj;
@@ -190,15 +193,47 @@ int SceModulemgrForKernel_78DBC027(SceUID pid, SceUID UserUid, uint32_t *a3, uin
 		return 0x8002D011;
 	}
 
-	*a3 = modobj->obj_base.data_0xB4;
-	*a4 = modobj->obj_base.data_0xB8;
+	*start = modobj->obj_base.module_start;
+	*stop  = modobj->obj_base.module_stop;
 	ksceKernelUidRelease(KernelUid);
 	ksceKernelUidRelease(pid);
 
-	if (*a3 == 0)
+	if (*start == 0)
 		return 0x8002D01C;
 
 	return 0;
+}
+
+SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid)
+{
+	SceUID res;
+	int cpu_intr;
+	SceKernelModuleProcInfo_t *module_tree_top;
+	SceKernelModuleInfoObj_t *modobj;
+
+	if (pid == 0x10005)
+		return 0x8002D082;
+
+	module_tree_top = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
+	if (module_tree_top == NULL)
+		return 0x8002D082;
+
+	modobj = func_0x81001f0c(module_tree_top->proc_main_module_id);
+	if (modobj == NULL){
+		ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
+		return 0x8002D082;
+	}
+
+	if ((modobj->obj_base.flags & 0x4000) != 0){
+		res = (modobj->obj_base.pid == pid) ? module_tree_top->proc_main_module_id : 0x8002D082;
+	}else{
+		res = 0x8002D082;
+	}
+
+	func_0x810021b8(module_tree_top->proc_main_module_id);
+	ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
+
+	return res;
 }
 
 /**
@@ -469,13 +504,12 @@ int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *
 	return 0;
 }
 
-// sceKernelModuleGetNonlinkedImportInfo
-int SceModulemgrForKernel_1BDE2ED2(SceUID pid, SceKernelModuleImportNID *info, SceSize *num)
+int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleImportNID *info, SceSize *num)
 {
 	int cpu_intr;
 	SceSize count = 0;
-	module_info_tree_t *module_info_tree;
-	module_tree_top_t  *module_tree_top;
+	SceKernelModuleImportNonlinkedInfo_t *import_nonlinked_list;
+	SceKernelModuleProcInfo_t *module_tree_top;
 
 	if (info == NULL){
 		module_tree_top = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
@@ -488,17 +522,17 @@ int SceModulemgrForKernel_1BDE2ED2(SceUID pid, SceKernelModuleImportNID *info, S
 	if (module_tree_top == NULL)
 		return 0x8002D080;
 
-	module_info_tree = module_tree_top->module_info_tree;
+	import_nonlinked_list = module_tree_top->import_nonlinked_list;
 
 	while(*num > count){
-		if (module_info_tree == NULL)
+		if (import_nonlinked_list == NULL)
 			break;
 
-		info[count].library_nid = module_info_tree->data_0x08->library_nid;
-		info[count].modid       = (pid == 0x10005) ? module_info_tree->pObjBase->modid_kernel : module_info_tree->pObjBase->modid_user;
+		info[count].libnid = import_nonlinked_list->lib_import_info->libnid;
+		info[count].modid  = (pid == 0x10005) ? import_nonlinked_list->pObjBase->modid_kernel : import_nonlinked_list->pObjBase->modid_user;
 
 		count++;
-		module_info_tree = module_info_tree->next;
+		import_nonlinked_list = import_nonlinked_list->next;
 	}
 
 	ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
@@ -514,12 +548,6 @@ int SceModulemgrForKernel_1D341231(SceUID pid, SceUID *a2, SceSize *num)
 }
 
 int sceKernelGetModuleUidListForKernel(SceUID pid, SceUID *modids, size_t *num)
-{
-	// yet not Reversed
-	return 0;
-}
-
-SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid)
 {
 	// yet not Reversed
 	return 0;
@@ -554,7 +582,7 @@ void sceKernelSetupForModulemgrForKernel(void)
 		goto loc_81004152;
 
 loc_81004142:
-	if (func_0x810040c8((module_tree_top_t *)(*(uint32_t *)(dat + 4))) < 0)
+	if (func_0x810040c8((SceKernelModuleProcInfo_t *)(*(uint32_t *)(dat + 4))) < 0)
 		ksceDebugPrintKernelPanic((void *)(SceKernelModulemgr_text + 0xD81C), lr);
 
 	if (*(uint32_t *)(*(uint32_t *)(dat + 4)) != 0)
@@ -566,7 +594,7 @@ loc_81004152:
 	return;
 }
 
-int sceKernelGetModuleUidForKernel(SceUID pid, SceUID modid, SceUID *modid_out, const void *unk1, int unk2)
+int sceKernelGetModuleUidForKernel(SceUID pid, SceUID libid, SceUID *dst, SceSize *num, SceSize cpy_skip_num)
 {
 	// yet not Reversed
 	return 0;
@@ -662,7 +690,7 @@ int sceKernelGetModuleInfoMinByAddrForKernel(
 		strncpy(module_name->s, (const char *)(*(uint32_t *)(some_addr + 0x1C)), 0x1B);
 
 loc_81007ED6:
-	ksceKernelCpuResumeIntr(&((module_tree_top_t *)dat)->cpu_addr, cpu_intr);
+	ksceKernelCpuResumeIntr(&((SceKernelModuleProcInfo_t *)dat)->cpu_addr, cpu_intr);
 
 	return res;
 }
