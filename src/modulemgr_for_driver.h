@@ -1,3 +1,8 @@
+/*
+ * PS Vita kernel module manager RE
+ * Copyright (C) 2019, Princess of Sleeping
+ */
+
 #ifndef _PSP2_KERNEL_MODULEMGR_FOR_DRIVER_H_
 #define _PSP2_KERNEL_MODULEMGR_FOR_DRIVER_H_
 
