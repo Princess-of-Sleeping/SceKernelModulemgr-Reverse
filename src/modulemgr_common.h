@@ -1,17 +1,13 @@
+/*
+ * PS Vita kernel module manager RE
+ * Copyright (C) 2019, Princess of Sleeping
+ */
+
 #ifndef _PSP2_KERNEL_MODULEMGR_COMMON_H_
 #define _PSP2_KERNEL_MODULEMGR_COMMON_H_
 
+#include "modulemgr_types.h"
 #include "modulemgr_internal.h"
-
-typedef struct SceKernelLibraryInfo {
-	SceSize size;
-	uint32_t unk_04;
-	uint32_t unk_08;
-	uint32_t unk_0C;
-	uint32_t unk_10;
-	uint32_t unk_14;
-	uint32_t unk_18;
-} SceKernelLibraryInfo;  // size is 0x1C
 
 SceUID module_load_for_pid(SceUID pid, const char *path, int flags, SceKernelLMOption *option);
 int module_start_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
@@ -34,7 +30,7 @@ int func_0x810021d8(SceUID pid);
 
 int func_0x81003708(uint16_t flag);
 
-int func_0x810040c8(module_tree_top_t *a1);
+int func_0x810040c8(SceKernelModuleProcInfo_t *a1);
 int func_0x81004198(void *a1, int a2, int a3);			// yet not Reversed
 int func_0x8100428c(void *a1, int a2, int a3);			// yet not Reversed
 void *func_0x8100498c(SceUID pid, int len);
@@ -49,15 +45,15 @@ int func_0x81005fec(void *a1, const void *a2);			// yet not Reversed
 
 //int func_0x81006cf4(int a1, int a2, int a3, void *a4);
 void *func_0x81006cf4(int a1, void *a2, const void *a3, void *a4);
-void *func_0x81006de8(SceUID pid, SceUID uid);
-module_tree_top_t *get_proc_module_tree_obj_for_pid(SceUID pid, int *cpu_suspend_intr);
-int func_0x81006e90(module_tree_top_t *module_tree_top, int cpu_suspend_intr);
+SceModuleLibraryObj_t *func_0x81006de8(SceUID pid, SceUID libid);
+SceKernelModuleProcInfo_t *get_proc_module_tree_obj_for_pid(SceUID pid, int *cpu_suspend_intr);
+int func_0x81006e90(SceKernelModuleProcInfo_t *module_tree_top, int cpu_suspend_intr);
 int func_0x81006e9c(SceUID pid);
 
 int func_0x810070b4(void *a1);
 int func_0x81007148(const char *path);
 int func_0x810071a8(void *r0);
-int func_0x810076b0(SceUID pid, SceUID uid, int a2, SceKernelLibraryInfo *info); // yet not Reversed
+int get_module_library_info_export(SceUID pid, SceUID modid, uint32_t libnid, SceKernelLibraryInfo *info);
 int get_module_info(SceUID pid, SceUID modid, SceKernelModuleInfo_fix_t *info);
 int func_0x81007a84(void *a1, const void *module_addr, void *dst);
 
