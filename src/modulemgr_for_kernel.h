@@ -1,3 +1,8 @@
+/*
+ * PS Vita kernel module manager RE
+ * Copyright (C) 2019, Princess of Sleeping
+ */
+
 #ifndef _PSP2_KERNEL_MODULEMGR_FOR_KERNEL_H_
 #define _PSP2_KERNEL_MODULEMGR_FOR_KERNEL_H_
 
@@ -26,8 +31,8 @@ void sceKernelSetupForModulemgrForKernel(void);
 
 int sceKernelGetModuleNIDForKernel(SceUID modid, uint32_t *module_nid);
 int sceKernelGetModulePathForKernel(SceUID modid, char *path, int pathlen);
-int SceModulemgrForKernel_78DBC027(SceUID pid, SceUID UserUid, uint32_t *a3, uint32_t *a4);
-void *SceModulemgrForKernel_66606301(SceUID modid);
+SceKernelModuleEntry sceKernelGetModuleEntryPointForKernel(SceUID modid);
+int sceKernelGetModuleEntryPointForUserForKernel(SceUID pid, SceUID UserUid, SceKernelModuleEntry *start, SceKernelModuleEntry *stop);
 
 int sceKernelGetModuleIdByAddrForKernel(SceUID pid, const void *module_addr);
 
@@ -44,15 +49,14 @@ int sceKernelGetModuleInternalForKernel(SceUID modid, SceKernelModuleInfoObjBase
 int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID modid, void *unk1, const void *unk2, int unk3);
 int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *modids, size_t *num);
 int sceKernelGetModuleList2ForKernel(SceUID pid, SceKernelModuleListInfo *infolists, size_t *num);
-int sceKernelGetModuleUidForKernel(SceUID pid, SceUID modid, SceUID *modid_out, const void *unk1, int unk2);
+int sceKernelGetModuleUidForKernel(SceUID pid, SceUID libid, SceUID *dst, SceSize *num, SceSize cpy_skip_num);
 int sceKernelGetModuleUidListForKernel(SceUID pid, SceUID *modids, size_t *num);
 
-// sceKernelGetModuleInhibitStateForKernel
-int SceModulemgrForKernel_7A1E882D(SceUID pid, int *a2);
+int sceKernelGetModuleInhibitStateForKernel(SceUID pid, int *a2);
 
 int SceModulemgrForKernel_2C2618D9(SceUID pid, const void *module_addr, int *dst);
 
-int SceModulemgrForKernel_1BDE2ED2(SceUID pid, SceKernelModuleImportNID *a2, SceSize *num);
+int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleImportNID *a2, SceSize *num);
 
 SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid);
 
