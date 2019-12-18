@@ -1,3 +1,8 @@
+/*
+ * PS Vita kernel module manager RE
+ * Copyright (C) 2019, Princess of Sleeping
+ */
+
 #include <psp2kern/kernel/modulemgr.h>
 #include <psp2kern/kernel/threadmgr.h>
 #include <psp2kern/kernel/sysmem.h>
@@ -81,10 +86,9 @@ int sceKernelGetModuleIdByAddr(const void *addr)
 	return res;
 }
 
-int sceKernelGetLibraryInfoByNID(SceUID uid, int a2, SceKernelLibraryInfo *info)
+int sceKernelGetLibraryInfoByNID(SceUID modid, uint32_t libnid, SceKernelLibraryInfo *info)
 {
 	int res;
-	SceUID kuid;
 	uint32_t state;
 	SceUID pid;
 	SceKernelLibraryInfo kinfo;
@@ -93,15 +97,15 @@ int sceKernelGetLibraryInfoByNID(SceUID uid, int a2, SceKernelLibraryInfo *info)
 
 	pid = ksceKernelGetProcessId();
 
-	kuid = ksceKernelKernelUidForUserUid(pid, uid);
-	if (kuid < 0)
+	modid = ksceKernelKernelUidForUserUid(pid, modid);
+	if (modid < 0)
 		goto loc_8100A2F6;
 
 	memset(&kinfo, 0, sizeof(SceKernelLibraryInfo));
 
 	kinfo.size = sizeof(SceKernelLibraryInfo);
 
-	res = func_0x810076b0(pid, kuid, a2, &kinfo);
+	res = get_module_library_info_export(pid, modid, libnid, &kinfo);
 	if (res < 0)
 		goto loc_8100A2E4;
 
@@ -114,7 +118,7 @@ loc_8100A2E8:
 	return res;
 
 loc_8100A2F6:
-	res = kuid | 0x40000000;
+	res = modid | 0x40000000;
 	EXIT_SYSCALL(state);
 	goto loc_8100A2E8;
 }
