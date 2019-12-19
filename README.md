@@ -89,9 +89,9 @@ sceKernelInhibitLoadingModule<br>
 0x3382952B : sceKernelSetupForModulemgrForKernel<br>
 
 SceModulemgrForKernel_952535A3 : (sceKernelGetModuleImportNonlinkedInfoByNID)<br>
-SceModulemgrForKernel_1D341231 : (sceKernelGetModuleImportStubIdList)<br>
+SceModulemgrForKernel_1D341231 : (sceKernelGetModuleLibStubIdList)<br>
+SceModulemgrForKernel_619925F1 : (sceKernelGetModuleLibraryIdList)<br>
 SceModulemgrForKernel_99890202 : (sceKernelGetModuleIsSharedByAddr)<br>
-SceModulemgrForKernel_619925F1 : (sceKernelGetModuleExportLibraryIdList)<br>
 SceModulemgrForKernel_8D1AA624 : (sceKernelGetModuleKernelExportList)<br>
 SceModulemgrForKernel_29CB2771<br>
 SceModulemgrForKernel_2DD3B511<br>
