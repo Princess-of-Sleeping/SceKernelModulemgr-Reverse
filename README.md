@@ -71,9 +71,9 @@ sceKernelInhibitLoadingModule<br>
 0x7BB4CE54 : sceKernelStopModuleForPidForKernel<br>
 0x5972E2CC : sceKernelUnloadModuleForPidForKernel<br>
 
-0x6A655255 : sceKernelGetModuleInfo2ForKernel<br>
+0x6A655255 : sceKernelGetModuleLibraryInfoForKernel<br>
 
-0xD4BF409C : sceKernelGetModuleLibraryInfoForKernel<br>
+0xD4BF409C : sceKernelGetModuleLibExportListForKernel<br>
 0x3B93CF88 : sceKernelGetModuleUidForKernel<br>
 0x1FDEAE16 : sceKernelGetModuleUidListForKernel<br>
 0x97CF7B4E : sceKernelGetModuleListForKernel<br>
