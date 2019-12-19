@@ -88,7 +88,7 @@ sceKernelInhibitLoadingModule<br>
 
 0x3382952B : sceKernelSetupForModulemgrForKernel<br>
 
-SceModulemgrForKernel_1D341231<br>
+SceModulemgrForKernel_1D341231 : (maybe sceKernelGetModuleImportStubIdList)<br>
 SceModulemgrForKernel_29CB2771<br>
 SceModulemgrForKernel_2DD3B511<br>
 SceModulemgrForKernel_4865C72C<br>
