@@ -94,7 +94,7 @@ SceModulemgrForKernel_2DD3B511<br>
 SceModulemgrForKernel_4865C72C<br>
 SceModulemgrForKernel_60E176C8<br>
 SceModulemgrForKernel_619925F1<br>
-SceModulemgrForKernel_8D1AA624<br>
+SceModulemgrForKernel_8D1AA624 (sceKernelGetModuleKernelExportList)<br>
 SceModulemgrForKernel_952535A3 (sceKernelGetModuleImportNonlinkedInfoByNID)<br>
 SceModulemgrForKernel_99890202 (sceKernelGetModuleIsSharedByAddr)<br>
 SceModulemgrForKernel_9D20C9BB<br>
