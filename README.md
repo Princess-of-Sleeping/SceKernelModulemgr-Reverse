@@ -75,7 +75,7 @@ sceKernelInhibitLoadingModule<br>
 
 0xD4BF409C : sceKernelGetModuleLibExportListForKernel<br>
 0x3B93CF88 : sceKernelGetModuleUidForKernel<br>
-0x1FDEAE16 : sceKernelGetModuleUidListForKernel<br>
+0x1FDEAE16 : sceKernelGetModuleUidListForKernel (maybe sceKernelGetModuleExportLibraryList)<br>
 0x97CF7B4E : sceKernelGetModuleListForKernel<br>
 0x410E1D2E : sceKernelGetModuleList2ForKernel<br>
 
