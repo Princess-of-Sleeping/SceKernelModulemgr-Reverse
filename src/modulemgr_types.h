@@ -8,6 +8,24 @@
 
 #include <psp2kern/kernel/modulemgr.h>
 
+/*
+ * for sceKernelGetModuleList
+ */
+
+#define SCE_KERNEL_MODULE_LIST_FLAG1_GET_NORMAL           0x1
+#define SCE_KERNEL_MODULE_LIST_FLAG1_GET_SHARED           0x80
+
+/*
+ * flags2 |= SCE_KERNEL_MODULE_LIST_FLAG2_CPY_KERNEL_MODULE_ID; -> cpy kernel modid
+ * If this flag is not set, the user modid will be copied
+ */
+#define SCE_KERNEL_MODULE_LIST_FLAG2_CPY_KERNEL_MODULE_ID 0x1
+
+/*
+ * If the modid to be copied is user, whether to copy the modid of the shared module
+ */
+#define SCE_KERNEL_MODULE_LIST_FLAG2_CPY_SHARED_MODULE_ID 0x2
+
 typedef struct SceKernelModuleExportEntry {
 	uint32_t libnid;
 	const void *entry; // function ptr. or vars?
