@@ -14,6 +14,7 @@
 #include "modulemgr_types.h"
 #include "modulemgr_internal.h"
 #include "modulemgr_common.h"
+#include "modulemgr_for_kernel.h"
 
 // return value is previous value
 int ksceKernelSetPermission(int value);
@@ -497,10 +498,74 @@ int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, vo
 	return 0;
 }
 
-int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *modids, size_t *num)
+int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *modids, SceSize *num)
 {
-	// yet not Reversed
+	int cpu_intr;
+	SceSize count = 0;
+	SceKernelModuleInfoObjBase_t *module_list;
+	SceKernelModuleProcInfo_t *module_proc_info;
+
+	if (pid == 0)
+		pid = ksceKernelGetProcessId();
+
+	if (modids == NULL)
+		goto module_count_mode;
+
+	module_proc_info = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
+	if (module_proc_info == NULL)
+		return 0x8002D080;
+
+	module_list = module_proc_info->module_list;
+
+	while(*num > count){
+		if (module_list == NULL)
+			break;
+
+		if ((pid != 0x10005) && ((flags1 & 1) != 0) && ((module_list->flags & 0x1000) == 0)){
+			modids[count] = ((flags2 & 1) == 0) ? module_list->modid_user : module_list->modid_kernel;
+			count++;
+		}
+
+		if ((pid == 0x10005) || (((flags1 & 0x80) != 0) && ((module_list->flags & 0x1000) != 0))){
+			if ((flags2 & 1) == 0){
+				if ((flags2 & 2) != 0){
+					modids[count] = module_list->modid_user;
+					count++;
+				}
+			}else{
+				modids[count] = module_list->modid_kernel;
+				count++;
+			}
+		}
+
+		module_list = module_list->next;
+	}
+	ksceKernelCpuResumeIntr(&module_proc_info->cpu_addr, cpu_intr);
+
+	*num = count;
 	return 0;
+
+module_count_mode:
+	module_proc_info = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
+	if (module_proc_info == NULL)
+		return 0;
+
+	module_list = module_proc_info->module_list;
+
+	while(module_list != NULL){
+		if (pid == 0x10005){
+			count++;
+		}else if (((flags1 & 1) != 0) && ((module_list->flags & 0x1000) == 0)){
+			count++;
+		}else if (((flags1 & 0x80) != 0) && ((module_list->flags & 0x1000) != 0)){
+			count++;
+		}
+
+		module_list = module_list->next;
+	}
+	ksceKernelCpuResumeIntr(&module_proc_info->cpu_addr, cpu_intr);
+
+	return count;
 }
 
 int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleImportNID *info, SceSize *num)
@@ -730,6 +795,10 @@ int SceModulemgrForKernel_B73BE671(int a1, int a2, int a3)
 	return 0;
 }
 
+// SceUID SceSysmemForKernel_libid = get_module_export_library_id(0x10005, search_module_by_name(0x10005, "SceSysmem"), 0x63a519e5);
+/*
+ * cpy_skip_num is >= 2, 1 == 0
+ */
 int sceKernelGetModuleLibExportListForKernel(SceUID pid, SceUID libid, SceKernelModuleExportEntry *list, SceSize *num, SceSize cpy_skip_num)
 {
 	// yet not Reversed
