@@ -9,9 +9,8 @@
 #include <psp2kern/kernel/modulemgr.h>
 
 /*
- * for sceKernelGetModuleList
+ * flags for sceKernelGetModuleList
  */
-
 #define SCE_KERNEL_MODULE_LIST_FLAG1_GET_NORMAL           0x1
 #define SCE_KERNEL_MODULE_LIST_FLAG1_GET_SHARED           0x80
 
