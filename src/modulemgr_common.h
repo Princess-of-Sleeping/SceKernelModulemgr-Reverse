@@ -55,7 +55,7 @@ int func_0x81007148(const char *path);
 int func_0x810071a8(void *r0);
 int get_module_library_info_export(SceUID pid, SceUID modid, uint32_t libnid, SceKernelLibraryInfo *info);
 int get_module_info(SceUID pid, SceUID modid, SceKernelModuleInfo_fix_t *info);
-int func_0x81007a84(void *a1, const void *module_addr, void *dst);
+int get_module_info_internal_by_addr(SceKernelModuleProcInfo_t *module_proc_info, const void *module_addr, SceKernelModuleInfoObjBase_t **dst);
 
 int syacall_init(void);
 
