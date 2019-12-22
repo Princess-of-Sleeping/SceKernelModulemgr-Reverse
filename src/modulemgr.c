@@ -169,7 +169,7 @@ int sceKernelIsCalledFromSysModule(int a1)
 	uint32_t state;
 
 	ENTER_SYSCALL(state);
-	res = SceModulemgrForKernel_99890202(ksceKernelGetProcessId(), (const void *)a1);
+	res = sceKernelGetModuleIsSharedByAddrForKernel(ksceKernelGetProcessId(), (const void *)a1);
 	EXIT_SYSCALL(state);
 
 	return res;
