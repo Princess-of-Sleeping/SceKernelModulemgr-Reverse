@@ -13,20 +13,17 @@ typedef struct SceKernelModuleInfoObjBase_t SceKernelModuleInfoObjBase_t;
 typedef int (* SceKernelModuleEntry)(SceSize args, void *argp);
 
 typedef struct SceModuleLibImport_t {
-
 	uint16_t size; // 0x24
 	uint16_t libver[2];
 	uint16_t entry_num_function;
 	uint16_t entry_num_variable;
 	uint16_t data_0x0A; // unused?
 	uint32_t libnid;
-
 	const char *libname;
-	void *ent1;
-	void *ent2;
-	void *ent3;
-
-	void *ent4;
+	uint32_t *table_func_nid;
+	void    **table_function;
+	uint32_t *table_vars_nid;
+	void    **table_variable;
 } SceModuleLibImport_t;
 
 typedef struct SceModuleLibExport_t {
