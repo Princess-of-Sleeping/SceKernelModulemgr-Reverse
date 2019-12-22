@@ -163,7 +163,7 @@ int get_function(void)
 	if(GetExport("SceKernelModulemgr", 0x92C9FFC2, 0xDAA90093, &_ksceKernelGetModuleInfo) < 0)
 		return 1;
 
-	GetExport("SceKernelModulemgr", 0x92C9FFC2, 0x97CF7B4E, &_ksceKernelGetModuleList);
+	GetExport("SceKernelModulemgr", 0xC445FA63, 0x97CF7B4E, &_ksceKernelGetModuleList);
 
 	GetExport("SceSysmem", 0x3691DA45, 0x37EC12BB, &_ksceKernelSysrootGetModulePrivate);
 	GetExport("SceSysmem", 0x63A519E5, 0xDF0288D7, &_ksceKernelCreateUidObj);
@@ -451,6 +451,16 @@ int modulemgr_lock_mutex(void)
 int modulemgr_unlock_mutex(void)
 {
 	return _modulemgr_unlock_mutex();
+}
+
+// 0x8100496C
+int memcpy_to_kernel(SceUID pid, void *dst, const void *src, SceSize len)
+{
+	if (pid == 0x10005){
+		memcpy(dst, src, len);
+		return 0;
+	}
+	return ksceKernelMemcpyUserToKernelForPid(pid, dst, src, len);
 }
 
 // 0x81005A5C
@@ -1928,7 +1938,7 @@ int print_proc_nonlinked_import(SceUID pid){
 
 	int cpu_intr;
 	SceKernelModuleProcInfo_t *module_tree_top;
-	SceKernelModuleImportNonlinkedInfo_t *module_info_tree;
+	SceKernelModuleImportNonlinkedInfo_t *module_nonlinked_info;
 
 	ksceDebugPrintf("pid:0x%X\n", pid);
 
@@ -1936,19 +1946,19 @@ int print_proc_nonlinked_import(SceUID pid){
 	if(module_tree_top != NULL){
 		func_0x81006e90(module_tree_top, cpu_intr);
 
-		module_info_tree = module_tree_top->import_nonlinked_list;
+		module_nonlinked_info = module_tree_top->import_nonlinked_list;
 
-		if(module_info_tree == NULL)
+		if(module_nonlinked_info == NULL)
 			ksceDebugPrintf("nonlinked import is none.\n");
 
-		while(module_info_tree != NULL){
+		while(module_nonlinked_info != NULL){
 			ksceDebugPrintf(
 				"[%-27s] <- [%-27s] libnid:0x%08X import nonlinked\n",
-				module_info_tree->pObjBase->module_name,
-				module_info_tree->lib_import_info->libname,
-				module_info_tree->lib_import_info->libnid
+				module_nonlinked_info->pObjBase->module_name,
+				module_nonlinked_info->lib_import_info->libname,
+				module_nonlinked_info->lib_import_info->libnid
 			);
-			module_info_tree = module_info_tree->next;
+			module_nonlinked_info = module_nonlinked_info->next;
 		}
 		ksceDebugPrintf("\n");
 	}
@@ -2095,12 +2105,14 @@ int threadFunc(SceSize args, void *argp){
 	ksceDebugPrintf("shell_uid : 0x%X\n", shell_uid);
 
 	modid = module_load_for_pid(0x10005, "os0:/kd/enum_wakeup.skprx", 0, NULL);
-	ksceDebugPrintf("modid : 0x%X\n", modid);
+	ksceDebugPrintf("enum_wakeup.skprx modid : 0x%X\n", modid);
 
-	// int res;
+	int res;
 
 	print_proc_nonlinked_import(0x10005);
 	print_proc_nonlinked_import(shell_pid);
+
+
 
 	int cpu_intr;
 	SceKernelModuleProcInfo_t *module_tree_top;
@@ -2108,89 +2120,13 @@ int threadFunc(SceSize args, void *argp){
 	module_tree_top = get_proc_module_tree_obj_for_pid(shell_pid, &cpu_intr);
 	if(module_tree_top != NULL){
 		func_0x81006e90(module_tree_top, cpu_intr);
-/*
 
-		// get import stubid
-		int (* _SceModulemgrForKernel_1D341231)(SceUID pid, SceUID *a2, SceSize *num);
-
-		GetExport("SceKernelModulemgr", 0xFFFFFFFF, 0x1D341231, &_SceModulemgrForKernel_1D341231);
-
-		SceSize num = 0xFF0;
-		SceUID uids[0x1000];
-		memset(uids, 0xAA, sizeof(uids));
-*/
-		// get stub list?
-		// _SceModulemgrForKernel_1D341231(0x10005, uids, &num);
-		// write_file("sd0:/modulemgr_1D341231.bin", uids, 0x1000);
-
-		// print_proc_test(0x10005);
-
-		// module_info_dump(0x10005);
-		// module_info_dump(shell_pid);
-
-/*
-		// sceKernelGetModuleImportNonlinkedInfoByNID
-		int (* _SceModulemgrForKernel_952535A3)(SceUID pid, SceUID modid, SceUID libnid, SceKernelModuleImportNonlinkedInfo *info);
-
-		// sceKernelGetModuleKernelExportList
-		int (* _SceModulemgrForKernel_8D1AA624)(SceModuleLibraryExportInfo_t **list, SceSize *num);
-
-		int sceKernelGetModuleIsSharedByAddr(SceUID pid, const void *addr);
-		SceModulemgrForKernel_99890202
-
-		// sceKernelGetModuleExportLibraryIdListForKernel
-		int (* _SceModulemgrForKernel_619925F1)(SceUID pid, SceUID modid, SceUID *libid, SceSize *num);
-
-*/
-
-		// write_file("sd0:/modulemgr.bin", uids, 0x1000);
-/*
-		print_export_info(0x10005, search_module_by_name(0x10005, "SceKernelModulemgr"));
-		ksceDebugPrintf("SceKernelModulemgr modid : 0x%X\n", search_module_by_name(0x10005, "SceKernelModulemgr"));
-*/
-
-/*
-		SceModuleLibraryObj_t *SceModuleLibraryObj;
-		SceModuleLibStubObj_t *SceModuleLibStubObj;
-
-		ksceDebugPrintf("modobj64->data_0x34\n");
-
-		res = ksceKernelGetObjForUid(modobj64->data_0x34, pSceUIDLibraryClass, (SceObjectBase **)&SceModuleLibraryObj);
-		if(res == 0)
-			ksceKernelUidRelease(modobj64->data_0x34);
-
-		ksceDebugPrintf("pSceUIDLibraryClass : 0x%X\n", res);
-
-		res = ksceKernelGetObjForUid(modobj64->data_0x34, pSceUIDLibStubClass, (SceObjectBase **)&SceModuleLibStubObj);
-		if(res == 0)
-			ksceKernelUidRelease(modobj64->data_0x34);
-
-		ksceDebugPrintf("pSceUIDLibStubClass : 0x%X\n", res);
-*/
-
-
-
-		// SceUID SceSysmemForKernel_libid = get_module_export_library_id(0x10005, search_module_by_name(0x10005, "SceSysmem"), 0x63a519e5);
-
-		/*
-		 * cpy_skip_num is >= 2, 1 == 0
-		 */
-/*
-		int (* sceKernelGetModuleLibExportList)(SceUID pid, SceUID libid, SceKernelModuleExportEntry *list, SceSize *num, SceSize cpy_skip_num);
-
-		GetExport("SceKernelModulemgr", 0xFFFFFFFF, 0xD4BF409C, &sceKernelGetModuleLibExportList);
-
-		sceKernelGetModuleLibExportList(0x10005, SceSysmemForKernel_libid, uids, &num, 0);
-*/
-
-		ksceDebugPrintf("unload res : 0x%X\n", module_unload_for_pid(0x10005, modid, 0, NULL));
-		ksceDebugPrintf("\n");
-
-/*
-		write_file("sd0:/modulemgr_modobj_58.bin", lib_export_info->modobj->data_0x58, 0x400);
-*/
+		// write_file("sd0:/modulemgr_modobj_58.bin", lib_export_info->modobj->data_0x58, 0x400);
 	}
 
+
+	ksceDebugPrintf("enum_wakeup.skprx unload res : 0x%X\n", module_unload_for_pid(0x10005, modid, 0, NULL));
+	ksceDebugPrintf("\n");
 
 
 	modid = search_module_by_name(shell_pid, "SceShell");
