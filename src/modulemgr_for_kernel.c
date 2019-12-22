@@ -87,7 +87,7 @@ label_0x81003706:
 	return res;
 }
 
-int SceModulemgrForKernel_2C2618D9(SceUID pid, const void *module_addr, int *dst)
+int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceKernelModuleInfoObjBase_t **info)
 {
 	int res;
 	int cpu_intr;
@@ -97,12 +97,11 @@ int SceModulemgrForKernel_2C2618D9(SceUID pid, const void *module_addr, int *dst
 		pid = ksceKernelGetProcessId();
 
 	mod_tree = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
-	if (mod_tree == NULL){
-		res = 0x8002D080;
-	}else{
-		res = func_0x81007a84(mod_tree, module_addr, dst);
-		ksceKernelCpuResumeIntr((int *)(&mod_tree->cpu_addr), cpu_intr);
-	}
+	if (mod_tree == NULL)
+		return 0x8002D080;
+
+	res = get_module_info_internal_by_addr(mod_tree, module_addr, info);
+	ksceKernelCpuResumeIntr((int *)(&mod_tree->cpu_addr), cpu_intr);
 
 	return res;
 }
@@ -309,7 +308,7 @@ label_0x810036B0:
 	goto label_0x810036A4;
 }
 
-int SceModulemgrForKernel_99890202(SceUID pid, const void *module_addr){
+int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_addr){
 	// yet not Reversed
 	return 0;
 }
@@ -541,7 +540,7 @@ int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleIm
 	return 0;
 }
 
-int SceModulemgrForKernel_1D341231(SceUID pid, SceUID *a2, SceSize *num)
+int sceKernelGetModuleLibStubIdListForKernel(SceUID pid, SceUID *stubid, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
@@ -612,56 +611,48 @@ int SceModulemgrForKernel_4865C72C(int a1, int a2)
 	return 0;
 }
 
-int SceModulemgrForKernel_619925F1(SceUID pid, int a2, int a3, int a4)
+int sceKernelGetModuleLibraryIdListForKernel(SceUID pid, SceUID modid, SceUID *libid, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
 }
 
-int sceKernelGetModuleInfo2ForKernel(SceUID pid, SceUID modid, SceKernelModuleInfo2_fix *info)
+int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelModuleLibraryInfo *info)
 {
 	int res;
-	int a1;
-	void *dat;
+	SceModuleLibraryObj_t *SceModuleLibraryObj;
+	SceModuleLibraryExportInfo_t *library_info;
 
 	res = func_0x810021c0(pid);
 	if (res < 0)
-		goto loc_81008952;
+		return res;
 
-	dat = func_0x81006de8(pid, modid);
-	if (dat == NULL)
-		goto loc_81008940;
+	SceModuleLibraryObj = func_0x81006de8(pid, libid);
+	if (SceModuleLibraryObj == NULL){
+		func_0x810021d8(pid);
+		return 0x8002D01C;
+	}
 
-	a1 = *(uint32_t *)(*(uint32_t *)(dat + 8) + 0x18);
-	if (a1 != modid)
-		a1 = *(uint32_t *)(*(uint32_t *)(dat + 8) + 0x1C);
+	library_info = SceModuleLibraryObj->library_info;
 
-	info->modid1    = a1;
-	info->unk_0x08  = *(uint32_t *)(*(uint32_t *)(*(uint32_t *)(dat + 8) + 8) + 0x10);
-	info->unk_0x0C  = *(uint16_t *)(*(uint32_t *)(*(uint32_t *)(dat + 8) + 8) + 2);
-	info->unk_0x0E  = *(uint16_t *)(*(uint32_t *)(*(uint32_t *)(dat + 8) + 8) + 4);
-	info->unk_0x10  = *(uint16_t *)(*(uint32_t *)(*(uint32_t *)(dat + 8) + 8) + 6);
-	info->unk_0x12  = *(uint16_t *)(*(uint32_t *)(*(uint32_t *)(dat + 8) + 8) + 8);
-	info->unk_0x14  = 0;
-	info->unk_0x118 = *(uint32_t *)(*(uint32_t *)(dat + 8) + 0x10);
-	info->modid2    = (pid != 0x10005) ? *(uint32_t *)(*(uint32_t *)(*(uint32_t *)(dat + 8) + 0x20) + 0x10) : info->modid1;
+	info->libid              = (library_info->libid_kernel != libid) ? library_info->libid_user : library_info->libid_kernel;
+	info->libnid             = library_info->nid_info->libnid;
+	info->libver[0]          = library_info->nid_info->libver[0];
+	info->libver[1]          = library_info->nid_info->libver[1];
+	info->entry_num_function = library_info->nid_info->entry_num_function;
+	info->entry_num_variable = library_info->nid_info->entry_num_variable;
+	info->unk_0x14           = 0;
 
-	info->module_name[0xFF] = 0;
-	strncpy(info->module_name, (const char *)(*(uint32_t *)(*(uint32_t *)(*(uint32_t *)(dat + 8) + 8) + 0x14)), 0xFF);
+	info->unk_0x118 = library_info->data_0x10;
+	info->modid2    = (pid != 0x10005) ? library_info->modobj->modid_user : info->libid;
 
-	func_0x810021b8(*(uint32_t *)(dat + 0xC));
-	ksceKernelUidRelease(*(uint32_t *)(*(uint32_t *)(dat + 8) + 0x18));
-	res = 0;
-	goto loc_81008948;
+	info->library_name[0xFF] = 0;
+	strncpy(info->library_name, library_info->nid_info->libname, 0xFF);
 
-loc_81008940:
-	res = 0x8002D01C;
-
-loc_81008948:
+	func_0x810021b8(SceModuleLibraryObj->modid);
+	ksceKernelUidRelease(library_info->libid_kernel);
 	func_0x810021d8(pid);
-
-loc_81008952:
-	return res;
+	return 0;
 }
 
 int sceKernelGetModuleInfoMinByAddrForKernel(
@@ -670,38 +661,38 @@ int sceKernelGetModuleInfoMinByAddrForKernel(
 {
 	int res;
 	int cpu_intr;
-	void *dat, *some_addr;
+	SceKernelModuleProcInfo_t *module_proc_info;
+	SceKernelModuleInfoObjBase_t *modobj;
 
-	dat = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
-	if (dat == NULL)
+	module_proc_info = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
+	if (module_proc_info == NULL)
 		return 0x8002D082;
 
-	res = func_0x81007a84(dat, module_addr, &some_addr);
+	res = get_module_info_internal_by_addr(module_proc_info, module_addr, &modobj);
 	if (res < 0)
 		goto loc_81007ED6;
 
 	if (module_nid != NULL)
-		*(uint32_t *)(module_nid) = *(uint32_t *)(some_addr + 0x30);
+		*module_nid = modobj->module_nid;
 
 	if (program_text_addr != NULL)
-		*(uint32_t *)(program_text_addr) = *(uint32_t *)(some_addr + 0x7C);
+		*program_text_addr = modobj->segments[0].vaddr;
 
 	if (module_name != NULL)
-		strncpy(module_name->s, (const char *)(*(uint32_t *)(some_addr + 0x1C)), 0x1B);
+		strncpy(module_name->s, modobj->module_name, 0x1B);
 
 loc_81007ED6:
-	ksceKernelCpuResumeIntr(&((SceKernelModuleProcInfo_t *)dat)->cpu_addr, cpu_intr);
-
+	ksceKernelCpuResumeIntr(&module_proc_info->cpu_addr, cpu_intr);
 	return res;
 }
 
-int SceModulemgrForKernel_8D1AA624(void *a1, void *a2)
+int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryExportInfo_t **list, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
 }
 
-int SceModulemgrForKernel_952535A3(SceUID a1, int a2, int a3, int a4)
+int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid, SceUID libnid, SceKernelModuleImportNonlinkedInfo *info)
 {
 	// yet not Reversed
 	return 0;
@@ -739,7 +730,7 @@ int SceModulemgrForKernel_B73BE671(int a1, int a2, int a3)
 	return 0;
 }
 
-int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID modid, void *unk1, const void *unk2, int unk3)
+int sceKernelGetModuleLibExportListForKernel(SceUID pid, SceUID libid, SceKernelModuleExportEntry *list, SceSize *num, SceSize cpy_skip_num)
 {
 	// yet not Reversed
 	return 0;
