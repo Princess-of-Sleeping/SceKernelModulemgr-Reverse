@@ -27,15 +27,7 @@ typedef struct SceModuleLibImport_t {
 	void *ent3;
 
 	void *ent4;
-
-/*
-	int data_0x00; // 0x10024
-	int data_0x04; // 0x10008
-	int data_0x08;
-	uint32_t library_nid;
-*/
 } SceModuleLibImport_t;
-// } module_library_info_t;
 
 typedef struct SceModuleLibExport_t {
 	uint16_t size; // 0x20
@@ -68,6 +60,20 @@ typedef struct SceModuleLibraryExportInfo_t {
 	// maybe more
 } SceModuleLibraryExportInfo_t;
 
+typedef struct SceModuleLibraryImportInfo_t {
+	SceUID stubid;
+	SceModuleLibImport_t *import_info;
+	SceModuleLibraryExportInfo_t *lib_export_info;
+	SceKernelModuleInfoObjBase_t *modobj;
+	int data_0x14;
+	void *data_0x18; // size is 0x30
+} SceModuleLibraryImportInfo_t;
+
+typedef struct SceModuleImportList_t { // size is 0x48
+	struct SceModuleImportList_t *next;
+	SceModuleLibraryImportInfo_t data[];
+} SceModuleImportList_t;
+
 typedef struct {
 	SceSize filesz;
 	SceSize memsz;
@@ -75,21 +81,6 @@ typedef struct {
 	void *vaddr;
 	SceUID unk_0x10;
 } SceKernelSegmentInfoObj_t; // size (0x14)
-
-typedef struct module_tree_t {
-	struct module_tree_t *next;
-	int data_0x04;		// ex : 0x28000 (flags?)
-	uint32_t version;	// ex : 0x03600011, -1, etc...
-	SceUID modid_kernel;
-
-	// 0x10
-	int data_0x10;
-	SceUID pid;
-	int data_0x18;		// ex : 0x1
-	const char *module_name;
-
-	// maybe more
-} module_tree_t;
 
 typedef struct SceKernelModuleInfoObjBase_t {
 	struct SceKernelModuleInfoObjBase_t *next;
@@ -126,14 +117,15 @@ typedef struct SceKernelModuleInfoObjBase_t {
 	void *extabBtm;
 
 	// 0x50
-	void *data_0x58;			// unk
+	uint16_t lib_export_num;		// Includes noname library
+	uint16_t lib_import_num;
 	SceModuleLibExport_t *data_0x5C;
 	SceModuleLibExport_t *data_0x60;	// export relation
 	SceModuleLibraryExportInfo_t *data_0x64;
 
 	// 0x60
-	void *data_0x68;			// import relation
-	void *data_0x6C;			// unk, function table?
+	SceModuleLibImport_t *data_0x68;	// first_imoprt?
+	SceModuleImportList_t *module_imports;	// allocated by sceKernelAlloc
 	const char *path;
 	int segments_num;
 
@@ -180,8 +172,9 @@ typedef struct SceModuleLibStubObj_t {
 typedef struct SceKernelModuleProcInfo_t {
 	SceUID pid;
 	SceModuleLibraryExportInfo_t *lib_export_info;
-	SceUID data_0x08;			// uid?
-	SceKernelModuleImportNonlinkedInfo_t *import_nonlinked_list;	// non linked import info?, allocated by sceKernelAlloc
+	SceUID data_0x08;						// uid?
+	SceKernelModuleImportNonlinkedInfo_t *import_nonlinked_list;	// allocated by sceKernelAlloc
+	// offset:0x10
 	SceKernelModuleInfoObjBase_t *module_list;
 	SceUID proc_main_module_id;
 	uint16_t proc_module_count;
