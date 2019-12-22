@@ -70,12 +70,11 @@ int sceKernelGetModuleLibStubIdListForKernel(SceUID pid, SceUID *stubid, SceSize
 int sceKernelGetModuleLibraryIdListForKernel(SceUID pid, SceUID modid, SceUID *libid, SceSize *num);
 int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryExportInfo_t **list, SceSize *num);
 
+int sceKernelModuleUnloadMySelfForKernel(void);
 
 int SceModulemgrForKernel_29CB2771(SceUID pid);
-int SceModulemgrForKernel_2A69385E(void);
 int SceModulemgrForKernel_2DD3B511(SceUID pid, int a2, int a3, int a4);
 int SceModulemgrForKernel_4865C72C(int a1, int a2);
-
 int SceModulemgrForKernel_60E176C8(int a1);
 
 int SceModulemgrForKernel_9D20C9BB(int a1);
