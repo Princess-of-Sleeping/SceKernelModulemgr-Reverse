@@ -63,7 +63,7 @@ SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid);
 
 int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, void *buffer, uint32_t bufsize, int zero_unk, uint32_t *bytes_read);
 
-int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid, SceUID libnid, SceKernelModuleImportNonlinkedInfo *info);
+int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid, uint32_t libnid, SceKernelModuleImportNonlinkedInfo *info);
 
 int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_addr);
 int sceKernelGetModuleLibStubIdListForKernel(SceUID pid, SceUID *stubid, SceSize *num);
