@@ -37,7 +37,9 @@ int sceKernelGetModuleEntryPointForUserForKernel(SceUID pid, SceUID UserUid, Sce
 int sceKernelGetModuleIdByAddrForKernel(SceUID pid, const void *module_addr);
 
 int sceKernelGetModuleInfoForKernel(SceUID pid, SceUID modid, SceKernelModuleInfo *info);
-int sceKernelGetModuleInfo2ForKernel(SceUID pid, SceUID modid, SceKernelModuleInfo2_fix *info);
+
+int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelModuleLibraryInfo *info);
+
 int sceKernelGetModuleInfoMinByAddrForKernel(
 	SceUID pid,
 	const void *module_addr,
@@ -45,8 +47,9 @@ int sceKernelGetModuleInfoMinByAddrForKernel(
 	const void **program_text_addr,
 	SceKernelModuleName_fix *module_name);
 int sceKernelGetModuleInternalForKernel(SceUID modid, SceKernelModuleInfoObjBase_t **info);
+int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceKernelModuleInfoObjBase_t **info);
 
-int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID modid, void *unk1, const void *unk2, int unk3);
+int sceKernelGetModuleLibExportListForKernel(SceUID pid, SceUID modid, void *unk1, const void *unk2, int unk3);
 int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *modids, size_t *num);
 int sceKernelGetModuleList2ForKernel(SceUID pid, SceKernelModuleListInfo *infolists, size_t *num);
 int sceKernelGetModuleUidForKernel(SceUID pid, SceUID libid, SceUID *dst, SceSize *num, SceSize cpy_skip_num);
@@ -54,27 +57,26 @@ int sceKernelGetModuleUidListForKernel(SceUID pid, SceUID *modids, size_t *num);
 
 int sceKernelGetModuleInhibitStateForKernel(SceUID pid, int *a2);
 
-int SceModulemgrForKernel_2C2618D9(SceUID pid, const void *module_addr, int *dst);
-
 int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleImportNID *a2, SceSize *num);
 
 SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid);
 
 int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, void *buffer, uint32_t bufsize, int zero_unk, uint32_t *bytes_read);
 
+int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid, SceUID libnid, SceKernelModuleImportNonlinkedInfo *info);
+
+int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_addr);
+int sceKernelGetModuleLibStubIdListForKernel(SceUID pid, SceUID *stubid, SceSize *num);
+int sceKernelGetModuleLibraryIdListForKernel(SceUID pid, SceUID modid, SceUID *libid, SceSize *num);
+int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryExportInfo_t **list, SceSize *num);
 
 
-int SceModulemgrForKernel_1D341231(SceUID pid, void *a2, int *num);
 int SceModulemgrForKernel_29CB2771(SceUID pid);
 int SceModulemgrForKernel_2A69385E(void);
 int SceModulemgrForKernel_2DD3B511(SceUID pid, int a2, int a3, int a4);
 int SceModulemgrForKernel_4865C72C(int a1, int a2);
 
 int SceModulemgrForKernel_60E176C8(int a1);
-int SceModulemgrForKernel_619925F1(SceUID pid, int a2, int a3, int a4);
-int SceModulemgrForKernel_8D1AA624(void *a1, void *a2);
-int SceModulemgrForKernel_952535A3(SceUID a1, int a2, int a3, int a4);
-int SceModulemgrForKernel_99890202(SceUID pid, const void *module_addr);
 
 int SceModulemgrForKernel_9D20C9BB(int a1);
 int SceModulemgrForKernel_B73BE671(int a1, int a2, int a3);
