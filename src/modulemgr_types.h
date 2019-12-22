@@ -8,6 +8,24 @@
 
 #include <psp2kern/kernel/modulemgr.h>
 
+typedef struct SceKernelModuleExportEntry {
+	uint32_t libnid;
+	const void *entry; // function ptr. or vars?
+} SceKernelModuleExportEntry;
+
+typedef struct SceKernelModuleImportNonlinkedInfo {
+	SceSize size; // 0x124
+	SceUID modid;
+	uint32_t libnid;
+	char libname[0x100];
+	uint32_t data_0x10C;
+	uint32_t data_0x110;
+	uint32_t data_0x114;
+	uint32_t data_0x118;
+	uint32_t data_0x11C;
+	uint32_t data_0x120;
+} SceKernelModuleImportNonlinkedInfo;
+
 typedef struct {
   SceSize size;   //!< this structure size (0x18)
   SceUInt perms;  //!< probably rwx in low bits
@@ -59,6 +77,20 @@ typedef struct {
 	uint32_t *table_entry;
 } SceKernelLibraryInfo;  // size is 0x1C
 
+typedef struct SceKernelModuleLibraryInfo {
+  SceSize size; //!< sizeof(SceKernelModuleLibraryInfo) : 0x120
+  SceUID libid;
+  uint32_t libnid;
+  uint16_t libver[2];
+  uint16_t entry_num_function;
+  uint16_t entry_num_variable;
+  uint16_t unk_0x14;
+  uint16_t unk_0x16;
+  char library_name[0x100]; // offset : 0x18
+  uint32_t unk_0x118;
+  SceUID modid2;
+} SceKernelModuleLibraryInfo;
+
 typedef struct {
   char s[0x1C];
 } SceKernelModuleName_fix;
@@ -67,21 +99,6 @@ typedef struct {
 	SceUID modid;
 	uint32_t libnid;
 } SceKernelModuleImportNID;
-
-typedef struct {
-  SceSize size; //!< sizeof(SceKernelModuleInfo2) : 0x120
-  SceUID modid1;
-  uint32_t unk_0x08;
-  uint16_t unk_0x0C;
-  uint16_t unk_0x0E;
-  uint16_t unk_0x10;
-  uint16_t unk_0x12;
-  uint16_t unk_0x14;
-  uint16_t unk_0x16;
-  char module_name[0x100]; // offset : 0x18
-  uint32_t unk_0x118;
-  SceUID modid2;
-} SceKernelModuleInfo2_fix;
 
 typedef struct {
 	int flags;
