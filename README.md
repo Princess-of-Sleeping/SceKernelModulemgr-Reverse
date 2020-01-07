@@ -97,8 +97,8 @@ SceModulemgrForKernel_8D1AA624 : (sceKernelGetModuleKernelExportListForKernel)
 SceModulemgrForKernel_29CB2771
 SceModulemgrForKernel_2DD3B511
 SceModulemgrForKernel_4865C72C
-SceModulemgrForKernel_60E176C8
-SceModulemgrForKernel_9D20C9BB
+SceModulemgrForKernel_60E176C8 : (some module start cb register)
+SceModulemgrForKernel_9D20C9BB : (some module start cb register)
 SceModulemgrForKernel_B73BE671
 SceModulemgrForKernel_F3CD647F
 SceModulemgrForKernel_F95D09C2
