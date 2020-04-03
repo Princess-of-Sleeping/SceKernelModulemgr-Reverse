@@ -124,7 +124,7 @@ typedef struct SceKernelModuleInfoObjBase_t {
 	SceModuleLibImport_t *data_0x68;	// first_imoprt?
 	SceModuleImportList_t *module_imports;	// allocated by sceKernelAlloc
 	const char *path;
-	int segments_num;
+	SceSize segments_num;
 
 	// 0x70
 	SceKernelSegmentInfoObj_t segments[3]; // 0x14 * 3 : 0x3C
