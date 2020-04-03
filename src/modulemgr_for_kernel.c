@@ -757,7 +757,7 @@ int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryExportInfo_t **l
 	return 0;
 }
 
-int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid, SceUID libnid, SceKernelModuleImportNonlinkedInfo *info)
+int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid, uint32_t libnid, SceKernelModuleImportNonlinkedInfo *info)
 {
 	// yet not Reversed
 	return 0;
