@@ -91,7 +91,7 @@ int (* SceQafMgrForDriver_382C71E8)(void);
 int (* SceSysrootForDriver_67AAB627)(void); // get sysver
 void (* SceSysrootForDriver_6E0BC27C)(void);
 
-void *(* sceKernelAllocRemoteProcessHeapForDriver)(SceUID pid, int size);
+void *(* sceKernelAllocRemoteProcessHeapForDriver)(SceUID pid, int size, void *pOpt);
 
 int (* SceProcessmgrForDriver_D141C076)(SceUID uid, void *a2);
 
@@ -355,7 +355,7 @@ void *func_0x8100498c(SceUID pid, int len)
 	void *res;
 
 	if (pid != 0x10005) {
-		res = sceKernelAllocRemoteProcessHeapForDriver(pid, len);
+		res = sceKernelAllocRemoteProcessHeapForDriver(pid, len, NULL);
 	}else{
 		res = ksceKernelSysrootAlloc(len);
 	}
@@ -2090,6 +2090,142 @@ int module_info_dump(SceUID pid){
 	return 0;
 }
 
+typedef struct sce_module_exports {
+  uint16_t size;           // size of this structure; 0x20 for Vita 1.x
+  uint8_t  lib_version[2]; //
+  uint16_t attribute;      // ?
+  uint16_t num_functions;  // number of exported functions
+  uint16_t num_vars;       // number of exported variables
+  uint16_t unk;
+  uint32_t num_tls_vars;   // number of exported TLS variables?  <-- pretty sure wrong // yifanlu
+  uint32_t lib_nid;        // NID of this specific export list; one PRX can export several names
+  char     *lib_name;      // name of the export module
+  uint32_t *nid_table;     // array of 32-bit NIDs for the exports, first functions then vars
+  void     **entry_table;  // array of pointers to exported functions and then variables
+} sce_module_exports_t;
+
+
+typedef struct opcode_thumb_ext {
+	uint8_t val1;
+	uint8_t opcode;
+	uint8_t val2;
+	uint8_t val3;
+} opcode_thumb_ext;
+
+typedef struct opcode_thumb {
+	uint8_t val;
+	uint8_t opcode;
+} opcode_thumb;
+
+
+typedef union opcode_t {
+	opcode_thumb     thumb_data;
+	opcode_thumb_ext thumb_data_ext;
+} opcode_t;
+
+int get_re_opcode(const void *src, void *dst, uint32_t *size){
+
+	int is_thumb, out_size;
+	opcode_t *opcode;
+
+	is_thumb = ((int)src) & 1;
+
+	opcode = (opcode_t *)(((int)src) & ~1);
+
+	if(is_thumb == 0){
+		if(*size > 0xC)
+			*size = 0xC;
+		memcpy(dst, src, *size);
+	}else{
+		out_size = 0;
+
+		while(out_size < 0xA){
+			if(opcode->thumb_data.opcode > 0xDF){
+				opcode = (opcode_t *)(((int)opcode) + 4);
+				out_size += 4;
+			}else{
+				opcode = (opcode_t *)(((int)opcode) + 2);
+				out_size += 2;
+			}
+		}
+
+		*size = out_size;
+		memcpy(dst, (const void *)(((int)src) & ~1), *size);
+
+	}
+
+	return 0;
+}
+
+
+int opcode_test(void){
+	tai_module_info_t mod_info;
+
+	taiGetModuleInfoForKernel(0x10005, "SceKernelModulemgr", &mod_info);
+
+	sce_module_exports_t *export_lib_list = (sce_module_exports_t *)mod_info.exports_start;
+	int export_lib_num = (mod_info.exports_end - mod_info.exports_start) >> 5;
+
+	uint32_t size;
+	char opcode[0x10];
+
+	for(int i=0;i<export_lib_num;i++){
+
+		if(export_lib_list[i].lib_name == NULL){
+			ksceDebugPrintf("noname lib\n");
+		}else{
+			ksceDebugPrintf("%s\n", export_lib_list[i].lib_name);
+		}
+
+		for(int n=0;n<export_lib_list[i].num_functions;n++){
+			if(n == 3){
+				break;
+			}
+
+			memset(opcode, 0, sizeof(opcode));
+			size = 0x10;
+			get_re_opcode(export_lib_list[i].entry_table[n], opcode, &size);
+
+			ksceDebugPrintf("nid   : 0x%X\n", export_lib_list[i].nid_table[n]);
+			ksceDebugPrintf("entry : 0x%X\n", export_lib_list[i].entry_table[n]);
+			ksceDebugPrintf("size  : 0x%X\n", size);
+			ksceDebugPrintf(
+				"%02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+				opcode[0x0], opcode[0x1], opcode[0x2], opcode[0x3],
+				opcode[0x4], opcode[0x5], opcode[0x6], opcode[0x7],
+				opcode[0x8], opcode[0x9], opcode[0xA], opcode[0xB],
+				opcode[0xC], opcode[0xD], opcode[0xE], opcode[0xF]
+			);
+			ksceDebugPrintf("\n");
+
+		}
+
+	}
+
+
+	return 0;
+}
+
+__attribute__((noinline))
+void hex_dump(const void *addr, int len){
+
+	if(addr == NULL)
+		return;
+
+	if(len == 0)
+		return;
+
+	for(int i=0;i<len;i+=0x10){
+		ksceDebugPrintf(
+			"%02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n",
+			((char *)addr)[i + 0x0], ((char *)addr)[i + 0x1], ((char *)addr)[i + 0x2], ((char *)addr)[i + 0x3],
+			((char *)addr)[i + 0x4], ((char *)addr)[i + 0x5], ((char *)addr)[i + 0x6], ((char *)addr)[i + 0x7],
+			((char *)addr)[i + 0x8], ((char *)addr)[i + 0x9], ((char *)addr)[i + 0xA], ((char *)addr)[i + 0xB],
+			((char *)addr)[i + 0xC], ((char *)addr)[i + 0xD], ((char *)addr)[i + 0xE], ((char *)addr)[i + 0xF]
+		);
+	}
+}
+
 int threadFunc(SceSize args, void *argp){
 
 	SceUID modid;
@@ -2104,14 +2240,29 @@ int threadFunc(SceSize args, void *argp){
 	ksceDebugPrintf("shell_pid : 0x%X\n", shell_pid);
 	ksceDebugPrintf("shell_uid : 0x%X\n", shell_uid);
 
+
 	modid = module_load_for_pid(0x10005, "os0:/kd/enum_wakeup.skprx", 0, NULL);
 	ksceDebugPrintf("enum_wakeup.skprx modid : 0x%X\n", modid);
 
 	int res;
 
+	if(0){
 	print_proc_nonlinked_import(0x10005);
 	print_proc_nonlinked_import(shell_pid);
+	}
 
+	if(0){
+		SceUID SceSysmem_uid = search_module_by_name(0x10005, "SceSysmem");
+
+		SceKernelModuleInfo sce_info;
+		memset(&sce_info, 0, sizeof(SceKernelModuleInfo));
+
+		sceKernelGetModuleInfoForKernel(0x10005, SceSysmem_uid, &sce_info);
+
+		uint32_t *sysroot_func_table = *(uint32_t **)(sce_info.segments[1].vaddr + 0x75F8);
+
+		ksceDebugPrintf("SceSysrootForDriver_D75D4F37 : 0x%X\n", sysroot_func_table[0x368 >> 2]);
+	}
 
 
 	int cpu_intr;
@@ -2136,6 +2287,25 @@ int threadFunc(SceSize args, void *argp){
 	module_load_unload_test(shell_pid, "os0:/psp2bootconfig.skprx");
 
 	return ksceKernelExitDeleteThread(0);
+}
+
+
+/*
+
+ksceKernelSysrootAppMgrSpawnProcess main 0x04000000 vs0:vsh/shell/shell.self 0x00000000 0x00000000 0x00000040 0x00000814 : 0x11843
+
+*/
+
+static tai_hook_ref_t ksceKernelSysrootAppMgrSpawnProcess_ref;
+SceUID ksceKernelSysrootAppMgrSpawnProcess_patch(const char *titleid, int flags, const char *path, int a4, int a5, void *a6, void *a7){
+	SceUID res;
+
+	res = TAI_CONTINUE(SceUID, ksceKernelSysrootAppMgrSpawnProcess_ref, titleid, flags, path, a4, a5, a6, a7);
+
+	if((res > 0) && (strncmp(titleid, "main", 4) == 0)){
+	}
+
+	return res;
 }
 
 void _start() __attribute__ ((weak, alias("module_start")));
@@ -2165,6 +2335,7 @@ int module_start(SceSize args, void *argp){
 	HookOffset(modulemgr_uid, 0x26BC, 1, module_unload_for_pid);
 
 
+	// HookImport("SceSysStateMgr", 0x3691da45, 0x3acacd22, ksceKernelSysrootAppMgrSpawnProcess);
 
 
 
@@ -2205,12 +2376,14 @@ int module_start(SceSize args, void *argp){
 	write_file("ur0:data/module_rev_SceKernelModulemgr_1D9E0F7E_rev.bin", &info, sizeof(info));
 */
 
+	if(0){
+
 	SceUID thid;
 	thid = ksceKernelCreateThread("my_thread", threadFunc, 0x10000100, 0x10000, 0, 0, NULL);
 	if(thid > 0)
 		ksceKernelStartThread(thid, 0, NULL);
 
-
+	}
 
 	return SCE_KERNEL_START_SUCCESS;
 }
