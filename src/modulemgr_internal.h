@@ -9,6 +9,7 @@
 #include <psp2kern/types.h>
 
 typedef struct SceKernelModuleInfoObjBase_t SceKernelModuleInfoObjBase_t;
+typedef struct SceModuleLibraryExportInfo_t SceModuleLibraryExportInfo_t;
 
 typedef int (* SceKernelModuleEntry)(SceSize args, void *argp);
 
@@ -28,7 +29,13 @@ typedef struct SceModuleLibImport_t {
 
 typedef struct SceModuleLibExport_t {
 	uint16_t size; // 0x20
+
 	uint16_t libver[2];
+/*
+	uint16_t libver_minor;
+	uint8_t  libver_major;
+	uint8_t  flags; // 0x40:user export
+*/
 	uint16_t entry_num_function;
 	uint16_t entry_num_variable;
 	uint16_t data_0x0A; // unused?
@@ -39,22 +46,27 @@ typedef struct SceModuleLibExport_t {
 	void *table_entry;
 } SceModuleLibExport_t;
 
+typedef struct SceModuleProcImportInfo_t {
+	struct SceModuleProcImportInfo_t *next;
+	SceUID data_0x04;
+	SceModuleLibImport_t *data_0x08;
+	SceModuleLibraryExportInfo_t *data_0x0C;
+	SceKernelModuleInfoObjBase_t *data_0x10;
+	int data_0x14; // zero?
+} SceModuleProcImportInfo_t;
+
 typedef struct SceModuleLibraryExportInfo_t {
 	struct SceModuleLibraryExportInfo_t *next;
 	void *data_0x04;
 	SceModuleLibExport_t *nid_info;
 	int data_0x0C; // flags?
 	int data_0x10; // ex:1
-	int data_0x14; // zero?
+	SceModuleProcImportInfo_t *data_0x14;
 	SceUID libid_kernel;
 	SceUID libid_user;
 	SceKernelModuleInfoObjBase_t *modobj;
-	int data_0x24[3]; // zero?
-	int data_0x30; // zero?
-	SceModuleLibExport_t *data_0x34; // maybe noname export
-	int data_0x38; // ex:0x40000
-
-	// maybe more
+	int data_0x24; // zero?
+	int data_0x28; // zero?
 } SceModuleLibraryExportInfo_t;
 
 typedef struct SceModuleLibraryImportInfo_t {
@@ -71,7 +83,7 @@ typedef struct SceModuleImportList_t { // size is 0x48
 	SceModuleLibraryImportInfo_t data[];
 } SceModuleImportList_t;
 
-typedef struct {
+typedef struct SceKernelSegmentInfoObj_t {
 	SceSize filesz;
 	SceSize memsz;
 	uint8_t perms[4];
