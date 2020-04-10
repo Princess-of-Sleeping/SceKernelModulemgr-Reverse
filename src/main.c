@@ -350,6 +350,7 @@ int func_0x8100428c(void *a1, int a2, int a3)
 	return 0;
 }
 
+// sceKernelAllocProc
 void *func_0x8100498c(SceUID pid, int len)
 {
 	void *res;
@@ -362,6 +363,7 @@ void *func_0x8100498c(SceUID pid, int len)
 	return res;
 }
 
+// sceIoOpenBootfs
 int func_0x810049fc(const char *path)
 {
 	const char **pPath;
@@ -386,6 +388,7 @@ int func_0x810049fc(const char *path)
 	return 0x80010002;
 }
 
+// sceIoCloseBootfs
 int func_0x81004a54(SceUID fd)
 {
 	*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 4) = 0xffffffff;
@@ -393,7 +396,7 @@ int func_0x81004a54(SceUID fd)
 }
 
 /*
- * create_new_module_class / 0x81005648
+ * create_new_module_class / 0x81005648 (checked)
  */
 int func_0x81005648(SceUID pid, int flags, SceKernelModuleInfoObj_t **dst)
 {
@@ -515,9 +518,7 @@ int func_0x81005a70(void *r0, const char *path, int flags)
 }
 
 /*
- * print_module_load_info / 0x81005b04
- *
- * @param[in] r0 - unk, some module info
+ * print_module_load_info / 0x81005b04 (checked)
  */
 void print_module_load_info(SceKernelModuleInfoObjBase_t *obj)
 {
@@ -1070,10 +1071,7 @@ SceUID get_module_id_by_addr(SceUID pid, const void *module_addr)
 		pid = ksceKernelGetProcessId();
 
 	modid = get_module_id_by_addr_internal(pid, module_addr);
-	if(pid == 0x10005)
-		goto label_0x81007C4A;
-
-	if(modid <= 0)
+	if((pid == 0x10005) && (modid <= 0))
 		goto label_0x81007C4A;
 
 	pRes = func_0x81001f0c(modid);
@@ -1237,36 +1235,27 @@ SceUID module_load_for_pid(SceUID pid, const char *path, int flags, SceKernelLMO
 	if (pid == 0)
 		pid = ksceKernelGetProcessId();
 
-	if ((flags & 1) == 0){
-		if (pid == 0x10005)
-			goto loc_81002236;
-	}else{
-		if (pid == 0x10005)
-			return 0x8002D017;	// kernel shared module is not supported
+	if (((flags & 1) != 0) && (pid == 0x10005)){
+		return 0x8002D017;	// kernel shared module is not supported
 	}
 
-	if (func_0x81001ec4(pid) < 0)
+	if ((pid != 0x10005) && (func_0x81001ec4(pid) < 0))
 		return 0x8002D012;
 
-loc_81002236:
 	if (SceThreadmgrForDriver_20C228E4() != 0)
 		goto loc_8100247E;
 
 loc_81002240:
-	if (strncmp(path, "host0:", 6) != 0)
-		goto loc_81002264;
+	if (strncmp(path, "host0:", 6) != 0){
+		if ((pid == 0x10005) && (ksceSblQafMgrIsAllowHost0Access() == 0))
+			return 0x8002D01C;
 
-	if ((pid == 0x10005) && (ksceSblQafMgrIsAllowHost0Access() == 0))
-		return 0x8002D01C;
-
-	if ((flags & 1) != 0){
-		if (ksceKernelCheckDipsw(0xFB) == 0){
+		if (((flags & 1) != 0) && (ksceKernelCheckDipsw(0xFB) == 0)){
 			res = 0x8002D01C;
 			goto loc_8100239A;
 		}
 	}
 
-loc_81002264:
 	module_tree_top = get_proc_module_tree_obj_for_pid(pid, &cpu_intr);
 	if (module_tree_top == NULL)
 	{
@@ -1327,17 +1316,12 @@ loc_810022B0:
 	// open file
 	if ((flags & 0x1000) != 0){
 		fd = ksceIoOpenForPid(pid, path, 1, 0);
-		goto loc_810022CE;
-	}
-
-	if ((flags & 0x800) == 0){
+	}else if ((flags & 0x800) == 0){
 		fd = ksceIoOpen(path, 1, 0);
-		goto loc_810022CE;
+	}else{
+		fd = _func_0x810049fc(path);
 	}
 
-	fd = _func_0x810049fc(path);
-
-loc_810022CE:
 	if (fd < 0){
 		if ((fd & ~0x10000) == 0x8008000A)
 			*(uint32_t *)(SceKernelModulemgr_data + 0x300) = 1;
@@ -1595,10 +1579,8 @@ int module_unload_for_pid(SceUID pid, SceUID modid, int flags, SceKernelULMOptio
 	if(pid == 0)
 		pid = ksceKernelGetProcessId();
 
-	if(pid != 0x10005){
-		if(func_0x81001ec4(pid) < 0)
-			return 0x8002D012;
-	}
+	if((pid != 0x10005) && (func_0x81001ec4(pid) < 0))
+		return 0x8002D012;
 
 	modobj = func_0x81001f0c(modid);
 	if(modobj == NULL){
@@ -1640,13 +1622,11 @@ loc_8100275A:
 	if(modobj->obj_base.pid == 0x10005)
 		goto loc_81002790;
 
-	// if((int)(flags << 1) >= 0)
 	if((flags & 0x40000000) == 0)
 	{
 		if(SceSysrootForKernel_6050A467(pid) == 1)
 			goto loc_810027F4;
 
-		// if((int)(flags << 0xE) >= 0)
 		if((flags & 0x20000) == 0)
 			goto loc_81002790;
 
