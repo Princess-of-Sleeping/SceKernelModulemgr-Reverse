@@ -190,7 +190,7 @@ typedef struct SceKernelModuleProcInfo_t {
 	uint16_t inhibit_state;
 	void *data_0x1C;
 	int cpu_addr;
-	int data_0x24;				// ex:0x1009B(modid?)
+	SceUID ScePsp2BootConfig_modid; // kernel only
 } SceKernelModuleProcInfo_t;
 
 #endif /* _PSP2_KERNEL_MODULEMGR_INTERNAL_H_ */
