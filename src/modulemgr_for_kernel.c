@@ -592,7 +592,7 @@ int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleIm
 		if (import_nonlinked_list == NULL)
 			break;
 
-		info[count].libnid = import_nonlinked_list->lib_import_info->libnid;
+		info[count].libnid = import_nonlinked_list->lib_import_info->type2.libnid;
 		info[count].modid  = (pid == 0x10005) ? import_nonlinked_list->pObjBase->modid_kernel : import_nonlinked_list->pObjBase->modid_user;
 
 		count++;
