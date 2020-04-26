@@ -58,7 +58,7 @@ typedef struct SceModuleProcImportInfo_t {
 typedef struct SceModuleLibraryExportInfo_t {
 	struct SceModuleLibraryExportInfo_t *next;
 	void *data_0x04;
-	SceModuleLibExport_t *nid_info;
+	SceModuleLibExport_t *info;
 	int data_0x0C; // flags?
 	int data_0x10; // ex:1
 	SceModuleProcImportInfo_t *data_0x14;
@@ -71,7 +71,7 @@ typedef struct SceModuleLibraryExportInfo_t {
 
 typedef struct SceModuleLibraryImportInfo_t {
 	SceUID stubid;
-	SceModuleLibImport_t *import_info;
+	SceModuleLibImport_t *info;
 	SceModuleLibraryExportInfo_t *lib_export_info;
 	SceKernelModuleInfoObjBase_t *modobj;
 	int data_0x14;
@@ -80,7 +80,7 @@ typedef struct SceModuleLibraryImportInfo_t {
 
 typedef struct SceModuleImportList_t { // size is 0x48
 	struct SceModuleImportList_t *next;
-	SceModuleLibraryImportInfo_t data[];
+	SceModuleLibraryImportInfo_t list[];
 } SceModuleImportList_t;
 
 typedef struct SceKernelSegmentInfoObj_t {
@@ -130,27 +130,38 @@ typedef struct SceKernelModuleInfoObjBase_t {
 	uint16_t lib_import_num;
 	SceModuleLibExport_t *data_0x5C;
 	SceModuleLibExport_t *data_0x60;	// export relation
-	SceModuleLibraryExportInfo_t *data_0x64;
+	SceModuleLibraryExportInfo_t *data_0x64;// first export?
 
 	// 0x60
-	SceModuleLibImport_t *data_0x68;	// first_imoprt?
-	SceModuleImportList_t *module_imports;	// allocated by sceKernelAlloc
+	SceModuleLibImport_t *data_0x68;	// first_import?
+	SceModuleImportList_t *imports;	// allocated by sceKernelAlloc
 	const char *path;
 	SceSize segments_num;
 
 	// 0x70
 	SceKernelSegmentInfoObj_t segments[3]; // 0x14 * 3 : 0x3C
-
-	int data_0xB4;
+	int data_0xAC;
 
 	// 0xB0
-	int data_0xB8;
+	int data_0xB0;
 	SceKernelModuleEntry module_start;
 	SceKernelModuleEntry module_stop;
 	SceKernelModuleEntry module_exit;
 
-	// more
-} SceKernelModuleInfoObjBase_t;
+	int data_0xC0;
+	void *data_0xC4; // module import/export data?
+	int data_0xC8;
+	int data_0xCC;
+
+	void *data_0xD0; // elf data
+	void *data_0xD4; // for shared module data
+	int data_0xD8;
+	int data_0xDC;
+
+	int data_0xE0;
+	int data_0xE4;
+	int data_0xE8;
+} SceKernelModuleInfoObjBase_t; // size is 0xEC
 
 typedef struct SceKernelModuleImportNonlinkedInfo_t {
 	struct SceKernelModuleImportNonlinkedInfo_t *next;
@@ -164,7 +175,7 @@ typedef struct SceKernelModuleImportNonlinkedInfo_t {
 typedef struct SceKernelModuleInfoObj_t {
 	uint32_t sce_reserved[2];
 	SceKernelModuleInfoObjBase_t obj_base;
-} SceKernelModuleInfoObj_t; // sizeof == 0x100
+} SceKernelModuleInfoObj_t; // sizeof == 0xF4
 
 typedef struct SceModuleLibraryObj_t {
 	uint32_t sce_reserved[2];
