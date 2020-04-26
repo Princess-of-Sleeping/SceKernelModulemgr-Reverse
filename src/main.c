@@ -1932,12 +1932,23 @@ int print_proc_nonlinked_import(SceUID pid){
 			ksceDebugPrintf("nonlinked import is none.\n");
 
 		while(module_nonlinked_info != NULL){
-			ksceDebugPrintf(
-				"[%-27s] <- [%-27s] libnid:0x%08X import nonlinked\n",
-				module_nonlinked_info->pObjBase->module_name,
-				module_nonlinked_info->lib_import_info->libname,
-				module_nonlinked_info->lib_import_info->libnid
-			);
+
+			if(module_nonlinked_info->lib_import_info->size == sizeof(SceModuleLibImport1_t)){
+				ksceDebugPrintf(
+					"[%-27s] <- [%-27s] libnid:0x%08X import nonlinked\n",
+					module_nonlinked_info->pObjBase->module_name,
+					module_nonlinked_info->lib_import_info->type1.libname,
+					module_nonlinked_info->lib_import_info->type1.libnid
+				);
+			}else if(module_nonlinked_info->lib_import_info->size == sizeof(SceModuleLibImport2_t)){
+				ksceDebugPrintf(
+					"[%-27s] <- [%-27s] libnid:0x%08X import nonlinked\n",
+					module_nonlinked_info->pObjBase->module_name,
+					module_nonlinked_info->lib_import_info->type2.libname,
+					module_nonlinked_info->lib_import_info->type2.libnid
+				);
+			}
+
 			module_nonlinked_info = module_nonlinked_info->next;
 		}
 		ksceDebugPrintf("\n");
@@ -1991,11 +2002,13 @@ int print_proc_test(SceUID pid){
 			ksceDebugPrintf("[%-27s]\n", module_list->module_name);
 			ksceDebugPrintf("imports\n");
 			for(int i=0;i<module_list->lib_import_num;i++){
+/*
 				ksceDebugPrintf(
 					"stubid:0x%X, %s\n",
 					module_list->imports->list[i].stubid,
 					module_list->imports->list[i].info->libname
 				);
+*/
 			}
 			ksceDebugPrintf("\n");
 
