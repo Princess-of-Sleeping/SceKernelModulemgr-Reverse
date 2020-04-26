@@ -856,15 +856,15 @@ int get_module_library_info_export(SceUID pid, SceUID modid, uint32_t libnid, Sc
 	lib_export_info = module_tree_top->lib_export_info;
 
 	while(lib_export_info != NULL){
-		if ((lib_export_info->modobj->modid_kernel == modid) && (lib_export_info->nid_info->libnid == libnid)){
-			info->libver[0]          = lib_export_info->nid_info->libver[0];
-			info->libver[1]          = lib_export_info->nid_info->libver[1];
+		if ((lib_export_info->modobj->modid_kernel == modid) && (lib_export_info->info->libnid == libnid)){
+			info->libver[0]          = lib_export_info->info->libver[0];
+			info->libver[1]          = lib_export_info->info->libver[1];
 			info->libnid             = libnid;
-			info->libname            = lib_export_info->nid_info->libname;
-			info->entry_num_function = lib_export_info->nid_info->entry_num_function;
-			info->entry_num_variable = lib_export_info->nid_info->entry_num_variable;
-			info->table_nid          = lib_export_info->nid_info->table_nid;
-			info->table_entry        = lib_export_info->nid_info->table_entry;
+			info->libname            = lib_export_info->info->libname;
+			info->entry_num_function = lib_export_info->info->entry_num_function;
+			info->entry_num_variable = lib_export_info->info->entry_num_variable;
+			info->table_nid          = lib_export_info->info->table_nid;
+			info->table_entry        = lib_export_info->info->table_entry;
 
 			ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
 			return 0;
@@ -1959,7 +1959,7 @@ SceUID get_module_export_library_id(SceUID pid, SceUID modid, uint32_t libnid)
 	lib_export_info = module_tree_top->lib_export_info;
 
 	while(lib_export_info != NULL){
-		if ((lib_export_info->modobj->modid_kernel == modid) && (lib_export_info->nid_info->libnid == libnid)){
+		if ((lib_export_info->modobj->modid_kernel == modid) && (lib_export_info->info->libnid == libnid)){
 			ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
 			return lib_export_info->libid_kernel;
 		}
@@ -1993,8 +1993,8 @@ int print_proc_test(SceUID pid){
 			for(int i=0;i<module_list->lib_import_num;i++){
 				ksceDebugPrintf(
 					"stubid:0x%X, %s\n",
-					module_list->module_imports->data[i].stubid,
-					module_list->module_imports->data[i].import_info->libname
+					module_list->imports->list[i].stubid,
+					module_list->imports->list[i].info->libname
 				);
 			}
 			ksceDebugPrintf("\n");
@@ -2028,7 +2028,7 @@ int print_export_info(SceUID pid, SceUID modid){
 					ksceDebugPrintf("[%-27s]\n", lib_export_info->modobj->module_name);
 				}
 
-				ksceDebugPrintf("[%-27s], libid:0x%X\n", lib_export_info->nid_info->libname, lib_export_info->libid_kernel);
+				ksceDebugPrintf("[%-27s], libid:0x%X\n", lib_export_info->info->libname, lib_export_info->libid_kernel);
 			}
 
 			lib_export_info = lib_export_info->next;
