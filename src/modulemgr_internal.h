@@ -70,8 +70,8 @@ typedef struct SceModuleLibExport_t {
 	uint32_t data_0x0C; // unused?
 	uint32_t libnid;
 	const char *libname;
-	void *table_nid;
-	void *table_entry;
+	void  *table_nid;
+	void **table_entry;
 } SceModuleLibExport_t;
 
 typedef struct SceModuleProcImportInfo_t {
