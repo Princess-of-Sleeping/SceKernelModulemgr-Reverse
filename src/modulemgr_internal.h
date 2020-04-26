@@ -13,7 +13,27 @@ typedef struct SceModuleLibraryExportInfo_t SceModuleLibraryExportInfo_t;
 
 typedef int (* SceKernelModuleEntry)(SceSize args, void *argp);
 
-typedef struct SceModuleLibImport_t {
+
+typedef struct SceModuleLibImport1_t {
+	uint16_t size;               // 0x34
+	uint16_t version;
+	uint16_t flags;
+	uint16_t entry_num_function;
+	uint16_t entry_num_variable;
+	uint16_t entry_num_tls;
+	uint32_t rsvd1;
+	uint32_t libnid;
+	const char *libname;
+	uint32_t rsvd2;
+	uint32_t *table_func_nid;
+	void    **table_function;
+	uint32_t *table_vars_nid;
+	void    **table_variable;
+	uint32_t *table_tls_nid;
+	void    **table_tls;
+} SceModuleLibImport1_t;
+
+typedef struct SceModuleLibImport2_t {
 	uint16_t size; // 0x24
 	uint16_t libver[2];
 	uint16_t entry_num_function;
@@ -25,7 +45,15 @@ typedef struct SceModuleLibImport_t {
 	void    **table_function;
 	uint32_t *table_vars_nid;
 	void    **table_variable;
+} SceModuleLibImport2_t;
+
+
+typedef union SceModuleLibImport_t {
+	uint16_t size;
+	SceModuleLibImport1_t type1;
+	SceModuleLibImport2_t type2;
 } SceModuleLibImport_t;
+
 
 typedef struct SceModuleLibExport_t {
 	uint16_t size; // 0x20
