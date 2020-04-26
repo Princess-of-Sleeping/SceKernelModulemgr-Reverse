@@ -701,18 +701,18 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelMo
 	library_info = SceModuleLibraryObj->library_info;
 
 	info->libid              = (library_info->libid_kernel != libid) ? library_info->libid_user : library_info->libid_kernel;
-	info->libnid             = library_info->nid_info->libnid;
-	info->libver[0]          = library_info->nid_info->libver[0];
-	info->libver[1]          = library_info->nid_info->libver[1];
-	info->entry_num_function = library_info->nid_info->entry_num_function;
-	info->entry_num_variable = library_info->nid_info->entry_num_variable;
+	info->libnid             = library_info->info->libnid;
+	info->libver[0]          = library_info->info->libver[0];
+	info->libver[1]          = library_info->info->libver[1];
+	info->entry_num_function = library_info->info->entry_num_function;
+	info->entry_num_variable = library_info->info->entry_num_variable;
 	info->unk_0x14           = 0;
 
 	info->unk_0x118 = library_info->data_0x10;
 	info->modid2    = (pid != 0x10005) ? library_info->modobj->modid_user : info->libid;
 
 	info->library_name[0xFF] = 0;
-	strncpy(info->library_name, library_info->nid_info->libname, 0xFF);
+	strncpy(info->library_name, library_info->info->libname, 0xFF);
 
 	func_0x810021b8(SceModuleLibraryObj->modid);
 	ksceKernelUidRelease(library_info->libid_kernel);
