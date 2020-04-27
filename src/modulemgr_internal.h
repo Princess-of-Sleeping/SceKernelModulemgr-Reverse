@@ -116,7 +116,7 @@ typedef struct SceKernelSegmentInfoObj_t {
 	SceSize memsz;
 	uint8_t perms[4];
 	void *vaddr;
-	SceUID unk_0x10;
+	SceUID memblk_id;
 } SceKernelSegmentInfoObj_t; // size (0x14)
 
 typedef struct SceKernelModuleInfoObjBase_t {
