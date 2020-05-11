@@ -422,7 +422,7 @@ int func_0x81005648(SceUID pid, int flags, SceKernelModuleInfoObj_t **dst)
 		opt.field_14 = 0;
 		opt.field_18 = 0;
 
-		res = SceProcessmgrForKernel_B75FB970(pid);
+		res = SceProcessmgrForKernel_B75FB970(pid); // wrong arg
 		if(res < 0)
 			return res;
 
