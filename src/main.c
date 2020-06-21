@@ -463,7 +463,7 @@ int memcpy_to_kernel(SceUID pid, void *dst, const void *src, SceSize len)
 		memcpy(dst, src, len);
 		return 0;
 	}
-	return ksceKernelMemcpyUserToKernelForPid(pid, dst, src, len);
+	return ksceKernelMemcpyUserToKernelForPid(pid, dst, (uintptr_t)src, len);
 }
 
 // 0x81005A5C
@@ -2237,7 +2237,7 @@ int threadFunc(SceSize args, void *argp){
 	modid = module_load_for_pid(0x10005, "os0:/kd/enum_wakeup.skprx", 0, NULL);
 	ksceDebugPrintf("enum_wakeup.skprx modid : 0x%X\n", modid);
 
-	int res;
+	// int res;
 
 	if(0){
 	print_proc_nonlinked_import(0x10005);
@@ -2280,25 +2280,6 @@ int threadFunc(SceSize args, void *argp){
 	module_load_unload_test(shell_pid, "os0:/psp2bootconfig.skprx");
 
 	return ksceKernelExitDeleteThread(0);
-}
-
-
-/*
-
-ksceKernelSysrootAppMgrSpawnProcess main 0x04000000 vs0:vsh/shell/shell.self 0x00000000 0x00000000 0x00000040 0x00000814 : 0x11843
-
-*/
-
-static tai_hook_ref_t ksceKernelSysrootAppMgrSpawnProcess_ref;
-SceUID ksceKernelSysrootAppMgrSpawnProcess_patch(const char *titleid, int flags, const char *path, int a4, int a5, void *a6, void *a7){
-	SceUID res;
-
-	res = TAI_CONTINUE(SceUID, ksceKernelSysrootAppMgrSpawnProcess_ref, titleid, flags, path, a4, a5, a6, a7);
-
-	if((res > 0) && (strncmp(titleid, "main", 4) == 0)){
-	}
-
-	return res;
 }
 
 void _start() __attribute__ ((weak, alias("module_start")));
