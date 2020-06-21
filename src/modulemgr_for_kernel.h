@@ -80,9 +80,9 @@ int SceModulemgrForKernel_60E176C8(int a1);
 int SceModulemgrForKernel_9D20C9BB(int a1);
 int SceModulemgrForKernel_B73BE671(int a1, int a2, int a3);
 void SceModulemgrForKernel_F3CD647F(int a1, int a2);
-int SceModulemgrForKernel_F95D09C2(const char *path, void *a2, void *a3);
+int SceModulemgrForKernel_F95D09C2(const char *path, uint64_t *pAuthid, SceSelfAppInfo *pInfo);
 int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID a2, int a3, int a4, int a5);
 
-int SceModulemgrForKernel_FF2264BB(SceUID a1, int a2, int a3, int a4);
+int SceModulemgrForKernel_FF2264BB(SceUID pid, SceUID modid, SceKernelModuleNonlinkedInfo *pList, SceSize *num);
 
 #endif /* _PSP2_KERNEL_MODULEMGR_FOR_KERNEL_H_ */
