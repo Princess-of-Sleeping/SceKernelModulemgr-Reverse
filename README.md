@@ -101,7 +101,7 @@ SceModulemgrForKernel_60E176C8 : (some module start cb register)
 SceModulemgrForKernel_9D20C9BB : (some module start cb register)
 SceModulemgrForKernel_B73BE671
 SceModulemgrForKernel_F3CD647F
-SceModulemgrForKernel_F95D09C2
+SceModulemgrForKernel_F95D09C2 : (sceKernelGetModuleAppInfo, temp name)
 SceModulemgrForKernel_FB251B7A
 SceModulemgrForKernel_FF2264BB : (sceKernelGetModuleNonlinkedList)
 ```
