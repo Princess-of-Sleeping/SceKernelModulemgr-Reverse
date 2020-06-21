@@ -658,7 +658,7 @@ loc_81004152:
 	return;
 }
 
-int sceKernelGetModuleUidForKernel(SceUID pid, SceUID libid, SceUID *dst, SceSize *num, SceSize cpy_skip_num)
+int sceKernelGetModuleListByLibraryIdForKernel(SceUID pid, SceUID libid, SceUID *modids, SceSize *num, SceSize cpy_skip_num)
 {
 	// yet not Reversed
 	return 0;
