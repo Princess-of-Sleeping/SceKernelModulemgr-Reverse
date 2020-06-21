@@ -611,7 +611,7 @@ int sceKernelGetModuleLibStubIdListForKernel(SceUID pid, SceUID *stubid, SceSize
 	return 0;
 }
 
-int sceKernelGetModuleUidListForKernel(SceUID pid, SceUID *modids, SceSize *num)
+int sceKernelGetModuleExportLibraryListForKernel(SceUID pid, SceUID *libids, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
