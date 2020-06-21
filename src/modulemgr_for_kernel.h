@@ -52,8 +52,9 @@ int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_add
 int sceKernelGetModuleLibExportListForKernel(SceUID pid, SceUID libid, SceKernelModuleExportEntry *list, SceSize *num, SceSize cpy_skip_num);
 int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *modids, size_t *num);
 int sceKernelGetModuleList2ForKernel(SceUID pid, SceKernelModuleListInfo *infolists, size_t *num);
-int sceKernelGetModuleUidForKernel(SceUID pid, SceUID libid, SceUID *dst, SceSize *num, SceSize cpy_skip_num);
-int sceKernelGetModuleUidListForKernel(SceUID pid, SceUID *modids, size_t *num);
+
+int sceKernelGetModuleListByImportForKernel(SceUID pid, SceUID libid, SceUID *modids, SceSize *num, SceSize cpy_skip_num);
+int sceKernelGetModuleExportLibraryListForKernel(SceUID pid, SceUID *libids, SceSize *num);
 
 int sceKernelGetModuleInhibitStateForKernel(SceUID pid, int *a2);
 
