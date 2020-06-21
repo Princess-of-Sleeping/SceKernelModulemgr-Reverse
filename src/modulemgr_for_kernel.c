@@ -321,8 +321,13 @@ int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_add
 	return 0;
 }
 
+typedef struct SceSelfAppInfo {
+	int vendor_id;
+	int self_type;
+} SceSelfAppInfo;
+
 //  SceModulemgrForKernel_F95D09C2("os0:ue/cui_setupper.self", sp + 0x60, sp + 0x70);
-int SceModulemgrForKernel_F95D09C2(const char *path, void *a2, void *a3){
+int SceModulemgrForKernel_F95D09C2(const char *path, uint64_t *pAuthid, SceSelfAppInfo *pInfo){
 	// yet not Reversed
 	return 0;
 }
