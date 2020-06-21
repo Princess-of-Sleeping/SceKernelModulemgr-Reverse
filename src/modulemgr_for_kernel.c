@@ -108,11 +108,6 @@ int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_add
 }
 
 // todo test
-typedef struct SceKernelModuleNonlinkedInfo {
-	SceUID modid;
-	uint32_t libnid;
-} SceKernelModuleNonlinkedInfo;
-
 // sceKernelGetModuleNonlinkedList
 int SceModulemgrForKernel_FF2264BB(SceUID pid, SceUID modid, SceKernelModuleNonlinkedInfo *pList, SceSize *num)
 {
@@ -320,11 +315,6 @@ int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_add
 	// yet not Reversed
 	return 0;
 }
-
-typedef struct SceSelfAppInfo {
-	int vendor_id;
-	int self_type;
-} SceSelfAppInfo;
 
 //  SceModulemgrForKernel_F95D09C2("os0:ue/cui_setupper.self", sp + 0x60, sp + 0x70);
 int SceModulemgrForKernel_F95D09C2(const char *path, uint64_t *pAuthid, SceSelfAppInfo *pInfo){
