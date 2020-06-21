@@ -25,10 +25,20 @@
  */
 #define SCE_KERNEL_MODULE_LIST_FLAG2_CPY_SHARED_MODULE_ID 0x2
 
+typedef struct SceSelfAppInfo {
+	int vendor_id;
+	int self_type;
+} SceSelfAppInfo;
+
 typedef struct SceKernelModuleExportEntry {
 	uint32_t libnid;
 	const void *entry; // function ptr. or vars?
 } SceKernelModuleExportEntry;
+
+typedef struct SceKernelModuleNonlinkedInfo {
+	SceUID modid;
+	uint32_t libnid;
+} SceKernelModuleNonlinkedInfo;
 
 typedef struct SceKernelModuleImportNonlinkedInfo {
 	SceSize size; // 0x124
@@ -91,7 +101,7 @@ typedef struct {
 	uint16_t entry_num_function;
 	uint16_t entry_num_variable;
 	uint32_t *table_nid;
-	uint32_t *table_entry;
+	void    **table_entry;
 } SceKernelLibraryInfo;  // size is 0x1C
 
 typedef struct SceKernelModuleLibraryInfo {
