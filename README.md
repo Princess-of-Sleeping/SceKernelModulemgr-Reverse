@@ -103,7 +103,7 @@ SceModulemgrForKernel_B73BE671
 SceModulemgrForKernel_F3CD647F
 SceModulemgrForKernel_F95D09C2
 SceModulemgrForKernel_FB251B7A
-SceModulemgrForKernel_FF2264BB
+SceModulemgrForKernel_FF2264BB : (sceKernelGetModuleNonlinkedList)
 ```
 
 ### SceModulemgrForDriver
