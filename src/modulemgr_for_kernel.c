@@ -107,7 +107,14 @@ int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_add
 	return res;
 }
 
-int SceModulemgrForKernel_FF2264BB(SceUID a1, int a2, int a3, int a4)
+// todo test
+typedef struct SceKernelModuleNonlinkedInfo {
+	SceUID modid;
+	uint32_t libnid;
+} SceKernelModuleNonlinkedInfo;
+
+// sceKernelGetModuleNonlinkedList
+int SceModulemgrForKernel_FF2264BB(SceUID pid, SceUID modid, SceKernelModuleNonlinkedInfo *pList, SceSize *num)
 {
 	return 0;
 }
