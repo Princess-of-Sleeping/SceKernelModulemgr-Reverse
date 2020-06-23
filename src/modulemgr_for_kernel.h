@@ -93,7 +93,10 @@ SceKernelModuleEntry sceKernelGetModuleEntryPointForKernel(SceUID modid);
 /*
  * unknown
  */
+
+// Related to process switch?
 int SceModulemgrForKernel_29CB2771(SceUID pid);
+
 int SceModulemgrForKernel_4865C72C(int a1, int a2);
 int SceModulemgrForKernel_60E176C8(int a1);
 
