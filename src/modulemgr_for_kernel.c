@@ -790,7 +790,7 @@ int SceModulemgrForKernel_9D20C9BB(int a1)
 	return res;
 }
 
-int SceModulemgrForKernel_B73BE671(int a1, int a2, int a3)
+int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID stubid, void *a3)
 {
 	// yet not Reversed
 	return 0;
