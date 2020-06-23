@@ -812,7 +812,7 @@ void SceModulemgrForKernel_F3CD647F(int a1, int a2)
 	*(uint32_t *)(SceKernelModulemgr_data + 0x32C) = a2;
 }
 
-int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID a2, int a3, int a4, int a5)
+int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID stubid, void *a3, SceSize *num, SceSize cpy_skip_num)
 {
 	// yet not Reversed
 	return 0;
