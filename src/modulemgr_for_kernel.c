@@ -29,8 +29,8 @@ extern void *SceKernelModulemgr_data;
 extern int (* SceIntrmgrForKernel_B60ACF4B)(int len, void *ptr_dst);
 extern void *(* sceKernelGetProcessClassForKernel)(void);
 extern int (* SceThreadmgrForDriver_E50E1185)(SceUID tid, const char *name, void *some_func, void *some_data);
-extern void *(* ksceKernelSysrootAlloc)(int size);
-extern int (* ksceKernelSysrootFree)(void *ptr);
+extern void *(* ksceKernelAlloc)(int size);
+extern int (* ksceKernelFree)(void *ptr);
 extern int (* _ksceKernelGetModuleList)(SceUID pid, int flags1, int flags2, SceUID *modids, size_t *num);
 
 int sceKernelGetModuleIdByAddrForKernel(SceUID pid, const void *module_addr)
@@ -446,7 +446,7 @@ int sceKernelMountBootfsForKernel(const char *bootImagePath){
 		goto label_0x81004AF2;
 	}
 
-	pRes = ksceKernelSysrootAlloc(0x10);
+	pRes = ksceKernelAlloc(0x10);
 	*(uint32_t *)(pBootfsMountInfo) = (uint32_t)pRes;
 	*(uint32_t *)(pRes + 0x00) = modid;
 	*(uint32_t *)(pRes + 0x04) = 0xFFFFFFFF;
@@ -476,7 +476,7 @@ int sceKernelUmountBootfsForKernel(void){
 	modid = *(SceUID *)(*(uint32_t *)(pBootfsMountInfo));
 
 	ksceKernelStopUnloadModule(modid, 0, 0, 0, 0, 0);
-	ksceKernelSysrootFree((void *)(*(uint32_t *)(pBootfsMountInfo)));
+	ksceKernelFree((void *)(*(uint32_t *)(pBootfsMountInfo)));
 	res = 0;
 	*(uint32_t *)(pBootfsMountInfo) = 0;
 
