@@ -107,6 +107,8 @@ int SceModulemgrForKernel_9D20C9BB(int a1);
 // a3 size is 0x128
 int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID stubid, void *a3);
 void SceModulemgrForKernel_F3CD647F(int a1, int a2);
-int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID a2, int a3, int a4, int a5);
+
+// a3 size is 8 * num
+int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID stubid, void *a3, SceSize *num, SceSize cpy_skip_num);
 
 #endif /* _PSP2_KERNEL_MODULEMGR_FOR_KERNEL_H_ */
