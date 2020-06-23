@@ -100,9 +100,10 @@ int SceModulemgrForKernel_29CB2771(SceUID pid);
 // Related to non-linked?
 int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname);
 
+// some module start cb register
 int SceModulemgrForKernel_60E176C8(int a1);
-
 int SceModulemgrForKernel_9D20C9BB(int a1);
+
 int SceModulemgrForKernel_B73BE671(int a1, int a2, int a3);
 void SceModulemgrForKernel_F3CD647F(int a1, int a2);
 int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID a2, int a3, int a4, int a5);
