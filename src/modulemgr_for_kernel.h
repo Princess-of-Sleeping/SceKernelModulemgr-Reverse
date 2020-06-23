@@ -104,7 +104,8 @@ int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname);
 int SceModulemgrForKernel_60E176C8(int a1);
 int SceModulemgrForKernel_9D20C9BB(int a1);
 
-int SceModulemgrForKernel_B73BE671(int a1, int a2, int a3);
+// a3 size is 0x128
+int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID stubid, void *a3);
 void SceModulemgrForKernel_F3CD647F(int a1, int a2);
 int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID a2, int a3, int a4, int a5);
 
