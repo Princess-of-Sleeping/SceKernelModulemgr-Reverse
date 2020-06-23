@@ -13,7 +13,6 @@ typedef struct SceModuleLibraryExportInfo_t SceModuleLibraryExportInfo_t;
 
 typedef int (* SceKernelModuleEntry)(SceSize args, void *argp);
 
-
 typedef struct SceModuleLibImport1_t {
 	uint16_t size;               // 0x34
 	uint16_t version;
@@ -163,7 +162,7 @@ typedef struct SceKernelModuleInfoObjBase_t {
 	// 0x60
 	SceModuleLibImport_t *data_0x68;	// first_import?
 	SceModuleImportList_t *imports;	// allocated by sceKernelAlloc
-	const char *path;
+	char *path;
 	SceSize segments_num;
 
 	// 0x70
