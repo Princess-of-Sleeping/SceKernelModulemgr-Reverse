@@ -15,7 +15,7 @@
 extern void *SceKernelModulemgr_text;
 extern void *SceKernelModulemgr_data;
 
-extern int (* SceSysrootForDriver_67AAB627)(void);
+int ksceKernelSysrootGetSystemSwVersion(void);
 
 // ksceKernelGetModuleInfoByAddr
 int SceModulemgrForDriver_1D9E0F7E(const void *addr, SceKernelModuleInfo *info){
@@ -106,7 +106,7 @@ label_0x81003D58:
 	return res;
 
 label_0x81003D5E:
-	sysver = SceSysrootForDriver_67AAB627();
+	sysver = ksceKernelSysrootGetSystemSwVersion();
 
 	info_internal->size    = sizeof(SceKernelFwInfo);
 	info_internal->version = sysver;
