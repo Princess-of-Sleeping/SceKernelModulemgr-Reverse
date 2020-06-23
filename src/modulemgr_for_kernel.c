@@ -33,7 +33,7 @@ extern void *(* ksceKernelAlloc)(int size);
 extern int (* ksceKernelFree)(void *ptr);
 extern int (* _ksceKernelGetModuleList)(SceUID pid, int flags1, int flags2, SceUID *modids, size_t *num);
 
-int sceKernelGetModuleIdByAddrForKernel(SceUID pid, const void *module_addr)
+SceUID sceKernelGetModuleIdByAddrForKernel(SceUID pid, const void *module_addr)
 {
 	return get_module_id_by_addr(pid, module_addr);
 }
@@ -108,8 +108,7 @@ int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_add
 }
 
 // todo test
-// sceKernelGetModuleNonlinkedList
-int SceModulemgrForKernel_FF2264BB(SceUID pid, SceUID modid, SceKernelModuleNonlinkedInfo *pList, SceSize *num)
+int sceKernelGetModuleNonlinkedListForKernel(SceUID pid, SceUID modid, SceKernelModuleNonlinkedInfo *pList, SceSize *num)
 {
 	return 0;
 }
@@ -316,8 +315,8 @@ int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_add
 	return 0;
 }
 
-//  SceModulemgrForKernel_F95D09C2("os0:ue/cui_setupper.self", sp + 0x60, sp + 0x70);
-int SceModulemgrForKernel_F95D09C2(const char *path, uint64_t *pAuthid, SceSelfAppInfo *pInfo){
+//  sceKernelGetModuleAppInfoForKernel("os0:ue/cui_setupper.self", sp + 0x60, sp + 0x70);
+int sceKernelGetModuleAppInfoForKernel(const char *path, uint64_t *pAuthid, SceSelfAppInfo *pInfo){
 	// yet not Reversed
 	return 0;
 }
@@ -625,7 +624,7 @@ int SceModulemgrForKernel_29CB2771(SceUID pid)
 	return 0;
 }
 
-int SceModulemgrForKernel_2DD3B511(SceUID pid, int a2, int a3, int a4)
+int sceKernelGetModuleImportListForKernel(SceUID pid, SceUID modid, SceUID *libids, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
@@ -818,7 +817,3 @@ int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID a2, int a3, int a4, int a5
 	// yet not Reversed
 	return 0;
 }
-
-
-
-
