@@ -106,6 +106,8 @@ int SceModulemgrForKernel_9D20C9BB(int a1);
 
 // a3 size is 0x128
 int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID stubid, void *a3);
+
+// set two param
 void SceModulemgrForKernel_F3CD647F(int a1, int a2);
 
 // a3 size is 8 * num
