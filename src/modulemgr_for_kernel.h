@@ -97,7 +97,9 @@ SceKernelModuleEntry sceKernelGetModuleEntryPointForKernel(SceUID modid);
 // Related to process switch?
 int SceModulemgrForKernel_29CB2771(SceUID pid);
 
-int SceModulemgrForKernel_4865C72C(int a1, int a2);
+// Related to non-linked?
+int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname);
+
 int SceModulemgrForKernel_60E176C8(int a1);
 
 int SceModulemgrForKernel_9D20C9BB(int a1);
