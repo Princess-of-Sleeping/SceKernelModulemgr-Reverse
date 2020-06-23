@@ -94,16 +94,17 @@ SceModulemgrForKernel_1D341231 : (sceKernelGetModuleLibStubIdListForKernel)
 SceModulemgrForKernel_619925F1 : (sceKernelGetModuleLibraryIdListForKernel)
 SceModulemgrForKernel_99890202 : (sceKernelGetModuleIsSharedByAddrForKernel)
 SceModulemgrForKernel_8D1AA624 : (sceKernelGetModuleKernelExportListForKernel)
-SceModulemgrForKernel_29CB2771
 SceModulemgrForKernel_2DD3B511 : (sceKernelGetModuleImportListForKernel)
+SceModulemgrForKernel_F95D09C2 : (sceKernelGetModuleAppInfoForKernel, temp name)
+SceModulemgrForKernel_FF2264BB : (sceKernelGetModuleNonlinkedListForKernel)
+
+SceModulemgrForKernel_29CB2771
 SceModulemgrForKernel_4865C72C
 SceModulemgrForKernel_60E176C8 : (some module start cb register)
 SceModulemgrForKernel_9D20C9BB : (some module start cb register)
 SceModulemgrForKernel_B73BE671
 SceModulemgrForKernel_F3CD647F
-SceModulemgrForKernel_F95D09C2 : (sceKernelGetModuleAppInfoForKernel, temp name)
 SceModulemgrForKernel_FB251B7A
-SceModulemgrForKernel_FF2264BB : (sceKernelGetModuleNonlinkedListForKernel)
 ```
 
 ### SceModulemgrForDriver
