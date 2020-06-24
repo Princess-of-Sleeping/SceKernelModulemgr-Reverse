@@ -45,20 +45,24 @@ void sceKernelSetupForModulemgrForKernel(void);
 /*
  * get list
  */
-int sceKernelGetModuleLibExportListForKernel(SceUID pid, SceUID libid, SceKernelModuleExportEntry *list, SceSize *num, SceSize cpy_skip_num);
-
-int sceKernelGetModuleImportListForKernel(SceUID pid, SceUID modid, SceUID *libids, SceSize *num);
-
 int sceKernelGetModuleNonlinkedListForKernel(SceUID pid, SceUID modid, SceKernelModuleNonlinkedInfo *pList, SceSize *num);
 int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryExportInfo_t **list, SceSize *num);
-int sceKernelGetModuleLibStubIdListForKernel(SceUID pid, SceUID *stubid, SceSize *num);
-int sceKernelGetModuleLibraryIdListForKernel(SceUID pid, SceUID modid, SceUID *libid, SceSize *num);
+
+int sceKernelGetProcessLibStubIdListForKernel(SceUID pid, SceUID *libstub_ids, SceSize *num);
+int sceKernelGetProcessLibraryIdListForKernel(SceUID pid, SceUID *library_ids, SceSize *num);
+
+int sceKernelGetModuleImportListForKernel(SceUID pid, SceUID modid, SceUID *library_ids, SceSize *num);
+int sceKernelGetModuleExportListForKernel(SceUID pid, SceUID modid, SceUID *library_ids, SceSize *num);
+
+int sceKernelGetModuleListByImportForKernel(SceUID pid, SceUID libid, SceUID *modids, SceSize *num, SceSize cpy_skip_num);
+
+int sceKernelGetModuleLibExportListForKernel(SceUID pid, SceUID libid, SceKernelModuleExportEntry *list, SceSize *num, SceSize cpy_skip_num);
 
 int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *modids, size_t *num);
 int sceKernelGetModuleList2ForKernel(SceUID pid, SceKernelModuleListInfo *infolists, size_t *num);
 
-int sceKernelGetModuleListByImportForKernel(SceUID pid, SceUID libid, SceUID *modids, SceSize *num, SceSize cpy_skip_num);
-int sceKernelGetModuleExportLibraryListForKernel(SceUID pid, SceUID *libids, SceSize *num);
+// a3 size is 8 * num
+int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID stubid, void *a3, SceSize *num, SceSize cpy_skip_num);
 
 /*
  * get info(Big structure)
@@ -67,6 +71,9 @@ int sceKernelGetModuleInfoForKernel(SceUID pid, SceUID modid, SceKernelModuleInf
 int sceKernelGetModuleInfoMinByAddrForKernel(SceUID pid, const void *module_addr, uint32_t *module_nid, const void **program_text_addr, SceKernelModuleName_fix *module_name);
 
 int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelModuleLibraryInfo *info);
+
+// a3 size is 0x128
+int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID stubid, void *a3);
 
 int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleImportNID *a2, SceSize *num);
 int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid, uint32_t libnid, SceKernelModuleImportNonlinkedInfo *info);
@@ -93,7 +100,6 @@ SceKernelModuleEntry sceKernelGetModuleEntryPointForKernel(SceUID modid);
 /*
  * unknown
  */
-
 // Related to process switch?
 int SceModulemgrForKernel_29CB2771(SceUID pid);
 
@@ -104,13 +110,7 @@ int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname);
 int SceModulemgrForKernel_60E176C8(int a1);
 int SceModulemgrForKernel_9D20C9BB(int a1);
 
-// a3 size is 0x128
-int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID stubid, void *a3);
-
 // set two param
 void SceModulemgrForKernel_F3CD647F(int a1, int a2);
-
-// a3 size is 8 * num
-int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID stubid, void *a3, SceSize *num, SceSize cpy_skip_num);
 
 #endif /* _PSP2_KERNEL_MODULEMGR_FOR_KERNEL_H_ */
