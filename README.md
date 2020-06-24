@@ -77,7 +77,13 @@ sceKernelInhibitLoadingModule
 
 0xD4BF409C : sceKernelGetModuleLibExportListForKernel
 0x3B93CF88 : sceKernelGetModuleListByImportForKernel (old name is sceKernelGetModuleUidForKernel)
-0x1FDEAE16 : sceKernelGetModuleExportLibraryListForKernel (old name is sceKernelGetModuleUidListForKernel)
+
+0x1D341231 : sceKernelGetProcessLibStubIdListForKernel (old name is sceKernelGetModuleLibStubIdListForKernel)
+0x1FDEAE16 : sceKernelGetProcessLibraryIdListForKernel (old name is sceKernelGetModuleUidListForKernel, sceKernelGetModuleExportLibraryListForKernel)
+
+0x2DD3B511 : sceKernelGetModuleImportListForKernel (old name is sceKernelGetModuleImportListForKernel)
+0x619925F1 : sceKernelGetModuleExportListForKernel (old name is sceKernelGetModuleLibraryIdListForKernel)
+
 0x410E1D2E : sceKernelGetModuleList2ForKernel
 
 0x448810D5 : sceKernelLoadPtLoadSegForFwloaderForKernel
@@ -90,11 +96,8 @@ sceKernelInhibitLoadingModule
 0x3382952B : sceKernelSetupForModulemgrForKernel
 
 SceModulemgrForKernel_952535A3 : (sceKernelGetModuleImportNonlinkedInfoByNIDForKernel)
-SceModulemgrForKernel_1D341231 : (sceKernelGetModuleLibStubIdListForKernel)
-SceModulemgrForKernel_619925F1 : (sceKernelGetModuleLibraryIdListForKernel)
 SceModulemgrForKernel_99890202 : (sceKernelGetModuleIsSharedByAddrForKernel)
 SceModulemgrForKernel_8D1AA624 : (sceKernelGetModuleKernelExportListForKernel)
-SceModulemgrForKernel_2DD3B511 : (sceKernelGetModuleImportListForKernel)
 SceModulemgrForKernel_F95D09C2 : (sceKernelGetModuleAppInfoForKernel, temp name)
 SceModulemgrForKernel_FF2264BB : (sceKernelGetModuleNonlinkedListForKernel)
 
