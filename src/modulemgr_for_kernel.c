@@ -25,7 +25,6 @@ SceUID ksceKernelSetProcessId(SceUID pid);
 extern void *SceKernelModulemgr_text;
 extern void *SceKernelModulemgr_data;
 
-
 extern int (* SceIntrmgrForKernel_B60ACF4B)(int len, void *ptr_dst);
 extern void *(* sceKernelGetProcessClassForKernel)(void);
 extern int (* SceThreadmgrForDriver_E50E1185)(SceUID tid, const char *name, void *some_func, void *some_data);
@@ -606,13 +605,13 @@ int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleIm
 	return 0;
 }
 
-int sceKernelGetModuleLibStubIdListForKernel(SceUID pid, SceUID *stubid, SceSize *num)
+int sceKernelGetProcessLibStubIdListForKernel(SceUID pid, SceUID *libstub_ids, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
 }
 
-int sceKernelGetModuleExportLibraryListForKernel(SceUID pid, SceUID *libids, SceSize *num)
+int sceKernelGetProcessLibraryIdListForKernel(SceUID pid, SceUID *library_ids, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
@@ -624,7 +623,13 @@ int SceModulemgrForKernel_29CB2771(SceUID pid)
 	return 0;
 }
 
-int sceKernelGetModuleImportListForKernel(SceUID pid, SceUID modid, SceUID *libids, SceSize *num)
+int sceKernelGetModuleImportListForKernel(SceUID pid, SceUID modid, SceUID *library_ids, SceSize *num)
+{
+	// yet not Reversed
+	return 0;
+}
+
+int sceKernelGetModuleExportListForKernel(SceUID pid, SceUID modid, SceUID *library_ids, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
@@ -671,13 +676,7 @@ int sceKernelGetModuleList2ForKernel(SceUID pid, SceKernelModuleListInfo *infoli
 	return 0;
 }
 
-int SceModulemgrForKernel_4865C72C(int a1, int a2)
-{
-	// yet not Reversed
-	return 0;
-}
-
-int sceKernelGetModuleLibraryIdListForKernel(SceUID pid, SceUID modid, SceUID *libid, SceSize *num)
+int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname)
 {
 	// yet not Reversed
 	return 0;
