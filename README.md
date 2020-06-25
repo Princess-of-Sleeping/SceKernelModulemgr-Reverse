@@ -103,8 +103,8 @@ SceModulemgrForKernel_FF2264BB : (sceKernelGetModuleNonlinkedListForKernel)
 
 SceModulemgrForKernel_29CB2771
 SceModulemgrForKernel_4865C72C
-SceModulemgrForKernel_60E176C8 : (sceKernelRegisterModuleStartCBForKernel, temp name)
-SceModulemgrForKernel_9D20C9BB : (sceKernelRegisterModuleStartCBCheckForKernel, temp name)
+SceModulemgrForKernel_60E176C8 : (sceKernelRegisterDebugCBForKernel, temp name)
+SceModulemgrForKernel_9D20C9BB : (sceKernelRegisterDebugCBCheckForKernel, temp name)
 SceModulemgrForKernel_B73BE671
 SceModulemgrForKernel_F3CD647F
 SceModulemgrForKernel_FB251B7A
