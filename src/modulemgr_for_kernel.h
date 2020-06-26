@@ -83,8 +83,8 @@ int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid
  */
 int sceKernelGetModuleAppInfoForKernel(const char *path, uint64_t *pAuthid, SceSelfAppInfo *pInfo);
 
-int sceKernelGetModuleInternalForKernel(SceUID modid, SceKernelModuleInfoObjBase_t **info);
-int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceKernelModuleInfoObjBase_t **info);
+int sceKernelGetModuleInternalForKernel(SceUID modid, SceModuleInfoInternal **info);
+int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceModuleInfoInternal **info);
 
 int sceKernelGetModuleNIDForKernel(SceUID modid, uint32_t *module_nid);
 int sceKernelGetModulePathForKernel(SceUID modid, char *path, int pathlen);
