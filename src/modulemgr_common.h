@@ -22,7 +22,7 @@ int syscall_stub();
 void func_0x810014a8(void);
 void func_0x810014d4(void);
 int func_0x81001ec4(SceUID pid);
-SceKernelModuleInfoObj_t *func_0x81001f0c(SceUID modid);
+SceModuleObject *func_0x81001f0c(SceUID modid);
 
 int release_obj(SceUID uid);
 int func_0x810021c0(SceUID pid);
@@ -38,14 +38,14 @@ int func_0x810049fc(const char *path);
 int func_0x81004a54(SceUID fd);
 
 // int func_0x81005648(SceUID pid, int flags, void *dst);
-int func_0x81005648(SceUID pid, int flags, SceKernelModuleInfoObj_t **dst);
-int func_0x81005a70(SceKernelModuleInfoObjBase_t *pInfo, const char *path, int flags);
-void print_module_load_info(SceKernelModuleInfoObjBase_t *obj);
+int func_0x81005648(SceUID pid, int flags, SceModuleObject **dst);
+int func_0x81005a70(SceModuleInfoInternal *pInfo, const char *path, int flags);
+void print_module_load_info(SceModuleInfoInternal *obj);
 int func_0x81005fec(void *a1, const void *a2);			// yet not Reversed
 
 //int func_0x81006cf4(int a1, int a2, int a3, void *a4);
 void *func_0x81006cf4(int a1, void *a2, const void *a3, void *a4);
-SceModuleLibraryObj_t *func_0x81006de8(SceUID pid, SceUID libid);
+SceModuleLibraryObject *func_0x81006de8(SceUID pid, SceUID libid);
 SceKernelProcessModuleInfo *getProcModuleInfo(SceUID pid, int *cpu_suspend_intr);
 int func_0x81006e90(SceKernelProcessModuleInfo *module_tree_top, int cpu_suspend_intr);
 int func_0x81006e9c(SceUID pid);
@@ -55,7 +55,7 @@ int func_0x81007148(const char *path);
 int func_0x810071a8(void *r0);
 int get_module_library_info_export(SceUID pid, SceUID modid, uint32_t libnid, SceKernelLibraryInfo *info);
 int get_module_info(SceUID pid, SceUID modid, SceKernelModuleInfo_fix_t *info);
-int get_module_info_internal_by_addr(SceKernelProcessModuleInfo *module_proc_info, const void *module_addr, SceKernelModuleInfoObjBase_t **dst);
+int get_module_info_internal_by_addr(SceKernelProcessModuleInfo *module_proc_info, const void *module_addr, SceModuleInfoInternal **dst);
 
 int syacall_init(void);
 
