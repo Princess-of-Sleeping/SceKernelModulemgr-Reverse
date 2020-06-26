@@ -11,15 +11,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "import_defs.h"
 #include "modulemgr.h"
 #include "modulemgr_types.h"
 #include "modulemgr_for_driver.h"
 #include "modulemgr_for_kernel.h"
 #include "modulemgr_common.h"
-
-extern void (* SceSysrootForDriver_6E0BC27C)(void);
-
-
 
 int sceKernelGetAllowedSdkVersionOnSystem(void)
 {
@@ -170,18 +167,6 @@ int sceKernelIsCalledFromSysModule(int a1)
 
 	ENTER_SYSCALL(state);
 	res = sceKernelGetModuleIsSharedByAddrForKernel(ksceKernelGetProcessId(), (const void *)a1);
-	EXIT_SYSCALL(state);
-
-	return res;
-}
-
-int sceKernelInhibitLoadingModule(uint16_t flag)
-{
-	int res;
-	uint32_t state;
-
-	ENTER_SYSCALL(state);
-	res = func_0x81003708(flag);
 	EXIT_SYSCALL(state);
 
 	return res;
