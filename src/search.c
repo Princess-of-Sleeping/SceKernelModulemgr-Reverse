@@ -25,13 +25,13 @@ SceUID search_module_by_name(SceUID pid, const char *module_name){
 	SceUID uid;
 	int cpu_suspend_intr;
 	SceKernelProcessModuleInfo *pProcModuleInfo;
-	SceKernelModuleInfoObjBase_t *module_list;
+	SceModuleInfoInternal *module_list;
 
 	pProcModuleInfo = getProcModuleInfo(pid, &cpu_suspend_intr);
 	if(pProcModuleInfo == NULL){
 		uid = 0x8002d080;
 	}else{
-		module_list = pProcModuleInfo->module_list;
+		module_list = pProcModuleInfo->pModuleInfo;
  		while(module_list != NULL){
 			if(strncmp(module_list->module_name, module_name, 0x1A) == 0){
 				uid = module_list->modid_kernel;
