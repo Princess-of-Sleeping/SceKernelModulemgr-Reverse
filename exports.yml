@@ -1,0 +1,20 @@
+ModulemgrRev:
+  attributes: 0
+  version:
+    major: 1
+    minor: 0
+  main:
+    start: module_start
+  modules:
+    SceModulemgrReForDriver:
+      syscall: false
+      functions:
+        - sceKernelSearchModuleByNameForDriver
+    SceModulemgrReForKernel:
+      syscall: false
+      functions:
+        - sceKernelGetModuleIdByAddrForKernel
+    SceKernelModulemgrRe:
+      syscall: false
+      functions:
+        - sceKernelInhibitLoadingModule
