@@ -10,8 +10,7 @@
 
 SceUID sceKernelSearchModuleByNameForDriver(const char *module_name);
 
-// ksceKernelGetModuleInfoByAddr
-int SceModulemgrForDriver_1D9E0F7E(const void *addr, SceKernelModuleInfo *info);
+int sceKernelGetModuleInfoByAddrForDriver(const void *addr, SceKernelModuleInfo *info);
 
 int sceKernelRegisterLibaryForDriver(const void *module_addr);
 int sceKernelReleaseLibaryForDriver(const void *module_addr);
