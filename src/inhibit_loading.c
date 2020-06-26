@@ -34,14 +34,14 @@ int inhibit_loading_module(uint16_t flag){
 		return 0x8002D080;
 
 	if(flag <= (pProcModuleInfo->inhibit_state & 0x30)){
-		func_0x81006e90(pProcModuleInfo, cpu_suspend_intr);
+		resume_cpu_intr(pProcModuleInfo, cpu_suspend_intr);
 		return 0x80020005;
 	}
 
 	pProcModuleInfo->inhibit_state &= ~0x30;
 	pProcModuleInfo->inhibit_state |= flag;
 
-	func_0x81006e90(pProcModuleInfo, (int)cpu_suspend_intr);
+	resume_cpu_intr(pProcModuleInfo, (int)cpu_suspend_intr);
 
 	return 0;
 }
