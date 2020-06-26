@@ -81,7 +81,7 @@ label_0x81003706:
 	return res;
 }
 
-int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceKernelModuleInfoObjBase_t **info){
+int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceModuleInfoInternal **info){
 
 	int res;
 	int cpu_intr;
@@ -122,9 +122,9 @@ int sceKernelGetModuleInhibitStateForKernel(SceUID pid, int *a2){
 	return 0;
 }
 
-int sceKernelGetModuleInternalForKernel(SceUID modid, SceKernelModuleInfoObjBase_t **info){
+int sceKernelGetModuleInternalForKernel(SceUID modid, SceModuleInfoInternal **info){
 
-	SceKernelModuleInfoObj_t *modobj;
+	SceModuleObject *modobj;
 
 	modobj = func_0x81001f0c(modid);
 	if (modobj == NULL)
@@ -141,7 +141,7 @@ int sceKernelGetModuleInternalForKernel(SceUID modid, SceKernelModuleInfoObjBase
 // old name is sceKernelGetProcessMainModulePathForKernel
 int sceKernelGetModulePathForKernel(SceUID modid, char *path, int pathlen){
 
-	SceKernelModuleInfoObj_t *modobj;
+	SceModuleObject *modobj;
 
 	modobj = func_0x81001f0c(modid);
 	if (modobj == NULL)
@@ -155,7 +155,7 @@ int sceKernelGetModulePathForKernel(SceUID modid, char *path, int pathlen){
 
 SceKernelModuleEntry sceKernelGetModuleEntryPointForKernel(SceUID modid){
 
-	SceKernelModuleInfoObj_t *modobj;
+	SceModuleObject *modobj;
 
 	modobj = func_0x81001f0c(modid);
 	if (modobj == NULL)
@@ -169,7 +169,7 @@ SceKernelModuleEntry sceKernelGetModuleEntryPointForKernel(SceUID modid){
 int sceKernelGetModuleEntryPointForUserForKernel(SceUID pid, SceUID UserUid, SceKernelModuleEntry *start, SceKernelModuleEntry *stop){
 
 	SceUID KernelUid;
-	SceKernelModuleInfoObj_t *modobj;
+	SceModuleObject *modobj;
 
 	if (pid == 0x10005)
 		return 0x8002D012;
@@ -205,7 +205,7 @@ SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid){
 	SceUID res;
 	int cpu_intr;
 	SceKernelProcessModuleInfo *module_tree_top;
-	SceKernelModuleInfoObj_t *modobj;
+	SceModuleObject *modobj;
 
 	if (pid == 0x10005)
 		return 0x8002D082;
@@ -214,19 +214,19 @@ SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid){
 	if (module_tree_top == NULL)
 		return 0x8002D082;
 
-	modobj = func_0x81001f0c(module_tree_top->proc_main_module_id);
+	modobj = func_0x81001f0c(module_tree_top->process_main_module_id);
 	if (modobj == NULL){
 		ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
 		return 0x8002D082;
 	}
 
 	if ((modobj->obj_base.flags & 0x4000) != 0){
-		res = (modobj->obj_base.pid == pid) ? module_tree_top->proc_main_module_id : 0x8002D082;
+		res = (modobj->obj_base.pid == pid) ? module_tree_top->process_main_module_id : 0x8002D082;
 	}else{
 		res = 0x8002D082;
 	}
 
-	release_obj(module_tree_top->proc_main_module_id);
+	release_obj(module_tree_top->process_main_module_id);
 	ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
 
 	return res;
@@ -242,7 +242,7 @@ SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid){
  */
 int sceKernelGetModuleNIDForKernel(SceUID modid, uint32_t *module_nid){
 
-	SceKernelModuleInfoObj_t *modobj;
+	SceModuleObject *modobj;
 
 	modobj = func_0x81001f0c(modid);
 	if (modobj == NULL)
@@ -465,7 +465,7 @@ int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *
 {
 	int cpu_intr;
 	SceSize count = 0;
-	SceKernelModuleInfoObjBase_t *module_list;
+	SceModuleInfoInternal *module_list;
 	SceKernelProcessModuleInfo *module_proc_info;
 
 	if (pid == 0)
@@ -478,7 +478,7 @@ int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *
 	if(module_proc_info == NULL)
 		return 0x8002D080;
 
-	module_list = module_proc_info->module_list;
+	module_list = module_proc_info->pModuleInfo;
 
 	while(*num > count){
 		if(module_list == NULL)
@@ -515,7 +515,7 @@ module_count_mode:
 	if (module_proc_info == NULL)
 		return 0;
 
-	module_list = module_proc_info->module_list;
+	module_list = module_proc_info->pModuleInfo;
 
 	while(module_list != NULL){
 		if (pid == 0x10005){
@@ -538,7 +538,7 @@ int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleIm
 {
 	int cpu_intr;
 	SceSize count = 0;
-	SceKernelModuleImportNonlinkedInfo_t *import_nonlinked_list;
+	SceModuleNonlinkedInfo *import_nonlinked_list;
 	SceKernelProcessModuleInfo *module_tree_top;
 
 	if (info == NULL){
@@ -552,14 +552,14 @@ int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleIm
 	if (module_tree_top == NULL)
 		return 0x8002D080;
 
-	import_nonlinked_list = module_tree_top->import_nonlinked_list;
+	import_nonlinked_list = module_tree_top->nonlinked_info;
 
 	while(*num > count){
 		if (import_nonlinked_list == NULL)
 			break;
 
 		info[count].libnid = import_nonlinked_list->lib_import_info->type2.libnid;
-		info[count].modid  = (pid == 0x10005) ? import_nonlinked_list->pObjBase->modid_kernel : import_nonlinked_list->pObjBase->modid_user;
+		info[count].modid  = (pid == 0x10005) ? import_nonlinked_list->pModuleInfo->modid_kernel : import_nonlinked_list->pModuleInfo->modid_user;
 
 		count++;
 		import_nonlinked_list = import_nonlinked_list->next;
@@ -648,10 +648,10 @@ int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname)
 	return 0;
 }
 
-int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelModuleLibraryInfo *info)
-{
+int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelModuleLibraryInfo *info){
+
 	int res;
-	SceModuleLibraryObj_t *SceModuleLibraryObj;
+	SceModuleLibraryObject *SceModuleLibraryObj;
 	SceModuleLibraryExportInfo_t *library_info;
 
 	res = func_0x810021c0(pid);
@@ -693,7 +693,7 @@ int sceKernelGetModuleInfoMinByAddrForKernel(
 	int res;
 	int cpu_intr;
 	SceKernelProcessModuleInfo *module_proc_info;
-	SceKernelModuleInfoObjBase_t *modobj;
+	SceModuleInfoInternal *modobj;
 
 	module_proc_info = getProcModuleInfo(pid, &cpu_intr);
 	if (module_proc_info == NULL)
