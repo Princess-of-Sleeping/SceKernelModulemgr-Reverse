@@ -216,19 +216,21 @@ typedef struct SceModuleLibStubObj_t {
 	SceSize num; // maybe non linked import num
 } SceModuleLibStubObj_t;
 
-typedef struct SceKernelModuleProcInfo_t {
+typedef struct SceKernelProcessModuleInfo {
 	SceUID pid;
 	SceModuleLibraryExportInfo_t *lib_export_info;
 	SceUID data_0x08;						// uid?
 	SceKernelModuleImportNonlinkedInfo_t *import_nonlinked_list;	// allocated by sceKernelAlloc
+
 	// offset:0x10
 	SceKernelModuleInfoObjBase_t *module_list;
 	SceUID proc_main_module_id;
 	uint16_t proc_module_count;
 	uint16_t inhibit_state;
 	void *data_0x1C;
+
 	int cpu_addr;
 	SceUID ScePsp2BootConfig_modid; // kernel only
-} SceKernelModuleProcInfo_t;
+} SceKernelProcessModuleInfo;
 
 #endif /* _PSP2_KERNEL_MODULEMGR_INTERNAL_H_ */
