@@ -30,26 +30,27 @@ int sceKernelGetModuleInfoByAddrForDriver(const void *addr, SceKernelModuleInfo 
 int sceKernelRegisterLibaryForDriver(const void *module_addr){
 
 	int res;
-	int some_uid;
-	void *arg1;
+	SceUID modid;
+	SceModuleObject *pObj;
 
-	some_uid = get_module_id_by_addr(0x10005, module_addr);
-	if(some_uid < 0)
-		return some_uid;
+	modid = get_module_id_by_addr(0x10005, module_addr);
+	if(modid < 0)
+		return modid;
 
-	arg1 = func_0x81001f0c(some_uid);
-	if(arg1 == NULL)
+	pObj = get_module_object(modid);
+	if(pObj == NULL)
 		return 0x8002D011;
 
-	res = func_0x81005fec(arg1 + 8, module_addr);
+	res = func_0x81005fec(&pObj->obj_base, module_addr);
 	if(res < 0)
 		goto label_0x81003242;
 
-	res = func_0x81004198(arg1 + 8, res, 1);
+	res = func_0x81004198(&pObj->obj_base, res, 1);
 
 label_0x81003242:
-	ksceKernelUidRelease(some_uid);
+	ksceKernelUidRelease(modid);
 	ksceKernelCpuIcacheInvalidateAll();
+
 	return res;
 }
 
@@ -57,25 +58,26 @@ int sceKernelReleaseLibaryForDriver(const void *module_addr){
 
 	int res;
 	SceUID modid;
-	void *pRes;
+	SceModuleObject *pObj;
 
 	modid = get_module_id_by_addr(0x10005, module_addr);
 	if(modid < 0)
 		return modid;
 
-	pRes = func_0x81001f0c(modid);
-	if(pRes == 0)
+	pObj = get_module_object(modid);
+	if(pObj == NULL)
 		return 0x8002D011;
 
-	res = func_0x81005fec(pRes + 8, module_addr);
+	res = func_0x81005fec(&pObj->obj_base, module_addr);
 	if(res < 0)
 		goto label_0x81003296;
 
-	res = func_0x8100428c(pRes + 8, res, 0);
+	res = func_0x8100428c(&pObj->obj_base, res, 0);
 
 label_0x81003296:
 	ksceKernelUidRelease(modid);
 	ksceKernelCpuIcacheInvalidateAll();
+
 	return res;
 }
 
@@ -152,7 +154,6 @@ SceUID ksceKernelLoadStartModuleForPid(SceUID pid, const char *path, SceSize arg
 
 	return module_load_start_for_pid(pid, path, args, argp, ((flags | 0x8000000) | 2), option, status);
 }
-
 
 int ksceKernelUnloadModule(SceUID modid, int flags, SceKernelULMOption *option){
 
