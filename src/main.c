@@ -1651,3 +1651,4 @@ int module_start(SceSize args, void *argp){
 int module_stop(SceSize args, void *argp){
 	return SCE_KERNEL_STOP_SUCCESS;
 }
+
