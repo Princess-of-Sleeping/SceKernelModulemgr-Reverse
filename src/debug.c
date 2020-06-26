@@ -32,17 +32,17 @@ const kernel_message_ctx load_param_one_seg = {
 /*
  * print_module_load_info / 0x81005b04 (checked)
  */
-void print_module_load_info(SceKernelModuleInfoObjBase_t *pObj){
+void print_module_load_info(SceModuleInfoInternal *pInfo){
 	if(SceQafMgrForDriver_382C71E8() != 0){
-		if(pObj->segments_num < 2){
+		if(pInfo->segments_num < 2){
 			ksceDebugPrintf2(0, (kernel_message_ctx *)&load_param_one_seg, "[%-27s]:text=%p(0x%08x), (no data)\n",
-				pObj->module_name, pObj->segments[0].vaddr, pObj->segments[0].memsz
+				pInfo->module_name, pInfo->segments[0].vaddr, pInfo->segments[0].memsz
 			);
 		}else{
 			ksceDebugPrintf2(0, (kernel_message_ctx *)&load_param, "[%-27s]:text=%p(0x%08x), data=%p(0x%08x/0x%08x)\n",
-				pObj->module_name,
-				pObj->segments[0].vaddr, pObj->segments[0].memsz,
-				pObj->segments[1].vaddr, pObj->segments[1].filesz, pObj->segments[1].memsz
+				pInfo->module_name,
+				pInfo->segments[0].vaddr, pInfo->segments[0].memsz,
+				pInfo->segments[1].vaddr, pInfo->segments[1].filesz, pInfo->segments[1].memsz
 			);
 		}
 	}
