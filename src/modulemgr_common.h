@@ -21,12 +21,13 @@ int syscall_stub();
 
 void func_0x810014a8(void);
 void func_0x810014d4(void);
-int func_0x81001ec4(SceUID pid);
-SceModuleObject *func_0x81001f0c(SceUID modid);
+SceModuleObject *get_module_object(SceUID modid);
 
 int release_obj(SceUID uid);
-int func_0x810021c0(SceUID pid);
 int release_obj_for_user(SceUID uid);
+
+int process_check(SceUID pid);
+int process_check_for_user(SceUID pid);
 
 int inhibit_loading_module(uint16_t flag);
 
@@ -47,8 +48,8 @@ int func_0x81005fec(void *a1, const void *a2);			// yet not Reversed
 void *func_0x81006cf4(int a1, void *a2, const void *a3, void *a4);
 SceModuleLibraryObject *func_0x81006de8(SceUID pid, SceUID libid);
 SceKernelProcessModuleInfo *getProcModuleInfo(SceUID pid, int *cpu_suspend_intr);
-int func_0x81006e90(SceKernelProcessModuleInfo *module_tree_top, int cpu_suspend_intr);
-int func_0x81006e9c(SceUID pid);
+int resume_cpu_intr(SceKernelProcessModuleInfo *pProcModuleInfo, int cpu_suspend_intr);
+int cleanup_process_module_info(SceUID pid);
 
 int func_0x810070b4(void *a1);
 int func_0x81007148(const char *path);
