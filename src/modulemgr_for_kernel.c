@@ -33,30 +33,24 @@ SceUID sceKernelGetModuleIdByAddrForKernel(SceUID pid, const void *module_addr){
 int sceKernelUnloadProcessModulesForKernel(SceUID pid){
 
 	int cpu_suspend_intr;
-	void *pRes;
-	SceUID modid;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
 
-	goto label_0x81003910;
+	do {
 
-label_0x810038F2:
-	if(*(uint32_t *)(pRes + 0x10) == 0)
-		goto label_0x81003934;
+		pProcModuleInfo = getProcModuleInfo(pid, &cpu_suspend_intr);
 
-	modid = *(uint32_t *)(*(uint32_t *)(pRes + 0x10) + 0xC);
+		if(pProcModuleInfo != NULL && pProcModuleInfo->pModuleInfo != NULL){
+			resume_cpu_intr(pProcModuleInfo, cpu_suspend_intr);
+			module_stop_unload_for_pid(pid, pProcModuleInfo->pModuleInfo->modid_kernel, 0, 0, 0x40000330, 0, 0);
+		}
 
-	func_0x81006e90(pRes, cpu_suspend_intr);
-	module_stop_unload_for_pid(pid, modid, 0, 0, 0x40000330, 0, 0);
+	} while(pProcModuleInfo != NULL && pProcModuleInfo->pModuleInfo != NULL);
 
-label_0x81003910:
-	pRes = getProcModuleInfo(pid, &cpu_suspend_intr);
-	if(pRes != 0)
-		goto label_0x810038F2;
+	if(pProcModuleInfo == NULL)
+		return 0x8002D080;
 
-	return 0x8002D080;
-
-label_0x81003934:
-	func_0x81006e90(pRes, cpu_suspend_intr);
-	func_0x81006e9c(pid);
+	resume_cpu_intr(pProcModuleInfo, cpu_suspend_intr);
+	cleanup_process_module_info(pid);
 
 	return 0;
 }
@@ -81,21 +75,20 @@ label_0x81003706:
 	return res;
 }
 
-int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceModuleInfoInternal **info){
+int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceModuleInfoInternal **ppInfo){
 
-	int res;
-	int cpu_intr;
-	SceKernelProcessModuleInfo *mod_tree;
+	int res, cpu_intr;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
 
-	if (pid == 0)
+	if(pid == 0)
 		pid = ksceKernelGetProcessId();
 
-	mod_tree = getProcModuleInfo(pid, &cpu_intr);
-	if (mod_tree == NULL)
+	pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
+	if(pProcModuleInfo == NULL)
 		return 0x8002D080;
 
-	res = get_module_info_internal_by_addr(mod_tree, module_addr, info);
-	ksceKernelCpuResumeIntr((int *)(&mod_tree->cpu_addr), cpu_intr);
+	res = get_module_info_internal_by_addr(pProcModuleInfo, module_addr, ppInfo);
+	ksceKernelCpuResumeIntr((int *)(&pProcModuleInfo->cpu_addr), cpu_intr);
 
 	return res;
 }
@@ -106,32 +99,32 @@ int sceKernelGetModuleNonlinkedListForKernel(SceUID pid, SceUID modid, SceKernel
 	return 0;
 }
 
-int sceKernelGetModuleInhibitStateForKernel(SceUID pid, int *a2){
+int sceKernelGetModuleInhibitStateForKernel(SceUID pid, int *pState){
 
 	int cpu_intr;
-	SceKernelProcessModuleInfo *module_tree_top;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
 
-	module_tree_top = getProcModuleInfo(pid, &cpu_intr);
-	if (module_tree_top == NULL)
+	pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
+	if(pProcModuleInfo == NULL)
 		return 0x8002D080;
 
-	*a2 = module_tree_top->inhibit_state;
+	*pState = pProcModuleInfo->inhibit_state;
 
-	ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
+	ksceKernelCpuResumeIntr(&pProcModuleInfo->cpu_addr, cpu_intr);
 
 	return 0;
 }
 
-int sceKernelGetModuleInternalForKernel(SceUID modid, SceModuleInfoInternal **info){
+int sceKernelGetModuleInternalForKernel(SceUID modid, SceModuleInfoInternal **ppInfo){
 
-	SceModuleObject *modobj;
+	SceModuleObject *pObj;
 
-	modobj = func_0x81001f0c(modid);
-	if (modobj == NULL)
+	pObj = get_module_object(modid);
+	if(pObj == NULL)
 		return 0x8002D011;
 
-	if (info != NULL)
-		*info = &modobj->obj_base;
+	if(ppInfo != NULL)
+		*ppInfo = &pObj->obj_base;
 
 	ksceKernelUidRelease(modid);
 
@@ -143,7 +136,7 @@ int sceKernelGetModulePathForKernel(SceUID modid, char *path, int pathlen){
 
 	SceModuleObject *modobj;
 
-	modobj = func_0x81001f0c(modid);
+	modobj = get_module_object(modid);
 	if (modobj == NULL)
 		return 0x8002D082;
 
@@ -157,7 +150,7 @@ SceKernelModuleEntry sceKernelGetModuleEntryPointForKernel(SceUID modid){
 
 	SceModuleObject *modobj;
 
-	modobj = func_0x81001f0c(modid);
+	modobj = get_module_object(modid);
 	if (modobj == NULL)
 		return NULL;
 
@@ -174,7 +167,7 @@ int sceKernelGetModuleEntryPointForUserForKernel(SceUID pid, SceUID UserUid, Sce
 	if (pid == 0x10005)
 		return 0x8002D012;
 
-	if (func_0x81001ec4(pid) < 0)
+	if (process_check_for_user(pid) < 0)
 		return 0x8002D012;
 
 	KernelUid = ksceKernelKernelUidForUserUid(pid, UserUid);
@@ -183,7 +176,7 @@ int sceKernelGetModuleEntryPointForUserForKernel(SceUID pid, SceUID UserUid, Sce
 		return KernelUid;
 	}
 
-	modobj = func_0x81001f0c(KernelUid);
+	modobj = get_module_object(KernelUid);
 	if (modobj == NULL){
 		ksceKernelUidRelease(pid);
 		return 0x8002D011;
@@ -214,7 +207,7 @@ SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid){
 	if (module_tree_top == NULL)
 		return 0x8002D082;
 
-	modobj = func_0x81001f0c(module_tree_top->process_main_module_id);
+	modobj = get_module_object(module_tree_top->process_main_module_id);
 	if (modobj == NULL){
 		ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
 		return 0x8002D082;
@@ -244,7 +237,7 @@ int sceKernelGetModuleNIDForKernel(SceUID modid, uint32_t *module_nid){
 
 	SceModuleObject *modobj;
 
-	modobj = func_0x81001f0c(modid);
+	modobj = get_module_object(modid);
 	if (modobj == NULL)
 		return 0x8002D082;
 
@@ -283,7 +276,7 @@ label_0x8100363E:
 
 label_0x81003644:
 	modnum -= 1;
-	pRes = func_0x81001f0c(modlist[modnum]);
+	pRes = get_module_object(modlist[modnum]);
 	if(pRes == NULL)
 		goto label_0x8100363E;
 
@@ -318,9 +311,8 @@ int sceKernelGetModuleAppInfoForKernel(const char *path, uint64_t *pAuthid, SceS
 
 int sceKernelGetModuleInfoForKernel(SceUID pid, SceUID modid, SceKernelModuleInfo *info){
 
-	if(pid == 0){
+	if(pid == 0)
 		pid = ksceKernelGetProcessId();
-	}
 
 	return get_module_info(pid, modid, (SceKernelModuleInfo_fix_t *)info);
 }
@@ -329,7 +321,7 @@ int sceKernelFinalizeKblForKernel(void){
 
 	SceUID modid;
 
-	modid = *(uint32_t *)(*(uint32_t *)(SceKernelModulemgr_data + 0x38) + 0xA8);
+	modid = *(SceUID *)(*(uint32_t *)(SceKernelModulemgr_data + 0x38) + 0xA8);
 	if(modid <= 0){
 		return 0;
 	}
@@ -413,7 +405,7 @@ int sceKernelMountBootfsForKernel(const char *bootImagePath){
 	*(uint32_t *)(pRes + 0x04) = 0xFFFFFFFF;
 	*(uint32_t *)(pRes + 0x08) = 0;
 	*(uint32_t *)(pRes + 0x0C) = 0;
-	func_0x81001f0c(modid);
+	get_module_object(modid);
 	release_obj(modid);
 	res = 0;
 
@@ -626,7 +618,7 @@ loc_81004142:
 
 loc_81004152:
 	func_0x810070b4(dat);
-	func_0x81006e90(dat, cpu_intr);
+	resume_cpu_intr(dat, cpu_intr);
 	return;
 }
 
@@ -654,7 +646,7 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelMo
 	SceModuleLibraryObject *SceModuleLibraryObj;
 	SceModuleLibraryExportInfo_t *library_info;
 
-	res = func_0x810021c0(pid);
+	res = process_check(pid);
 	if (res < 0)
 		return res;
 
