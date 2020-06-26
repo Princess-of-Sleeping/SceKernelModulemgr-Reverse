@@ -8,6 +8,6 @@
 
 #include "modulemgr_internal.h"
 
-void print_module_load_info(SceKernelModuleInfoObjBase_t *pObj);
+void print_module_load_info(SceModuleInfoInternal *pInfo);
 
 #endif /* _PSP2_KERNEL_MODULE_MGR_DEBUG_H_ */
