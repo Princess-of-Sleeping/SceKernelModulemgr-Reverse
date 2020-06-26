@@ -25,19 +25,19 @@ SceUID search_module_by_name(SceUID pid, const char *module_name){
 	SceUID uid;
 	int cpu_suspend_intr;
 	SceKernelProcessModuleInfo *pProcModuleInfo;
-	SceModuleInfoInternal *module_list;
+	SceModuleInfoInternal *pModuleInfo;
 
 	pProcModuleInfo = getProcModuleInfo(pid, &cpu_suspend_intr);
 	if(pProcModuleInfo == NULL){
 		uid = 0x8002d080;
 	}else{
-		module_list = pProcModuleInfo->pModuleInfo;
- 		while(module_list != NULL){
-			if(strncmp(module_list->module_name, module_name, 0x1A) == 0){
-				uid = module_list->modid_kernel;
+		pModuleInfo = pProcModuleInfo->pModuleInfo;
+ 		while(pModuleInfo != NULL){
+			if(strncmp(pModuleInfo->module_name, module_name, 0x1A) == 0){
+				uid = pModuleInfo->modid_kernel;
 				goto loc_81007c9a;
 			}
-			module_list = module_list->next;
+			pModuleInfo = pModuleInfo->next;
 		}
 		uid = 0x8002d082;
 loc_81007c9a:
