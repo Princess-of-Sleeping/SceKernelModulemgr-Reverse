@@ -9,16 +9,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "import_defs.h"
 #include "modulemgr_internal.h"
 #include "modulemgr_common.h"
 
 extern void *SceKernelModulemgr_text;
 extern void *SceKernelModulemgr_data;
 
-int ksceKernelSysrootGetSystemSwVersion(void);
-
-// ksceKernelGetModuleInfoByAddr
-int SceModulemgrForDriver_1D9E0F7E(const void *addr, SceKernelModuleInfo *info){
+int sceKernelGetModuleInfoByAddrForDriver(const void *addr, SceKernelModuleInfo *info){
 
 	SceUID modid;
 
@@ -27,10 +25,6 @@ int SceModulemgrForDriver_1D9E0F7E(const void *addr, SceKernelModuleInfo *info){
 		return modid;
 
 	return get_module_info(0x10005, modid, (SceKernelModuleInfo_fix_t *)info);
-}
-
-SceUID sceKernelSearchModuleByNameForDriver(const char *module_name){
-	return search_module_by_name(0x10005, module_name);
 }
 
 int sceKernelRegisterLibaryForDriver(const void *module_addr){
