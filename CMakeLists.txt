@@ -8,21 +8,27 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
   endif()
 endif()
 
-project(SceKernelModulemgr_Reverse)
+project(SceKernelModulemgrReverse)
 include("${VITASDK}/share/vita.cmake" REQUIRED)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -nostdlib")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -fno-inline")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
 
-add_executable(SceKernelModulemgr_Reverse
+enable_language(C ASM)
+
+add_executable(SceKernelModulemgrReverse
   src/main.c
   src/modulemgr.c
   src/modulemgr_for_driver.c
   src/modulemgr_for_kernel.c
+  src/debug.c
+  src/search.c
+  src/syscall.c
+  src/inhibit_loading.c
   src/libkernel.c
 )
 
-target_link_libraries(SceKernelModulemgr_Reverse
+target_link_libraries(SceKernelModulemgrReverse
   SceDebugForDriver_stub
   SceDipswForDriver_stub
   SceIofilemgrForDriver_stub
@@ -36,10 +42,18 @@ target_link_libraries(SceKernelModulemgr_Reverse
   SceCpuForKernel_stub
   SceQafMgrForDriver_stub
   taihenForKernel_stub
-  taihenModuleUtils_stub
+
+  ${CMAKE_CURRENT_BINARY_DIR}/../extra/libSceSysmem_stub.a
+  ${CMAKE_CURRENT_BINARY_DIR}/../extra/libSceKernelIntrMgr_stub.a
+  ${CMAKE_CURRENT_BINARY_DIR}/../extra/libSceProcessmgr_stub.a
+  ${CMAKE_CURRENT_BINARY_DIR}/../extra/libSceKernelThreadMgr_stub.a
 )
 
-vita_create_self(ModulemgrRev.skprx SceKernelModulemgr_Reverse
+set_target_properties(SceKernelModulemgrReverse
+  PROPERTIES LINK_FLAGS "-nostdlib"
+)
+
+vita_create_self(modulemgr_rev.skprx SceKernelModulemgrReverse
   CONFIG exports.yml
   UNSAFE
 )
