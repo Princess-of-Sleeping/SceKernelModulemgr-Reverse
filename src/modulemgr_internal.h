@@ -80,7 +80,7 @@ typedef struct SceModuleProcImportInfo_t {
 	int data_0x14; // zero?
 } SceModuleProcImportInfo_t;
 
-typedef struct SceModuleLibraryExportInfo_t {
+typedef struct SceModuleLibraryExportInfo_t { // size is 0x2C
 	struct SceModuleLibraryExportInfo_t *next;
 	void *data_0x04;
 	SceModuleLibExport_t *info;
@@ -151,15 +151,23 @@ typedef struct SceModuleInfoInternal {
 	void *extabBtm;
 
 	// 0x50
-	uint16_t lib_export_num;		// Includes noname library
+	uint16_t lib_export_num;                 // Includes noname library
 	uint16_t lib_import_num;
-	SceModuleLibExport_t *data_0x5C;
-	SceModuleLibExport_t *data_0x60;	// export relation
-	SceModuleLibraryExportInfo_t *data_0x64;// first export?
+	SceModuleLibExport_t *data_0x54;
+	SceModuleLibExport_t *data_0x58;         // export relation
+
+	/*
+	 * export list
+	 * maybe this kernel only
+	 * allocated by sceKernelAlloc
+	 *
+	 * if you using this data, need call get_module_object
+	 */
+	SceModuleLibraryExportInfo_t *data_0x5C;
 
 	// 0x60
-	SceModuleLibImport_t *data_0x68;	// first_import?
-	SceModuleImportList *imports;	// allocated by sceKernelAlloc
+	SceModuleLibImport_t *data_0x60;         // first_import?
+	SceModuleImportList *imports;            // allocated by sceKernelAlloc
 	char *path;
 	SceSize segments_num;
 
