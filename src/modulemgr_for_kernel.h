@@ -42,6 +42,10 @@ int sceKernelFinalizeKblForKernel(void);
 
 void sceKernelSetupForModulemgrForKernel(void);
 
+// register module debug cb
+int SceModulemgrForKernel_60E176C8(int a1);
+int SceModulemgrForKernel_9D20C9BB(int a1);
+
 /*
  * get list
  */
@@ -105,10 +109,6 @@ int SceModulemgrForKernel_29CB2771(SceUID pid);
 
 // Related to non-linked?
 int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname);
-
-// some module start cb register
-int SceModulemgrForKernel_60E176C8(int a1);
-int SceModulemgrForKernel_9D20C9BB(int a1);
 
 // set two param
 void SceModulemgrForKernel_F3CD647F(int a1, int a2);
