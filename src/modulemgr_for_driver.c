@@ -41,7 +41,7 @@ int sceKernelRegisterLibaryForDriver(const void *module_addr){
 	if(pObj == NULL)
 		return 0x8002D011;
 
-	res = func_0x81005fec(&pObj->obj_base, module_addr);
+	res = get_export_index(&pObj->obj_base, module_addr);
 	if(res < 0)
 		goto label_0x81003242;
 
@@ -68,7 +68,7 @@ int sceKernelReleaseLibaryForDriver(const void *module_addr){
 	if(pObj == NULL)
 		return 0x8002D011;
 
-	res = func_0x81005fec(&pObj->obj_base, module_addr);
+	res = get_export_index(&pObj->obj_base, module_addr);
 	if(res < 0)
 		goto label_0x81003296;
 
