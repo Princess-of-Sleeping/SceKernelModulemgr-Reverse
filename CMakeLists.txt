@@ -24,6 +24,7 @@ add_executable(SceKernelModulemgrReverse
   src/debug.c
   src/search.c
   src/syscall.c
+  src/module_user.c
   src/inhibit_loading.c
   src/libkernel.c
 )
