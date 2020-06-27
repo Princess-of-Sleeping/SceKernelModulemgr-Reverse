@@ -62,11 +62,14 @@ sceKernelUnloadModuleForPidForKernel
 
 ### SceModulemgr
 ```
+sceKernelGetAllowedSdkVersionOnSystem
 sceKernelGetModuleIdByAddr
 sceKernelGetModuleInfo
+sceKernelGetModuleList
 sceKernelGetLibraryInfoByNID
 sceKernelGetSystemSwVersion
 sceKernelInhibitLoadingModule
+sceKernelIsCalledFromSysModule
 ```
 
 ## List of only frame(prototype) reversed
@@ -127,9 +130,6 @@ SceModulemgrForDriver_861638AD(ksceKernelRegisterLibary)
 
 ### SceModulemgr
 ```
-sceKernelGetAllowedSdkVersionOnSystem
-sceKernelGetModuleList
-sceKernelIsCalledFromSysModule
 _sceKernelOpenModule
 _sceKernelCloseModule
 _sceKernelLoadModule
