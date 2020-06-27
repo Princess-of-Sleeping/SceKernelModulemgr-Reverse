@@ -38,6 +38,7 @@ sceKernelUnloadModuleForPidForKernel
 0x7A1E882D : sceKernelGetModuleInhibitStateForKernel
 0xFE303863 : sceKernelGetModuleInternalForKernel
 0x2C2618D9 : sceKernelGetModuleInternalByAddrForKernel
+0x99890202 : sceKernelGetModuleIsSharedByAddrForKernel
 0x97CF7B4E : sceKernelGetModuleListForKernel
 0x779A1025 : sceKernelGetModulePathForKernel
 0xEEA92F1F : sceKernelGetModuleNIDForKernel
@@ -46,6 +47,9 @@ sceKernelUnloadModuleForPidForKernel
 0x2A69385E : sceKernelModuleUnloadMySelfForKernel
 0x01360661 : sceKernelMountBootfsForKernel
 0x9C838A6B : sceKernelUmountBootfsForKernel
+0x0E33258E : sceKernelUnloadProcessModulesForKernel
+0x432DCC7A : sceKernelStartPreloadingModulesForKernel
+0x3382952B : sceKernelSetupForModulemgrForKernel
 0xB427025E : sceKernelRegisterSyscallForKernel
 ```
 
@@ -90,13 +94,8 @@ sceKernelInhibitLoadingModule
 
 0xAC4EABDB : sceKernelLoadProcessImageForKernel
 0x3AD26B43 : sceKernelLoadPreloadingModulesForKernel
-0x432DCC7A : sceKernelStartPreloadingModulesForKernel
-0x0E33258E : sceKernelUnloadProcessModulesForKernel
-
-0x3382952B : sceKernelSetupForModulemgrForKernel
 
 SceModulemgrForKernel_952535A3 : (sceKernelGetModuleImportNonlinkedInfoByNIDForKernel)
-SceModulemgrForKernel_99890202 : (sceKernelGetModuleIsSharedByAddrForKernel)
 SceModulemgrForKernel_8D1AA624 : (sceKernelGetModuleKernelExportListForKernel)
 SceModulemgrForKernel_F95D09C2 : (sceKernelGetModuleAppInfoForKernel, temp name)
 SceModulemgrForKernel_FF2264BB : (sceKernelGetModuleNonlinkedListForKernel)
