@@ -30,11 +30,6 @@ typedef struct SceSelfAppInfo {
 	int self_type;
 } SceSelfAppInfo;
 
-typedef struct SceKernelModuleExportEntry {
-	uint32_t libnid;
-	const void *entry; // function ptr. or vars?
-} SceKernelModuleExportEntry;
-
 typedef struct SceKernelModuleNonlinkedInfo {
 	SceUID modid;
 	uint32_t libnid;
@@ -103,20 +98,6 @@ typedef struct {
 	uint32_t *table_nid;
 	void    **table_entry;
 } SceKernelLibraryInfo;  // size is 0x1C
-
-typedef struct SceKernelModuleLibraryInfo {
-  SceSize size; //!< sizeof(SceKernelModuleLibraryInfo) : 0x120
-  SceUID libid;
-  uint32_t libnid;
-  uint16_t libver[2];
-  uint16_t entry_num_function;
-  uint16_t entry_num_variable;
-  uint16_t unk_0x14;
-  uint16_t unk_0x16;
-  char library_name[0x100]; // offset : 0x18
-  uint32_t unk_0x118;
-  SceUID modid2;
-} SceKernelModuleLibraryInfo;
 
 typedef struct {
   char s[0x1C];
