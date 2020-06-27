@@ -13,7 +13,22 @@ ModulemgrRev:
     SceModulemgrReForKernel:
       syscall: false
       functions:
+        - sceKernelFinalizeKblForKernel
+        - sceKernelGetModuleEntryPointForKernel
+        - sceKernelGetModuleEntryPointForUserForKernel
         - sceKernelGetModuleIdByAddrForKernel
+        - sceKernelGetModuleIsSharedByAddrForKernel
+        - sceKernelGetModuleInfoForKernel
+        - sceKernelGetModuleInternalForKernel
+        - sceKernelGetModuleInternalByAddrForKernel
+        - sceKernelGetModuleListForKernel
+        - sceKernelGetModuleNIDForKernel
+        - sceKernelGetModulePathForKernel
+        - sceKernelGetModuleInhibitStateForKernel
+        - sceKernelGetProcessMainModuleForKernel
+        - sceKernelSetupForModulemgrForKernel
+        - sceKernelModuleUnloadMySelfForKernel
+        - sceKernelUnloadProcessModulesForKernel
     SceKernelModulemgrRe:
       syscall: true
       functions:
