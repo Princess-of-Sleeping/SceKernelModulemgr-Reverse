@@ -34,15 +34,17 @@ int inhibit_loading_module(uint16_t flag);
 int func_0x810040c8(SceKernelProcessModuleInfo *a1);
 int func_0x81004198(void *a1, int a2, int a3);			// yet not Reversed
 int func_0x8100428c(void *a1, int a2, int a3);			// yet not Reversed
-void *func_0x8100498c(SceUID pid, SceSize len);
+
+void *alloc_for_process(SceUID pid, SceSize len);
+void free_for_process(SceUID pid, void *ptr);
+
 int func_0x810049fc(const char *path);
 int func_0x81004a54(SceUID fd);
 
 // int func_0x81005648(SceUID pid, int flags, void *dst);
 int func_0x81005648(SceUID pid, int flags, SceModuleObject **dst);
 int func_0x81005a70(SceModuleInfoInternal *pInfo, const char *path, int flags);
-void print_module_load_info(SceModuleInfoInternal *obj);
-int func_0x81005fec(void *a1, const void *a2);			// yet not Reversed
+int get_export_index(SceModuleInfoInternal *pModuleInfo, const void *module_addr);
 
 //int func_0x81006cf4(int a1, int a2, int a3, void *a4);
 void *func_0x81006cf4(int a1, void *a2, const void *a3, void *a4);
