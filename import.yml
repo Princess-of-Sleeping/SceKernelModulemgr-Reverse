@@ -54,6 +54,7 @@ modules:
         nid: 0x746EC971
         functions:
           sceKernelAllocRemoteProcessHeapForDriver: 0x00B1CA0F
+          sceKernelFreeRemoteProcessHeapForDriver: 0x9C28EA9A
           SceProcessmgrForDriver_D141C076: 0xD141C076
       SceProcessmgrForKernel:
         kernel: false
