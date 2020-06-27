@@ -24,7 +24,7 @@ int ksceKernelSysrootDbgpSuspendProcessAndWaitResume(SceUID pid, SceUID modid, i
 
 // SceSysmem
 SceClass *ksceKernelGetClassForUid(SceUID uid, SceClass **cls);
-
+int ksceKernelStrnlenUser(uintptr_t path, SceSize len);
 
 
 int sceKernelEnqueueWorkQueueForDriver(SceUID tid, const char *name, void *some_func, void *some_data);
@@ -38,6 +38,7 @@ int ksceKernelAllocSyscallTable(SceSize len, void *ptr_dst);
 
 
 void *sceKernelAllocRemoteProcessHeapForDriver(SceUID pid, int size, void *pOpt);
+void sceKernelFreeRemoteProcessHeapForDriver(SceUID pid, void *ptr);
 void *sceKernelGetProcessClassForKernel(void);
 int SceProcessmgrForKernel_0A5A2CF1(SceUID pid, int a2);
 int SceProcessmgrForKernel_41815DF2(SceUID pid, void *a2);
