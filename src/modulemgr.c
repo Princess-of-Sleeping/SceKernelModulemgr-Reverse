@@ -18,8 +18,8 @@
 #include "modulemgr_for_kernel.h"
 #include "modulemgr_common.h"
 
-int sceKernelGetAllowedSdkVersionOnSystem(void)
-{
+int sceKernelGetAllowedSdkVersionOnSystem(void){
+
 	int res;
 	uint32_t state;
 	SceKernelFwInfo kdata;
@@ -46,8 +46,8 @@ loc_8100A280:
 	goto loc_8100A270;
 }
 
-int sceKernelGetSystemSwVersion(SceKernelFwInfo *data)
-{
+int sceKernelGetSystemSwVersion(SceKernelFwInfo *data){
+
 	int res;
 	uint32_t state;
 	SceKernelFwInfo kdata;
@@ -71,20 +71,20 @@ loc_8100A214:
 	return res;
 }
 
-int sceKernelGetModuleIdByAddr(const void *addr)
-{
+int sceKernelGetModuleIdByAddr(const void *module_addr){
+
 	int res;
 	uint32_t state;
 
 	ENTER_SYSCALL(state);
-	res = get_module_id_by_addr(0, addr);
+	res = get_module_id_by_addr(0, module_addr);
 	EXIT_SYSCALL(state);
 
 	return res;
 }
 
-int sceKernelGetLibraryInfoByNID(SceUID modid, uint32_t libnid, SceKernelLibraryInfo *info)
-{
+int sceKernelGetLibraryInfoByNID(SceUID modid, uint32_t libnid, SceKernelLibraryInfo *info){
+
 	int res;
 	uint32_t state;
 	SceUID pid;
@@ -120,14 +120,54 @@ loc_8100A2F6:
 	goto loc_8100A2E8;
 }
 
-int sceKernelGetModuleList(int flags, SceUID *modids, int *num)
-{
-	// yet not Reversed
-	return 0;
+int sceKernelGetModuleList(int flags, SceUID *modids, SceSize *num){
+
+	int res;
+	uint32_t state;
+	SceSize knum = 0;
+	void *klist;
+
+	ENTER_SYSCALL(state);
+
+	if(flags == 0)
+		flags = 1;
+
+	if(modids == NULL){
+		res = sceKernelGetModuleListForKernel(0, flags, 0, NULL, NULL);
+		goto exit_syscall;
+	}
+
+	res = ksceKernelMemcpyUserToKernel(&knum, (uintptr_t)num, 4);
+	if(res < 0)
+		goto exit_syscall;
+
+	klist = ksceKernelAlloc(knum << 2);
+	if(klist == NULL){
+		res = 0x8002D008;
+		goto exit_syscall;
+	}
+
+	res = sceKernelGetModuleListForKernel(0, flags, 2, klist, &knum);
+	if(res < 0)
+		goto free_klist;
+
+	res = ksceKernelMemcpyKernelToUser((uintptr_t)modids, klist, knum << 2);
+	if(res < 0)
+		goto free_klist;
+
+	res = ksceKernelMemcpyKernelToUser((uintptr_t)num, &knum, 4);
+
+free_klist:
+	ksceKernelFree(klist);
+
+exit_syscall:
+	EXIT_SYSCALL(state);
+
+	return res;
 }
 
-int sceKernelGetModuleInfo(SceUID modid, SceKernelModuleInfo *info)
-{
+int sceKernelGetModuleInfo(SceUID modid, SceKernelModuleInfo *info){
+
 	int res;
 	SceUID kuid;
 	uint32_t state;
@@ -160,13 +200,13 @@ loc_8100A194:
 	goto loc_8100A186;
 }
 
-int sceKernelIsCalledFromSysModule(int a1)
-{
+int sceKernelIsCalledFromSysModule(const void *module_addr){
+
 	int res;
 	uint32_t state;
 
 	ENTER_SYSCALL(state);
-	res = sceKernelGetModuleIsSharedByAddrForKernel(ksceKernelGetProcessId(), (const void *)a1);
+	res = sceKernelGetModuleIsSharedByAddrForKernel(ksceKernelGetProcessId(), module_addr);
 	EXIT_SYSCALL(state);
 
 	return res;
