@@ -2,6 +2,18 @@
 target version : 3.60<br>
 There is nothing to guarantee perfect operation<br>
 
+## Module flags
+```
+0x8000 : relocatable
+0x4000 : process main module
+0x2000 : unknown
+0x1000 : shared
+0x0800 : unknown
+0x0400 : unknown
+0x0200 : shared host
+0x0100 : shared child
+```
+
 ## Tested functions
 ```
 sceKernelGetModuleIdByAddrForKernel
