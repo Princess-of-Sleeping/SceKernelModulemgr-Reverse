@@ -87,7 +87,7 @@ int sceKernelGetModuleInternalForKernel(SceUID modid, SceModuleInfoInternal **in
 int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceModuleInfoInternal **info);
 
 int sceKernelGetModuleNIDForKernel(SceUID modid, uint32_t *module_nid);
-int sceKernelGetModulePathForKernel(SceUID modid, char *path, int pathlen);
+int sceKernelGetModulePathForKernel(SceUID modid, char *path, SceSize pathlen);
 int sceKernelGetModuleEntryPointForUserForKernel(SceUID pid, SceUID UserUid, SceKernelModuleEntry *start, SceKernelModuleEntry *stop);
 
 int sceKernelGetModuleInhibitStateForKernel(SceUID pid, int *a2);
