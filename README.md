@@ -6,7 +6,7 @@ There is nothing to guarantee perfect operation<br>
 ```
 0x8000 : relocatable
 0x4000 : process main module
-0x2000 : unknown
+0x2000 : unknown (used by kernel only)
 0x1000 : shared
 0x0800 : unknown
 0x0400 : unknown
