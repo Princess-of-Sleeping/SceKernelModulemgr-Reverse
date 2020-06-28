@@ -307,10 +307,8 @@ int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_add
 		return 0;
 
 	res = get_module_info_internal_by_addr(pProcModuleInfo, module_addr, &pModuleInfo);
-	if(res < 0)
-		return 0;
 
-	res = (pModuleInfo->flags >> 0xC) & 1;
+	res = (res < 0) ? 0 : ((pModuleInfo->flags >> 0xC) & 1);
 
 	ksceKernelCpuResumeIntr((int *)(&pProcModuleInfo->cpu_addr), cpu_intr);
 
