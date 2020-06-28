@@ -9,7 +9,7 @@ how to get this value : `((SceModuleInfoInternal *)info_addr)->flags`
 ```
 0x8000 : relocatable
 0x4000 : process main module
-0x2000 : unknown (used by kernel only)
+0x2000 : has syscall export
 0x1000 : shared
 0x0800 : unknown
 0x0400 : unknown
