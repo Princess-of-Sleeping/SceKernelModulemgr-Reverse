@@ -1667,11 +1667,10 @@ int threadFunc(SceSize args, void *argp){
 	ksceDebugPrintf("enum_wakeup.skprx unload res : 0x%X\n", module_unload_for_pid(0x10005, modid, 0, NULL));
 	ksceDebugPrintf("\n");
 
-/*
 	print_module_flags(0x10005);
 	print_module_flags(shell_pid);
-*/
 
+/*
 	dump_module_export(shell_pid, "SceShell");
 	dump_module_export(shell_pid, "SceLibKernel");
 	dump_module_export(shell_pid, "SceDriverUser");
@@ -1694,7 +1693,7 @@ int threadFunc(SceSize args, void *argp){
 	dump_module_export(0x10005, "SceKernelModulemgr");
 	dump_module_export(0x10005, "SceLowio");
 	dump_module_export(0x10005, "SceSyscon");
-
+*/
 
 
 
