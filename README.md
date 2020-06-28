@@ -3,6 +3,9 @@ target version : 3.60<br>
 There is nothing to guarantee perfect operation<br>
 
 ## Module flags
+
+how to get this value : `((SceModuleInfoInternal *)info_addr)->flags`
+
 ```
 0x8000 : relocatable
 0x4000 : process main module
