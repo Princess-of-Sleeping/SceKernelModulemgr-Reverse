@@ -1,6 +1,8 @@
 # SceKernelModulemgr-Reverse
-target version : 3.60<br>
-There is nothing to guarantee perfect operation<br>
+
+target version : 3.60
+
+There is nothing to guarantee perfect operation
 
 ## Module flags
 
