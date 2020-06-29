@@ -8,7 +8,6 @@
 #include <psp2kern/kernel/sysmem.h>
 #include <psp2kern/kernel/cpu.h>
 
-#include <stdio.h>
 #include <string.h>
 
 #include "import_defs.h"
