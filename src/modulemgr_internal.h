@@ -104,7 +104,8 @@ typedef struct SceModuleLibraryInfo { // size is 0x2C
 	 * (syscall_idx & 0x1000):has syscall flag?
 	 * (syscall_idx == 0) -> kernel export
 	 */
-	SceSize syscall_idx;
+	uint16_t syscall_info;
+	uint16_t data_0x0E;
 
 	/*
 	 * Number of times this export was imported into another module
