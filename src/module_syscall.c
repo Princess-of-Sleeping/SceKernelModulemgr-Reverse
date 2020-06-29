@@ -5,7 +5,7 @@
 
 #include <psp2/types.h>
 #include "import_defs.h"
-#include "syscall.h"
+#include "module_syscall.h"
 
 extern void *SceKernelModulemgr_data;
 
