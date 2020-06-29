@@ -3,7 +3,6 @@
  * Copyright (C) 2020, Princess of Sleeping
  */
 
-#include <psp2/types.h>
 #include <psp2kern/kernel/sysmem.h>
 #include <string.h>
 
