@@ -12,7 +12,7 @@ int syacall_init(void);
 
 int IsSyscallTableExist(void);
 
-void sceKernelRegisterSyscallForKernel(int syscall_id, const void *func);
-void sceKernelUnregisterSyscallForKernel(int syscall_id);
+void sceKernelRegisterSyscallForKernel(SceSize syscall_id, const void *func);
+void sceKernelUnregisterSyscallForKernel(SceSize syscall_id);
 
 #endif /* _PSP2_KERNEL_MODULE_MGR_SYSCALL_H_ */
