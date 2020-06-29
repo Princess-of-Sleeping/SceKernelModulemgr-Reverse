@@ -10,6 +10,7 @@
 #include "import_defs.h"
 #include "modulemgr_types.h"
 #include "modulemgr_internal.h"
+#include "module_utility.h"
 #include "modulemgr_common.h"
 
 /*
