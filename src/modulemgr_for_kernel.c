@@ -8,11 +8,11 @@
 #include <psp2kern/kernel/processmgr.h>
 #include <psp2kern/kernel/sysmem.h>
 #include <psp2kern/kernel/cpu.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "modulemgr_types.h"
 #include "modulemgr_internal.h"
+#include "module_utility.h"
 #include "modulemgr_common.h"
 #include "modulemgr_for_kernel.h"
 #include "import_defs.h"
@@ -655,20 +655,20 @@ int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname)
 int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelModuleLibraryInfo *info){
 
 	int res;
-	SceModuleLibraryObject *SceModuleLibraryObj;
+	SceModuleLibraryObject *pObj;
 	SceModuleLibraryExportInfo_t *library_info;
 
 	res = process_check(pid);
 	if (res < 0)
 		return res;
 
-	SceModuleLibraryObj = func_0x81006de8(pid, libid);
-	if (SceModuleLibraryObj == NULL){
+	pObj = get_library_object(pid, libid);
+	if(pObj == NULL){
 		release_obj_for_user(pid);
 		return 0x8002D01C;
 	}
 
-	library_info = SceModuleLibraryObj->library_info;
+	library_info = pObj->library_info;
 
 	info->libid              = (library_info->libid_kernel != libid) ? library_info->libid_user : library_info->libid_kernel;
 	info->libnid             = library_info->info->libnid;
@@ -684,9 +684,10 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelMo
 	info->library_name[0xFF] = 0;
 	strncpy(info->library_name, library_info->info->libname, 0xFF);
 
-	release_obj(SceModuleLibraryObj->modid);
+	release_obj(pObj->modid);
 	ksceKernelUidRelease(library_info->libid_kernel);
 	release_obj_for_user(pid);
+
 	return 0;
 }
 
