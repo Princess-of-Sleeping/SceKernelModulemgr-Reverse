@@ -50,7 +50,7 @@ int SceModulemgrForKernel_9D20C9BB(int a1);
  * get list
  */
 int sceKernelGetModuleNonlinkedListForKernel(SceUID pid, SceUID modid, SceKernelModuleNonlinkedInfo *pList, SceSize *num);
-int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryExportInfo_t **list, SceSize *num);
+int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryInfo **list, SceSize *num);
 
 int sceKernelGetProcessLibStubIdListForKernel(SceUID pid, SceUID *libstub_ids, SceSize *num);
 int sceKernelGetProcessLibraryIdListForKernel(SceUID pid, SceUID *library_ids, SceSize *num);
