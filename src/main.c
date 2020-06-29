@@ -28,9 +28,9 @@
 #include "modulemgr_for_driver.h"
 #include "modulemgr_for_kernel.h"
 #include "modulemgr_common.h"
-#include "syscall.h"
-#include "search.h"
-#include "debug.h"
+#include "module_syscall.h"
+#include "module_search.h"
+#include "module_debug.h"
 
 int module_get_export_func(SceUID pid, const char *modname, uint32_t libnid, uint32_t funcnid, uintptr_t *func);
 
