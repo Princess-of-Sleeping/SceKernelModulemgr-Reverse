@@ -3,13 +3,14 @@
  * Copyright (C) 2020, Princess of Sleeping
  */
 
-#include <psp2/types.h>
+#include <psp2kern/types.h>
 #include <psp2kern/kernel/cpu.h>
 #include <string.h>
 
 #include "import_defs.h"
 #include "modulemgr_types.h"
 #include "modulemgr_internal.h"
+#include "module_utility.h"
 #include "modulemgr_common.h"
 
 /*
