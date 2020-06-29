@@ -7,6 +7,7 @@
 #define _PSP2_KERNEL_MODULE_MGR_IMPORT_H_
 
 #include <psp2kern/kernel/sysmem.h>
+#include "modulemgr_internal.h"
 
 int __stack_chk_fail();
 
@@ -41,10 +42,10 @@ void *sceKernelAllocRemoteProcessHeapForDriver(SceUID pid, int size, void *pOpt)
 void sceKernelFreeRemoteProcessHeapForDriver(SceUID pid, void *ptr);
 void *sceKernelGetProcessClassForKernel(void);
 int SceProcessmgrForKernel_0A5A2CF1(SceUID pid, int a2);
+int SceProcessmgrForKernel_B75FB970(SceUID pid, int a2);
 int SceProcessmgrForKernel_41815DF2(SceUID pid, void *a2);
-int SceProcessmgrForKernel_B75FB970(SceUID pid);
 int SceProcessmgrForDriver_D141C076(SceUID uid, void *a2);
-void *SceProcessmgrForKernel_C1C91BB2(SceUID pid);
+SceKernelProcessModuleInfo *SceProcessmgrForKernel_C1C91BB2(SceUID pid);
 
 
 
