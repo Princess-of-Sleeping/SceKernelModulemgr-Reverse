@@ -551,30 +551,30 @@ int get_module_library_info_export(SceUID pid, SceUID modid, uint32_t libnid, Sc
 
 	int cpu_intr;
 	SceKernelProcessModuleInfo *pProcModuleInfo;
-	SceModuleLibraryExportInfo_t *lib_export_info;
+	SceModuleLibraryInfo *pLibraryInfo;
 
 	pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
 	if(pProcModuleInfo == NULL)
 		return 0x8002D080;
 
-	lib_export_info = pProcModuleInfo->lib_export_info;
+	pLibraryInfo = pProcModuleInfo->pLibraryInfo;
 
-	while(lib_export_info != NULL){
-		if((lib_export_info->modobj->modid_kernel == modid) && (lib_export_info->info->libnid == libnid)){
-			info->libver[0]          = lib_export_info->info->libver[0];
-			info->libver[1]          = lib_export_info->info->libver[1];
+	while(pLibraryInfo != NULL){
+		if((pLibraryInfo->pModuleInfo->modid_kernel == modid) && (pLibraryInfo->pExportInfo->libnid == libnid)){
+			info->libver[0]          = pLibraryInfo->pExportInfo->libver[0];
+			info->libver[1]          = pLibraryInfo->pExportInfo->libver[1];
 			info->libnid             = libnid;
-			info->libname            = lib_export_info->info->libname;
-			info->entry_num_function = lib_export_info->info->entry_num_function;
-			info->entry_num_variable = lib_export_info->info->entry_num_variable;
-			info->table_nid          = lib_export_info->info->table_nid;
-			info->table_entry        = lib_export_info->info->table_entry;
+			info->libname            = pLibraryInfo->pExportInfo->libname;
+			info->entry_num_function = pLibraryInfo->pExportInfo->entry_num_function;
+			info->entry_num_variable = pLibraryInfo->pExportInfo->entry_num_variable;
+			info->table_nid          = pLibraryInfo->pExportInfo->table_nid;
+			info->table_entry        = pLibraryInfo->pExportInfo->table_entry;
 
 			ksceKernelCpuResumeIntr(&pProcModuleInfo->cpu_addr, cpu_intr);
 			return 0;
 		}
 
-		lib_export_info = (lib_export_info->data_0x04 != NULL) ? lib_export_info->data_0x04 : lib_export_info->next;
+		pLibraryInfo = (pLibraryInfo->data_0x04 != NULL) ? pLibraryInfo->data_0x04 : pLibraryInfo->next;
 	}
 
 	ksceKernelCpuResumeIntr(&pProcModuleInfo->cpu_addr, cpu_intr);
@@ -1367,6 +1367,9 @@ void hex_dump(const void *addr, int len){
 
 int write_file(const char *path, const void *data, SceSize size){
 
+	if(data == NULL || size == 0)
+		return -1;
+
 	SceUID fd = ksceIoOpen(path, SCE_O_WRONLY | SCE_O_CREAT | SCE_O_TRUNC, 0666);
 	if (fd < 0)
 		return fd;
@@ -1399,43 +1402,7 @@ int print_module_flags(SceUID pid){
 	return 0;
 }
 
-int dump_module_export(SceUID pid, const char *module_name){
-
-	int cpu_intr;
-	SceKernelProcessModuleInfo *pProcModuleInfo;
-	SceModuleInfoInternal *pModuleInfo;
-
-	pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
-	if(pProcModuleInfo == NULL)
-		return -1;
-
-	resume_cpu_intr(pProcModuleInfo, cpu_intr);
-
-	pModuleInfo = pProcModuleInfo->pModuleInfo;
-
-	while(pModuleInfo != NULL){
-
-		if(strcmp(module_name, pModuleInfo->module_name) == 0){
-
-			char path[0x100];
-
-			if(pid == 0x10005)
-				pModuleInfo = &get_module_object(pModuleInfo->modid_kernel)->obj_base;
-
-			snprintf(path, sizeof(path) - 1, "uma0:%s_exprot.bin", pModuleInfo->module_name);
-
-			write_file(path, pModuleInfo->data_0x5C - 0x20, 0x1000);
-
-			return 0;
-		}
-
-		pModuleInfo = pModuleInfo->next;
-	}
-
-	return 0;
-}
-
-int threadFunc(SceSize args, void *argp){
+int module_testing_thread(SceSize args, void *argp){
 
 	SceUID modid;
 	SceUID shell_pid, shell_uid;
@@ -1468,48 +1435,20 @@ int threadFunc(SceSize args, void *argp){
 	ksceDebugPrintf("enum_wakeup.skprx unload res : 0x%X\n", module_unload_for_pid(0x10005, modid, 0, NULL));
 	ksceDebugPrintf("\n");
 
-	print_module_flags(0x10005);
-	print_module_flags(shell_pid);
-
-/*
-	dump_module_export(shell_pid, "SceShell");
-	dump_module_export(shell_pid, "SceLibKernel");
-	dump_module_export(shell_pid, "SceDriverUser");
-	dump_module_export(shell_pid, "SceAvcodecUser");
-	dump_module_export(shell_pid, "SceGpuEs4User");
-	dump_module_export(shell_pid, "SceGxm");
-
-	dump_module_export(0x10005, "SceSysmem");
-	dump_module_export(0x10005, "SceExcpmgr");
-	dump_module_export(0x10005, "SceKernelIntrMgr");
-	dump_module_export(0x10005, "SceKernelBusError");
-	dump_module_export(0x10005, "SceSystimer");
-	dump_module_export(0x10005, "SceSblACMgr");
-	dump_module_export(0x10005, "SceKernelThreadMgr");
-	dump_module_export(0x10005, "SceKernelDmacMgr");
-	dump_module_export(0x10005, "SceSblSmschedProxy");
-	dump_module_export(0x10005, "SceSblAuthMgr");
-	dump_module_export(0x10005, "SceProcessmgr");
-	dump_module_export(0x10005, "SceIofilemgr");
-	dump_module_export(0x10005, "SceKernelModulemgr");
-	dump_module_export(0x10005, "SceLowio");
-	dump_module_export(0x10005, "SceSyscon");
-*/
 
 
+	write_file("uma0:syscall_table.bin", (void *)(*(int *)(SceKernelModulemgr_data + 0x334)), 0x4000);
+
+
+	ksceDebugPrintf("0x%X\n", *(int *)(SceKernelModulemgr_data + 0x338));
+
+
+	if(0){
+		print_module_flags(0x10005);
+		print_module_flags(shell_pid);
+	}
 
 	ksceDebugPrintf("Testing Thread Exit\n");
-	ksceDebugPrintf("\n");
-
-/*
-	int cpu_intr;
-	SceKernelProcessModuleInfo *pProcModuleInfo;
-
-	pProcModuleInfo = getProcModuleInfo(shell_pid, &cpu_intr);
-	if(pProcModuleInfo != NULL){
-		resume_cpu_intr(pProcModuleInfo, cpu_intr);
-	}
-*/
 
 	return ksceKernelExitDeleteThread(0);
 }
@@ -1560,7 +1499,7 @@ int module_start(SceSize args, void *argp){
 	pThreadSomeInfo = (int *)(info.segments[1].vaddr + 0x44);
 
 	if(1){
-		SceUID thid = ksceKernelCreateThread("SceKernelModuleTestingThread", threadFunc, 0x60, 0x4000, 0, 0, NULL);
+		SceUID thid = ksceKernelCreateThread("SceKernelModuleTestingThread", module_testing_thread, 0x60, 0x4000, 0, 0, NULL);
 		if(thid > 0)
 			ksceKernelStartThread(thid, 0, NULL);
 	}
