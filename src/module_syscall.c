@@ -71,11 +71,11 @@ int IsSyscallTableExist(void){
 	return (pSyscallTable != NULL) ? 1 : 0;
 }
 
-void sceKernelRegisterSyscallForKernel(int syscall_id, const void *func){
+void sceKernelRegisterSyscallForKernel(SceSize syscall_id, const void *func){
 
 	int dacr;
 
-	if((uint32_t)syscall_id >= 0x1000)
+	if(syscall_id >= 0x1000)
 		return;
 
 	asm volatile ("mrc p15, 0, %0, c3, c0, 0" : "=r" (dacr));
@@ -89,11 +89,14 @@ void sceKernelRegisterSyscallForKernel(int syscall_id, const void *func){
 }
 
 // non export
-void sceKernelUnregisterSyscallForKernel(int syscall_id){
+/*
+ * sceKernelUnregisterSyscallForKernel / func_0x81008cd4
+ */
+void sceKernelUnregisterSyscallForKernel(SceSize syscall_id){
 
 	int dacr;
 
-	if((uint32_t)syscall_id >= 0x1000)
+	if(syscall_id >= 0x1000)
 		return;
 
 	asm volatile ("mrc p15, 0, %0, c3, c0, 0" : "=r" (dacr));
