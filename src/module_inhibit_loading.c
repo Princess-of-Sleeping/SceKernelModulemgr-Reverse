@@ -3,7 +3,7 @@
  * Copyright (C) 2020, Princess of Sleeping
  */
 
-#include <psp2/types.h>
+#include <psp2kern/types.h>
 #include <psp2kern/kernel/sysmem.h>
 #include <psp2kern/kernel/threadmgr.h>
 #include <psp2kern/kernel/cpu.h>
@@ -11,6 +11,7 @@
 
 #include "modulemgr_types.h"
 #include "modulemgr_internal.h"
+#include "module_utility.h"
 #include "modulemgr_common.h"
 
 /*
