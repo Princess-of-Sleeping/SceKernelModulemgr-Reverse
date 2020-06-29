@@ -465,113 +465,112 @@ int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, vo
 	return 0;
 }
 
-int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *modids, SceSize *num)
-{
+int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *modids, SceSize *num){
+
 	int cpu_intr;
 	SceSize count = 0;
-	SceModuleInfoInternal *module_list;
-	SceKernelProcessModuleInfo *module_proc_info;
+	SceModuleInfoInternal *pModuleInfo;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
 
-	if (pid == 0)
+	if(pid == 0)
 		pid = ksceKernelGetProcessId();
 
 	if(modids == NULL)
 		goto module_count_mode;
 
-	module_proc_info = getProcModuleInfo(pid, &cpu_intr);
-	if(module_proc_info == NULL)
+	pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
+	if(pProcModuleInfo == NULL)
 		return 0x8002D080;
 
-	module_list = module_proc_info->pModuleInfo;
+	pModuleInfo = pProcModuleInfo->pModuleInfo;
 
 	while(*num > count){
-		if(module_list == NULL)
+		if(pModuleInfo == NULL)
 			break;
 
-		if((pid != 0x10005) && ((flags1 & 1) != 0) && ((module_list->flags & 0x1000) == 0)){
-			modids[count] = ((flags2 & 1) == 0) ? module_list->modid_user : module_list->modid_kernel;
+		if((pid != 0x10005) && ((flags1 & 1) != 0) && ((pModuleInfo->flags & 0x1000) == 0)){
+			modids[count] = ((flags2 & 1) == 0) ? pModuleInfo->modid_user : pModuleInfo->modid_kernel;
 			count++;
 		}
 
-		if((pid == 0x10005) || (((flags1 & 0x80) != 0) && ((module_list->flags & 0x1000) != 0))){
+		if((pid == 0x10005) || (((flags1 & 0x80) != 0) && ((pModuleInfo->flags & 0x1000) != 0))){
 			if((flags2 & 1) == 0){
 				if((flags2 & 2) != 0){
-					modids[count] = module_list->modid_user;
+					modids[count] = pModuleInfo->modid_user;
 					count++;
 				}
 			}else{
-				modids[count] = module_list->modid_kernel;
+				modids[count] = pModuleInfo->modid_kernel;
 				count++;
 			}
 		}
 
-		module_list = module_list->next;
+		pModuleInfo = pModuleInfo->next;
 	}
 
-	ksceKernelCpuResumeIntr(&module_proc_info->cpu_addr, cpu_intr);
+	ksceKernelCpuResumeIntr(&pProcModuleInfo->cpu_addr, cpu_intr);
 
 	*num = count;
 
 	return 0;
 
 module_count_mode:
-	module_proc_info = getProcModuleInfo(pid, &cpu_intr);
-	if (module_proc_info == NULL)
+	pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
+	if(pProcModuleInfo == NULL)
 		return 0;
 
-	module_list = module_proc_info->pModuleInfo;
+	pModuleInfo = pProcModuleInfo->pModuleInfo;
 
-	while(module_list != NULL){
+	while(pModuleInfo != NULL){
 		if (pid == 0x10005){
 			count++;
-		}else if (((flags1 & 1) != 0) && ((module_list->flags & 0x1000) == 0)){
+		}else if (((flags1 & 1) != 0) && ((pModuleInfo->flags & 0x1000) == 0)){
 			count++;
-		}else if (((flags1 & 0x80) != 0) && ((module_list->flags & 0x1000) != 0)){
+		}else if (((flags1 & 0x80) != 0) && ((pModuleInfo->flags & 0x1000) != 0)){
 			count++;
 		}
 
-		module_list = module_list->next;
+		pModuleInfo = pModuleInfo->next;
 	}
 
-	ksceKernelCpuResumeIntr(&module_proc_info->cpu_addr, cpu_intr);
+	ksceKernelCpuResumeIntr(&pProcModuleInfo->cpu_addr, cpu_intr);
 
 	return count;
 }
 
-int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleImportNID *info, SceSize *num)
-{
+int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleImportNID *info, SceSize *num){
+
 	int cpu_intr;
 	SceSize count = 0;
-	SceModuleNonlinkedInfo *import_nonlinked_list;
-	SceKernelProcessModuleInfo *module_tree_top;
+	SceModuleNonlinkedInfo *pNonlinkedInfo;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
 
-	if (info == NULL){
-		module_tree_top = getProcModuleInfo(pid, &cpu_intr);
-		ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
+	if(info == NULL){
+		pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
+		ksceKernelCpuResumeIntr(&pProcModuleInfo->cpu_addr, cpu_intr);
 
-		return *(uint16_t *)(((int)module_tree_top) + 0xA);
+		return *(uint16_t *)(((int)pProcModuleInfo) + 0xA);
 	}
 
-	module_tree_top = getProcModuleInfo(pid, &cpu_intr);
-	if (module_tree_top == NULL)
+	pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
+	if(pProcModuleInfo == NULL)
 		return 0x8002D080;
 
-	import_nonlinked_list = module_tree_top->nonlinked_info;
+	pNonlinkedInfo = pProcModuleInfo->pNonlinkedInfo;
 
-	while(*num > count){
-		if (import_nonlinked_list == NULL)
-			break;
+	while(*num > count && pNonlinkedInfo != NULL){
 
-		info[count].libnid = import_nonlinked_list->lib_import_info->type2.libnid;
-		info[count].modid  = (pid == 0x10005) ? import_nonlinked_list->pModuleInfo->modid_kernel : import_nonlinked_list->pModuleInfo->modid_user;
+		info[count].libnid = pNonlinkedInfo->lib_import_info->type2.libnid;
+		info[count].modid  = (pid == 0x10005) ? pNonlinkedInfo->pModuleInfo->modid_kernel : pNonlinkedInfo->pModuleInfo->modid_user;
 
 		count++;
-		import_nonlinked_list = import_nonlinked_list->next;
+		pNonlinkedInfo = pNonlinkedInfo->next;
 	}
 
-	ksceKernelCpuResumeIntr(&module_tree_top->cpu_addr, cpu_intr);
+	ksceKernelCpuResumeIntr(&pProcModuleInfo->cpu_addr, cpu_intr);
 
 	*num = count;
+
 	return 0;
 }
 
@@ -656,7 +655,7 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelMo
 
 	int res;
 	SceModuleLibraryObject *pObj;
-	SceModuleLibraryExportInfo_t *library_info;
+	SceModuleLibraryInfo *pLibraryInfo;
 
 	res = process_check(pid);
 	if (res < 0)
@@ -668,24 +667,24 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelMo
 		return 0x8002D01C;
 	}
 
-	library_info = pObj->library_info;
+	pLibraryInfo = pObj->pLibraryInfo;
 
-	info->libid              = (library_info->libid_kernel != libid) ? library_info->libid_user : library_info->libid_kernel;
-	info->libnid             = library_info->info->libnid;
-	info->libver[0]          = library_info->info->libver[0];
-	info->libver[1]          = library_info->info->libver[1];
-	info->entry_num_function = library_info->info->entry_num_function;
-	info->entry_num_variable = library_info->info->entry_num_variable;
+	info->libid              = (pLibraryInfo->libid_kernel != libid) ? pLibraryInfo->libid_user : pLibraryInfo->libid_kernel;
+	info->libnid             = pLibraryInfo->pExportInfo->libnid;
+	info->libver[0]          = pLibraryInfo->pExportInfo->libver[0];
+	info->libver[1]          = pLibraryInfo->pExportInfo->libver[1];
+	info->entry_num_function = pLibraryInfo->pExportInfo->entry_num_function;
+	info->entry_num_variable = pLibraryInfo->pExportInfo->entry_num_variable;
 	info->unk_0x14           = 0;
 
-	info->unk_0x118 = library_info->data_0x10;
-	info->modid2    = (pid != 0x10005) ? library_info->modobj->modid_user : info->libid;
+	info->unk_0x118 = pLibraryInfo->number_of_imported;
+	info->modid2    = (pid != 0x10005) ? pLibraryInfo->pModuleInfo->modid_user : info->libid;
 
 	info->library_name[0xFF] = 0;
-	strncpy(info->library_name, library_info->info->libname, 0xFF);
+	strncpy(info->library_name, pLibraryInfo->pExportInfo->libname, 0xFF);
 
 	release_obj(pObj->modid);
-	ksceKernelUidRelease(library_info->libid_kernel);
+	ksceKernelUidRelease(pLibraryInfo->libid_kernel);
 	release_obj_for_user(pid);
 
 	return 0;
@@ -722,7 +721,7 @@ loc_81007ED6:
 	return res;
 }
 
-int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryExportInfo_t **list, SceSize *num)
+int sceKernelGetModuleKernelExportListForKernel(SceModuleLibraryInfo **list, SceSize *num)
 {
 	// yet not Reversed
 	return 0;
