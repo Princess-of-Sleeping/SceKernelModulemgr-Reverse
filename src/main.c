@@ -46,12 +46,11 @@ SceClass *pSceUIDLibStubClass;
 
 int (* _modulemgr_lock_mutex)(void);
 int (* _modulemgr_unlock_mutex)(void);
-int (* _set_modobj_type)(SceModuleInfoInternal *objbase, uint8_t type);
-void (* _module_unload_some_cleanup)(SceModuleInfoInternal *objbase);
+int (* _set_modobj_type)(SceModuleInfoInternal *pModuleInfo, uint8_t state);
+void (* _module_unload_some_cleanup)(SceModuleInfoInternal *pModuleInfo);
 
 void *(* _func_0x81007148)(const char *path);
 int (* _func_0x810071a8)(void *a1);
-void (* _func_0x810014a8)(void);
 int (* _func_0x81001518)(SceModuleObject *pObj, const char *path, SceUID fd, void *a4, uint32_t flags);
 
 int SceKernelModulemgr_module_start(SceSize args, void *argp){
@@ -130,6 +129,7 @@ void func_0x810014d4(void){
 	return;
 }
 
+// related to syscall
 int func_0x810040c8(SceKernelProcessModuleInfo *pProcModuleInfo)
 {
 	// yet not Reversed
@@ -160,7 +160,7 @@ SceUID sceIoOpenBootfs(const char *path){
 	if((*(uint32_t *)(SceKernelModulemgr_data + 0x304) != 0) && (*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 8) > 0)){
 		r0 = 0;
 		r1 = 0;
-		do{
+		do {
 			pPath = (const char **)(*(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 0xc) + r0);
 			r0 += 0xC;
 			if(strncmp(path, *pPath, 0xFF) == 0){
@@ -168,7 +168,7 @@ SceUID sceIoOpenBootfs(const char *path){
 				return 0x7f7f7f7f;
 			}
 			r1 += 1;
-		}while(r1 != *(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 8));
+		} while(r1 != *(int *)(*(uint32_t *)(SceKernelModulemgr_data + 0x304) + 8));
 	}
 
 	return 0x80010002;
@@ -241,46 +241,13 @@ int modulemgr_unlock_mutex(void){
 }
 
 // 0x81005A5C
-int set_modobj_type(SceModuleInfoInternal *objbase, uint8_t type){
-	return _set_modobj_type(objbase, type);
+int set_modobj_type(SceModuleInfoInternal *pModuleInfo, uint8_t state){
+	return _set_modobj_type(pModuleInfo, state);
 }
 
 // 0x810071CC
-void module_unload_some_cleanup(SceModuleInfoInternal *objbase){
-	_module_unload_some_cleanup(objbase);
-}
-
-int func_0x81005a70(SceModuleInfoInternal *pInfo, const char *path, int flags){
-
-	int res = 0;
-	int path_len;
-	void *pPath;
-
-	if((pInfo->flags & 0x500) != 0){
-		pInfo->path = (char *)(*(uint32_t *)(*(uint32_t *)(pInfo->data_0xD4 + 4) + 0x68));
-		return 0;
-	}
-
-	path_len = strnlen(path, 0xff);
-	if(((pInfo->flags & 0x8000) != 0) && (0xfe < path_len)){
-		res = 0x8002D01F;
-	}else{
-		pPath = alloc_for_process(pInfo->pid, path_len + 1);
-		pInfo->path = pPath;
-		if(pPath == NULL){
-			res = 0x8002D008;
-		}else{
-			memcpy(pPath, path, path_len);
-			pInfo->path[path_len] = 0;
-
-			if((flags & 0x800) != 0){
-				memcpy(pInfo->path, "bootfs:", 7);
-				return 0;
-			}
-		}
-	}
-
-	return res;
+void module_unload_some_cleanup(SceModuleInfoInternal *pModuleInfo){
+	_module_unload_some_cleanup(pModuleInfo);
 }
 
 /*
@@ -605,17 +572,17 @@ int get_module_info(SceUID pid, SceUID modid, SceKernelModuleInfo_fix_t *info){
 
 			strncpy(info->module_name, info_obj->obj_base.module_name, 28-1);
 
-			switch(info_obj->obj_base.type){
+			switch(info_obj->obj_base.state){
 			case 1:
 			case 2:
 			case 0x10:
-				info->type = 2;
+				info->state = 2;
 				break;
 			case 3:
-				info->type = 6;
+				info->state = 6;
 				break;
 			default:
-				info->type = 9;
+				info->state = 9;
 			}
 
 			info->module_start = info_obj->obj_base.module_start;
@@ -954,7 +921,7 @@ loc_8100231A:
 
 	ksceKernelCpuIcacheInvalidateAll();
 	ksceKernelGetSystemTimeLow();
-	_func_0x810014a8();
+	func_0x810014a8();
 	print_module_load_info(&modobj->obj_base);
 
 	res = modid = modobj->obj_base.modid_kernel;
@@ -1170,10 +1137,10 @@ int module_unload_for_pid(SceUID pid, SceUID modid, int flags, SceKernelULMOptio
 loc_8100274C:
 	modulemgr_lock_mutex();
 
-	if(modobj->obj_base.type == 1)
+	if(modobj->obj_base.state == 1)
 		goto loc_8100275A;
 
-	if(modobj->obj_base.type != 5){
+	if(modobj->obj_base.state != 5){
 		modulemgr_unlock_mutex();
 		res = 0x8002D016;
 		goto loc_8100279E;
@@ -1317,7 +1284,6 @@ int module_start(SceSize args, void *argp){
 	_func_0x81001518 = (void *)(info.segments[0].vaddr + 0x1519);
 	_func_0x81007148 = (void *)(info.segments[0].vaddr + 0x7149);
 	_func_0x810071a8 = (void *)(info.segments[0].vaddr + 0x71a9);
-	_func_0x810014a8 = (void *)(info.segments[0].vaddr + 0x14a9);
 
 	_modulemgr_lock_mutex       = (void *)(info.segments[0].vaddr + 0x1869);
 	_modulemgr_unlock_mutex     = (void *)(info.segments[0].vaddr + 0x1885);
