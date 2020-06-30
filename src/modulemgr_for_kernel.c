@@ -560,7 +560,7 @@ int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleIm
 
 	while(*num > count && pNonlinkedInfo != NULL){
 
-		info[count].libnid = pNonlinkedInfo->lib_import_info->type2.libnid;
+		info[count].libnid = pNonlinkedInfo->pImportInfo->type2.libnid;
 		info[count].modid  = (pid == 0x10005) ? pNonlinkedInfo->pModuleInfo->modid_kernel : pNonlinkedInfo->pModuleInfo->modid_user;
 
 		count++;
