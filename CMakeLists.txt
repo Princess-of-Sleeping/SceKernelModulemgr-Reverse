@@ -28,6 +28,7 @@ add_executable(SceKernelModulemgrReverse
   src/module_user.c
   src/module_inhibit_loading.c
   src/libkernel.c
+  src/debug.c
 )
 
 target_link_libraries(SceKernelModulemgrReverse
