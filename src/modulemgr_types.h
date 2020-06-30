@@ -58,7 +58,7 @@ typedef struct {
 } SceKernelSegmentInfo_fix;
 
 typedef struct {
-	SceUInt size;    //!< 0x1B8 for Vita 1.x
+	SceSize size;    //!< 0x1B8 for Vita 1.x
 	SceUID modid;
 	uint16_t attr;
 	uint8_t minor;
@@ -85,7 +85,7 @@ typedef struct {
 	SceSize tlsAreaSize;
 	char path[0x100];
 	SceKernelSegmentInfo_fix segments[4];
-	SceUInt type;   //!< 6 = user-mode PRX?
+	SceUInt state;
 } SceKernelModuleInfo_fix_t;
 
 typedef struct {
