@@ -72,28 +72,27 @@ typedef struct SceModuleExport {
 	void **table_entry;
 } SceModuleExport;
 
-typedef struct SceModuleImportedInfo {
-	struct SceModuleImportedInfo *next;
-	SceUID data_0x04;
-	SceModuleImport *pImportInfo;
-	SceModuleLibraryInfo *pLibraryInfo;
-	SceModuleInfoInternal *pModuleInfo;
-	int data_0x14; // zero?
-} SceModuleImportedInfo;
-
 typedef struct SceModuleLibraryImportInfo {
 	SceUID stubid;
 	SceModuleImport *pImportInfo;
 	SceModuleLibraryInfo *pLibraryInfo;
 	SceModuleInfoInternal *pModuleInfo;
-	int data_0x14;
-	void *data_0x18; // size is 0x30
+	int data_0x10; // zero?
 } SceModuleLibraryImportInfo;
 
 typedef struct SceModuleImportList {
 	struct SceModuleImportList *next;
 	SceModuleLibraryImportInfo list[];
 } SceModuleImportList;
+
+typedef struct SceModuleImportedInfo {
+	struct SceModuleImportedInfo *next;
+	SceUID stubid;
+	SceModuleImport *pImportInfo;
+	SceModuleLibraryInfo *pLibraryInfo;
+	SceModuleInfoInternal *pModuleInfo;
+	int data_0x14; // zero?
+} SceModuleImportedInfo;
 
 typedef struct SceModuleLibraryInfo { // size is 0x2C
 	struct SceModuleLibraryInfo *next;
