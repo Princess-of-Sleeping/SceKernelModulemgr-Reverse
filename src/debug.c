@@ -7,6 +7,7 @@
 #include <psp2kern/kernel/threadmgr.h>
 #include <psp2kern/io/fcntl.h>
 #include <taihen.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "import_defs.h"
@@ -155,13 +156,9 @@ int module_testing_thread(SceSize args, void *argp){
 	ksceDebugPrintf("enum_wakeup.skprx unload res : 0x%X\n", module_unload_for_pid(0x10005, modid, 0, NULL));
 	ksceDebugPrintf("\n");
 
-
-
-	write_file("uma0:syscall_table.bin", (void *)(*(int *)(SceKernelModulemgr_data + 0x334)), 0x4000);
-
+	// write_file("uma0:syscall_table.bin", (void *)(*(int *)(SceKernelModulemgr_data + 0x334)), 0x4000);
 
 	ksceDebugPrintf("0x%X\n", *(int *)(SceKernelModulemgr_data + 0x338));
-
 
 	if(0){
 		print_module_flags(0x10005);
