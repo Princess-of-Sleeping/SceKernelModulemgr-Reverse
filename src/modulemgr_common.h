@@ -17,7 +17,7 @@ int module_unload_for_pid(SceUID pid, SceUID modid, int flags, SceKernelULMOptio
 int module_stop_unload_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
 SceUID module_load_start_shared_for_pid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
 
-int syscall_stub();
+int create_new_module_class(SceUID pid, int flags, SceModuleObject **dst);
 
 void func_0x810014a8(void);
 void func_0x810014d4(void);
