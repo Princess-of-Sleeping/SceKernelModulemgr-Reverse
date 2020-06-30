@@ -63,7 +63,6 @@ int (* _set_modobj_type)(SceModuleInfoInternal *objbase, uint8_t type);
 void (* _module_unload_some_cleanup)(SceModuleInfoInternal *objbase);
 
 void *(* _func_0x81007148)(const char *path);
-void *(* _func_0x81007f00)(SceUID pid);
 int (* _func_0x810071a8)(void *a1);
 void (* _func_0x810014a8)(void);
 int (* _func_0x81001518)(SceModuleObject *pObj, const char *path, SceUID fd, void *a4, uint32_t flags);
@@ -897,8 +896,7 @@ loc_81002298:
 		goto loc_810022B0;
 
 loc_8100229A:
-	ptr = _func_0x81007f00(pid);
-	if(ptr == NULL){
+	if(func_0x81007f00(pid) == 0){
 		ptr = _func_0x81007148(path);
 		if(ptr == NULL)
 			goto loc_810022B0;
@@ -1139,14 +1137,18 @@ label_0x81002F4C:
 	return res;
 }
 
-// 0x81002B40
+/*
+ * module_stop_for_pid / func_0x81002b40
+ */
 int module_stop_for_pid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status)
 {
 	// yet not Reversed
 	return 0;
 }
 
-// 0x810026BC
+/*
+ * module_unload_for_pid / func_0x810026bc
+ */
 int module_unload_for_pid(SceUID pid, SceUID modid, int flags, SceKernelULMOption *option){
 
 	int res;
@@ -1487,7 +1489,6 @@ int module_start(SceSize args, void *argp){
 
 	_func_0x81001518 = (void *)(info.segments[0].vaddr + 0x1519);
 	_func_0x81007148 = (void *)(info.segments[0].vaddr + 0x7149);
-	_func_0x81007f00 = (void *)(info.segments[0].vaddr + 0x7f01);
 	_func_0x810071a8 = (void *)(info.segments[0].vaddr + 0x71a9);
 	_func_0x810014a8 = (void *)(info.segments[0].vaddr + 0x14a9);
 
