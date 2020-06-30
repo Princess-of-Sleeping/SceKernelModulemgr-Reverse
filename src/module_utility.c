@@ -139,3 +139,39 @@ SceKernelProcessModuleInfo *getProcModuleInfo(SceUID pid, int *cpu_suspend_intr)
 int resume_cpu_intr(SceKernelProcessModuleInfo *pProcModuleInfo, int cpu_suspend_intr){
 	return ksceKernelCpuResumeIntr((int *)(&pProcModuleInfo->cpu_addr), cpu_suspend_intr);
 }
+
+/*
+ * set_module_info_path / func_0x81005a70
+ */
+int set_module_info_path(SceModuleInfoInternal *pModuleInfo, const char *path, int flags){
+
+	int res = 0;
+	int path_len;
+	void *pPath;
+
+	if((pModuleInfo->flags & 0x500) != 0){
+		pModuleInfo->path = pModuleInfo->pSharedInfo->pModuleInfo->path;
+		return 0;
+	}
+
+	path_len = strnlen(path, 0xff);
+	if(((pModuleInfo->flags & 0x8000) != 0) && (0xfe < path_len)){
+		res = 0x8002D01F;
+	}else{
+		pPath = alloc_for_process(pModuleInfo->pid, path_len + 1);
+		pModuleInfo->path = pPath;
+		if(pPath == NULL){
+			res = 0x8002D008;
+		}else{
+			memcpy(pPath, path, path_len);
+			pModuleInfo->path[path_len] = 0;
+
+			if((flags & 0x800) != 0){
+				memcpy(pModuleInfo->path, "bootfs:", 7);
+				return 0;
+			}
+		}
+	}
+
+	return res;
+}
