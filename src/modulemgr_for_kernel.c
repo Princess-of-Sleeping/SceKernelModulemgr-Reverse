@@ -14,6 +14,7 @@
 #include "modulemgr_internal.h"
 #include "module_utility.h"
 #include "modulemgr_common.h"
+#include "modulemgr_for_driver.h"
 #include "modulemgr_for_kernel.h"
 #include "import_defs.h"
 
@@ -405,7 +406,7 @@ int sceKernelMountBootfsForKernel(const char *bootImagePath){
 	if(*(uint32_t *)(pBootfsMountInfo) != 0)
 		goto label_0x81004AF6;
 
-	modid = ksceKernelLoadStartModule(bootImagePath, 0, 0, 0x100, 0, 0);
+	modid = sceKernelLoadStartModuleForDriver(bootImagePath, 0, 0, 0x100, 0, 0);
 	if(modid < 0){
 		res = modid;
 		goto label_0x81004AF2;
@@ -440,7 +441,7 @@ int sceKernelUmountBootfsForKernel(void){
 
 	modid = *(SceUID *)(*(uint32_t *)(pBootfsMountInfo));
 
-	ksceKernelStopUnloadModule(modid, 0, 0, 0, 0, 0);
+	sceKernelStopUnloadModuleForDriver(modid, 0, 0, 0, 0, 0);
 	ksceKernelFree((void *)(*(uint32_t *)(pBootfsMountInfo)));
 	res = 0;
 	*(uint32_t *)(pBootfsMountInfo) = 0;
