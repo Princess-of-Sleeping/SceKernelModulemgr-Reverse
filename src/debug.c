@@ -157,8 +157,7 @@ int module_testing_thread(SceSize args, void *argp){
 	ksceDebugPrintf("\n");
 
 	// write_file("uma0:syscall_table.bin", (void *)(*(int *)(SceKernelModulemgr_data + 0x334)), 0x4000);
-
-	ksceDebugPrintf("0x%X\n", *(int *)(SceKernelModulemgr_data + 0x338));
+	// ksceDebugPrintf("0x%X\n", *(int *)(SceKernelModulemgr_data + 0x338));
 
 	if(0){
 		print_module_flags(0x10005);
