@@ -19,6 +19,16 @@ how to get this value : `((SceModuleInfoInternal *)info_addr)->flags`
 0x0100 : shared child
 ```
 
+## Todo list
+
+* [ ] Module load (30% done)
+* [ ] Module start
+* [ ] Module stop
+* [ ] Module unload (30% done)
+* [ ] Get module info/list RE (80% done, These can be easily done because the structure reverse is almost completed.)
+* [ ] elf relocation for Module load
+* [ ] structure RE
+
 ## Tested functions
 ```
 sceKernelGetModuleIdByAddrForKernel
