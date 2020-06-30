@@ -90,7 +90,7 @@ typedef struct SceModuleLibraryImportInfo {
 	void *data_0x18; // size is 0x30
 } SceModuleLibraryImportInfo;
 
-typedef struct SceModuleImportList { // size is 0x48
+typedef struct SceModuleImportList {
 	struct SceModuleImportList *next;
 	SceModuleLibraryImportInfo list[];
 } SceModuleImportList;
@@ -178,6 +178,7 @@ typedef struct SceModuleInfoInternal {
 	/*
 	 * export list
 	 * maybe this kernel only
+	 * And includes noname library
 	 *
 	 * if you using this data, need call get_module_object
 	 */
