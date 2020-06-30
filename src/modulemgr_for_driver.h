@@ -19,20 +19,18 @@ SceUID sceKernelSearchModuleByNameForDriver(const char *module_name);
 
 int sceKernelGetSystemSwVersionForDriver(SceKernelFwInfo *data);
 
-SceUID ksceKernelLoadModule(const char *path, int flags, SceKernelLMOption *option);
-int ksceKernelStartModule(SceUID modid, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
-SceUID ksceKernelLoadStartModule(const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
+SceUID sceKernelLoadModuleForDriver(const char *path, int flags, SceKernelLMOption *option);
+int sceKernelStartModuleForDriver(SceUID modid, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
+SceUID sceKernelLoadStartModuleForDriver(const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
 
-int ksceKernelUnloadModule(SceUID modid, int flags, SceKernelULMOption *option);
-int ksceKernelStopModule(SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
-int ksceKernelStopUnloadModule(SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
+int sceKernelUnloadModuleForDriver(SceUID modid, int flags, SceKernelULMOption *option);
+int sceKernelStopModuleForDriver(SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
+int sceKernelStopUnloadModuleForDriver(SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
 
-SceUID ksceKernelLoadStartModuleForPid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
-int ksceKernelStopUnloadModuleForPid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
+SceUID sceKernelLoadStartModuleForPidForDriver(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
+int sceKernelStopUnloadModuleForPidForDriver(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
 
-SceUID ksceKernelLoadStartSharedModuleForPid(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
-int ksceKernelStopUnloadSharedModuleForPid(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
-
-
+SceUID sceKernelLoadStartSharedModuleForPidForDriver(SceUID pid, const char *path, SceSize args, void *argp, int flags, SceKernelLMOption *option, int *status);
+int sceKernelStopUnloadSharedModuleForPidForDriver(SceUID pid, SceUID modid, SceSize args, void *argp, int flags, SceKernelULMOption *option, int *status);
 
 #endif /* _PSP2_KERNEL_MODULEMGR_FOR_DRIVER_H_ */
