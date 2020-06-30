@@ -97,7 +97,7 @@ typedef struct SceModuleImportList { // size is 0x48
 
 typedef struct SceModuleLibraryInfo { // size is 0x2C
 	struct SceModuleLibraryInfo *next;
-	void *data_0x04;
+	struct SceModuleLibraryInfo *data_0x04; // maybe
 	SceModuleExport *pExportInfo;
 
 	/*
@@ -178,7 +178,6 @@ typedef struct SceModuleInfoInternal {
 	/*
 	 * export list
 	 * maybe this kernel only
-	 * allocated by sceKernelAlloc
 	 *
 	 * if you using this data, need call get_module_object
 	 */
@@ -219,19 +218,10 @@ typedef struct SceModuleInfoInternal {
 	int data_0xE8;
 } SceModuleInfoInternal; // size is 0xEC
 
-typedef struct SceModuleNonlinkedInfo {
-	struct SceModuleNonlinkedInfo *next;
-	SceUID stubid;
-	SceModuleImport *pImportInfo;
-	int data_0x0C;
-	SceModuleInfoInternal *pModuleInfo;
-	int data_0x14;
-} SceModuleNonlinkedInfo;
-
-typedef struct SceModuleObject {
+typedef struct SceModuleObject { // size is 0xF4
 	uint32_t sce_reserved[2];
 	SceModuleInfoInternal obj_base;
-} SceModuleObject; // sizeof == 0xF4
+} SceModuleObject;
 
 typedef struct SceModuleLibraryObject {
 	uint32_t sce_reserved[2];
@@ -244,6 +234,15 @@ typedef struct SceModuleLibStubObject {
 	SceUID modid;
 	SceSize num; // maybe nonlinked import num
 } SceModuleLibStubObject;
+
+typedef struct SceModuleNonlinkedInfo {
+	struct SceModuleNonlinkedInfo *next;
+	SceUID stubid;
+	SceModuleImport *pImportInfo;
+	int data_0x0C;
+	SceModuleInfoInternal *pModuleInfo;
+	int data_0x14;
+} SceModuleNonlinkedInfo;
 
 typedef struct SceKernelProcessModuleInfo {
 	SceUID pid;
