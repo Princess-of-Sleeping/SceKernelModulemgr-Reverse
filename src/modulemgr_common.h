@@ -33,7 +33,6 @@ int func_0x81004a54(SceUID fd);
 
 // int func_0x81005648(SceUID pid, int flags, void *dst);
 int func_0x81005648(SceUID pid, int flags, SceModuleObject **dst);
-int func_0x81005a70(SceModuleInfoInternal *pInfo, const char *path, int flags);
 int get_export_index(SceModuleInfoInternal *pModuleInfo, const void *module_addr);
 
 void *func_0x81006cf4(int a1, void *a2, const void *a3, void *a4);
