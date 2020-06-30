@@ -31,11 +31,6 @@ int sceKernelUmountBootfsForKernel(void);
 int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, void *buffer, uint32_t bufsize, int zero_unk, uint32_t *bytes_read);
 
 /*
- * Syscall
- */
-void sceKernelRegisterSyscallForKernel(int syscall_id, const void *func);
-
-/*
  * Init
  */
 int sceKernelFinalizeKblForKernel(void);
