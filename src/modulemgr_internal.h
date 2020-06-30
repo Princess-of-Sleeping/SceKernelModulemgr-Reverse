@@ -12,6 +12,7 @@ typedef struct SceModuleInfoInternal SceModuleInfoInternal;
 typedef struct SceModuleLibraryInfo SceModuleLibraryInfo;
 
 typedef int (* SceKernelModuleEntry)(SceSize args, void *argp);
+typedef int (* SceKernelModuleDebugCallback)(SceModuleInfoInternal *pModuleInfo);
 
 typedef struct SceModuleImport1 {
 	uint16_t size;               // 0x34
@@ -127,10 +128,17 @@ typedef struct SceSegmentInfoInternal { // size is 0x14
 	SceUID memblk_id;
 } SceSegmentInfoInternal;
 
+typedef struct SceModuleSharedInfo { // size is 0x10
+	struct SceModuleSharedInfo *next;
+	SceModuleInfoInternal *pModuleInfo;
+	int data_0x08; // ex:1
+	int data_0x0C;
+} SceModuleSharedInfo;
+
 typedef struct SceModuleInfoInternal {
 	struct SceModuleInfoInternal *next;
 	uint16_t flags;
-	uint8_t type;
+	uint8_t state;
 	uint8_t data_0x07;
 	uint32_t version;	// ex : 0x03600011
 	SceUID modid_kernel;	// This is only used by kernel modules
@@ -141,7 +149,7 @@ typedef struct SceModuleInfoInternal {
 	uint16_t attr;
 	uint8_t minor;
 	uint8_t major;
-	const char *module_name;
+	char *module_name;
 
 	// 0x20
 	void *libent_top;
@@ -193,12 +201,16 @@ typedef struct SceModuleInfoInternal {
 	SceKernelModuleEntry module_exit;
 
 	int data_0xC0;
-	void *data_0xC4; // module import/export data?
+	void *module_proc_param;
 	int data_0xC8;
 	int data_0xCC;
 
-	void *data_0xD0; // elf data
-	void *data_0xD4; // for shared module data
+	/*
+	 * hb  : elf data
+	 * sce : some data
+	 */
+	void *data_0xD0;
+	SceModuleSharedInfo *pSharedInfo; // allocated by sceKernelAlloc
 	int data_0xD8;
 	int data_0xDC;
 
@@ -210,7 +222,7 @@ typedef struct SceModuleInfoInternal {
 typedef struct SceModuleNonlinkedInfo {
 	struct SceModuleNonlinkedInfo *next;
 	SceUID stubid;
-	SceModuleImport *lib_import_info;
+	SceModuleImport *pImportInfo;
 	int data_0x0C;
 	SceModuleInfoInternal *pModuleInfo;
 	int data_0x14;
