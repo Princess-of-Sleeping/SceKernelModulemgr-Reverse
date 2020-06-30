@@ -24,4 +24,6 @@ int memcpy_to_kernel(SceUID pid, void *dst, const void *src, SceSize len);
 SceKernelProcessModuleInfo *getProcModuleInfo(SceUID pid, int *cpu_suspend_intr);
 int resume_cpu_intr(SceKernelProcessModuleInfo *pProcModuleInfo, int cpu_suspend_intr);
 
+int set_module_info_path(SceModuleInfoInternal *pModuleInfo, const char *path, int flags);
+
 #endif /* _PSP2_KERNEL_MODULE_MGR_UTILITY_H_ */
