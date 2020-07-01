@@ -53,7 +53,7 @@ int sceKernelGetProcessLibraryIdListForKernel(SceUID pid, SceUID *library_ids, S
 int sceKernelGetModuleImportListForKernel(SceUID pid, SceUID modid, SceUID *library_ids, SceSize *num);
 int sceKernelGetModuleExportListForKernel(SceUID pid, SceUID modid, SceUID *library_ids, SceSize *num);
 
-int sceKernelGetModuleListByImportForKernel(SceUID pid, SceUID libid, SceUID *modids, SceSize *num, SceSize cpy_skip_num);
+int sceKernelGetModuleListByImportForKernel(SceUID pid, SceUID library_id, SceUID *modids, SceSize *num, SceSize cpy_skip_num);
 
 int sceKernelGetModuleLibExportListForKernel(SceUID pid, SceUID libid, SceKernelModuleExportEntry *list, SceSize *num, SceSize cpy_skip_num);
 
