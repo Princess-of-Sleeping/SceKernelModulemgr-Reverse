@@ -460,7 +460,7 @@ int sceKernelLoadProcessImageForKernel(int a1, int a2, int a3, int a4, int a5, i
 	return 0;
 }
 
-int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, void *buffer, uint32_t bufsize, int zero_unk, uint32_t *bytes_read)
+int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, void *buffer, SceSize bufsize, int zero_unk, SceSize *bytes_read)
 {
 	// yet not Reversed
 	return 0;
@@ -634,7 +634,7 @@ loc_81004152:
 	return;
 }
 
-int sceKernelGetModuleListByImportForKernel(SceUID pid, SceUID libid, SceUID *modids, SceSize *num, SceSize cpy_skip_num)
+int sceKernelGetModuleListByImportForKernel(SceUID pid, SceUID library_id, SceUID *modids, SceSize *num, SceSize cpy_skip_num)
 {
 	// yet not Reversed
 	return 0;
@@ -652,7 +652,7 @@ int SceModulemgrForKernel_4865C72C(SceUID pid, const char *libname)
 	return 0;
 }
 
-int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelModuleLibraryInfo *info){
+int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKernelModuleLibraryInfo *info){
 
 	int res;
 	SceModuleLibraryObject *pObj;
@@ -760,7 +760,7 @@ int SceModulemgrForKernel_9D20C9BB(int a1)
 	return res;
 }
 
-int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID stubid, void *a3)
+int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID libstub_id, void *a3)
 {
 	// yet not Reversed
 	return 0;
@@ -782,7 +782,7 @@ void SceModulemgrForKernel_F3CD647F(int a1, int a2)
 	*(uint32_t *)(SceKernelModulemgr_data + 0x32C) = a2;
 }
 
-int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID stubid, void *a3, SceSize *num, SceSize cpy_skip_num)
+int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID libstub_id, void *a3, SceSize *num, SceSize cpy_skip_num)
 {
 	// yet not Reversed
 	return 0;
