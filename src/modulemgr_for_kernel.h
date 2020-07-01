@@ -28,7 +28,7 @@ int sceKernelModuleUnloadMySelfForKernel(void);
 int sceKernelMountBootfsForKernel(const char *bootImagePath);
 int sceKernelUmountBootfsForKernel(void);
 
-int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, void *buffer, uint32_t bufsize, int zero_unk, uint32_t *bytes_read);
+int sceKernelLoadPtLoadSegForFwloaderForKernel(const char *path, int e_phnum, void *buffer, SceSize bufsize, int zero_unk, SceSize *bytes_read);
 
 /*
  * Init
@@ -61,7 +61,7 @@ int sceKernelGetModuleListForKernel(SceUID pid, int flags1, int flags2, SceUID *
 int sceKernelGetModuleList2ForKernel(SceUID pid, SceKernelModuleListInfo *infolists, size_t *num);
 
 // a3 size is 8 * num
-int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID stubid, void *a3, SceSize *num, SceSize cpy_skip_num);
+int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID libstub_id, void *a3, SceSize *num, SceSize cpy_skip_num);
 
 /*
  * get info(Big structure)
@@ -69,10 +69,10 @@ int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID stubid, void *a3, SceSize 
 int sceKernelGetModuleInfoForKernel(SceUID pid, SceUID modid, SceKernelModuleInfo *info);
 int sceKernelGetModuleInfoMinByAddrForKernel(SceUID pid, const void *module_addr, uint32_t *module_nid, const void **program_text_addr, SceKernelModuleName_fix *module_name);
 
-int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID libid, SceKernelModuleLibraryInfo *info);
+int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKernelModuleLibraryInfo *info);
 
 // a3 size is 0x128
-int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID stubid, void *a3);
+int SceModulemgrForKernel_B73BE671(SceUID pid, SceUID libstub_id, void *a3);
 
 int sceKernelGetModuleNonlinkedImportInfoForKernel(SceUID pid, SceKernelModuleImportNID *a2, SceSize *num);
 int sceKernelGetModuleImportNonlinkedInfoByNIDForKernel(SceUID pid, SceUID modid, uint32_t libnid, SceKernelModuleImportNonlinkedInfo *info);
