@@ -14,7 +14,7 @@ how to get this value : `((SceModuleInfoInternal *)info_addr)->flags`
 0x2000 : has syscall export
 0x1000 : shared
 0x0800 : unknown
-0x0400 : unknown
+0x0400 : need dipsw(0xD2)
 0x0200 : shared host
 0x0100 : shared child
 ```
