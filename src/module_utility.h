@@ -26,4 +26,13 @@ int resume_cpu_intr(SceKernelProcessModuleInfo *pProcModuleInfo, int cpu_suspend
 
 int set_module_info_path(SceModuleInfoInternal *pModuleInfo, const char *path, int flags);
 
+int is_process_compiled_new_sdk(SceUID pid);
+
+SceModuleSharedInfo *search_shared_info_by_path(const char *path);
+int shared_info_decrements(SceModuleSharedInfo *pSharedInfo);
+
+int is_inhibit_shared(SceUID pid);
+
+void update_shared_info_node(SceModuleInfoInternal *pModuleInfo);
+
 #endif /* _PSP2_KERNEL_MODULE_MGR_UTILITY_H_ */
