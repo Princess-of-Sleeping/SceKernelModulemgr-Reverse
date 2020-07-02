@@ -15,6 +15,8 @@ extern SceClass *pSceUIDLibraryClass;
 extern SceClass *pSceUIDModuleClass;
 extern SceClass *pSceUIDLibStubClass;
 
+extern void *SceKernelModulemgr_data;
+
 /*
  * get_module_object / func_0x81001f0c (checked)
  */
@@ -123,7 +125,7 @@ SceKernelProcessModuleInfo *getProcModuleInfo(SceUID pid, int *cpu_suspend_intr)
 	if(r0 < 0){
 		res = NULL;
 	}else{
-		res = SceProcessmgrForKernel_C1C91BB2(pid);
+		res = sceKernelGetProcessModuleInfoForKernel(pid);
 		if(res != NULL)
 			*cpu_suspend_intr = ksceKernelCpuSuspendIntr((int *)(&res->cpu_addr));
 
@@ -174,4 +176,152 @@ int set_module_info_path(SceModuleInfoInternal *pModuleInfo, const char *path, i
 	}
 
 	return res;
+}
+
+/*
+ * is_process_compiled_new_sdk / func_0x81006da4 (checked)
+ */
+int is_process_compiled_new_sdk(SceUID pid){
+
+	unsigned int version = 0;
+
+	if(sceKernelGetCompiledSdkVersionByPidForDriver(pid, &version) < 0)
+		return 0;
+
+	return (version < 0x1800000) ? 0 : 1;
+}
+
+/*
+ * search_shared_info_by_path / func_0x81007148 (checked)
+ */
+SceModuleSharedInfo *search_shared_info_by_path(const char *path){
+
+	int cpu_intr;
+	SceModuleSharedInfo *pSharedInfo;
+
+	pSharedInfo = *(SceModuleSharedInfo **)(SceKernelModulemgr_data + 0x30C);
+
+	cpu_intr = ksceKernelCpuSuspendIntr((int *)(SceKernelModulemgr_data + 0x310));
+
+	while(pSharedInfo != NULL){
+		if(strncmp(pSharedInfo->pModuleInfo->path, path, 0x100) == 0){
+			pSharedInfo->info_linked_number += 1;
+			goto end;
+		}
+
+		pSharedInfo = pSharedInfo->next;
+	}
+
+end:
+	ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_intr);
+
+	return pSharedInfo;
+}
+
+/*
+ * shared_info_decrements / func_0x810071a8
+ */
+int shared_info_decrements(SceModuleSharedInfo *pSharedInfo){
+
+	int cpu_suspend_intr;
+  
+	cpu_suspend_intr = ksceKernelCpuSuspendIntr((int *)(SceKernelModulemgr_data + 0x310));
+	pSharedInfo->info_linked_number -= 1;
+	ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_suspend_intr);
+
+	return 0;
+}
+
+/*
+ * is_inhibit_shared / func_0x81007f00 (checked)
+ */
+int is_inhibit_shared(SceUID pid){
+	return sceKernelGetProcessModuleInfoForKernel(pid)->inhibit_state & 1;
+}
+
+/*
+ * update_shared_info_node / func_0x81007f10 (checked)
+ */
+void update_shared_info_node(SceModuleInfoInternal *pModuleInfo){
+
+	int res, cpu_suspend_intr, cpu_intr;
+	SceSize filesz;
+	void *ptr, *vaddr;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
+	SceModuleSharedInfo *pSharedInfo;
+
+	pProcModuleInfo = getProcModuleInfo(pModuleInfo->pid, &cpu_suspend_intr);
+	if(pProcModuleInfo == NULL)
+		return;
+
+	pModuleInfo->next = pProcModuleInfo->pModuleInfo;
+	pProcModuleInfo->process_module_count += 1;
+	pProcModuleInfo->pModuleInfo = pModuleInfo;
+
+	if(pProcModuleInfo->data_0x1C != NULL)
+		func_0x81006d40(pProcModuleInfo->data_0x1C, pModuleInfo);
+
+	if((pModuleInfo->flags & 0x200) != 0)
+		goto loc_81007F64;
+
+loc_81007F4C:
+	ksceKernelCpuResumeIntr(&pProcModuleInfo->cpu_addr, cpu_suspend_intr);
+	return;
+
+loc_81007F64:
+	res = sceKernelGetProcessBudgetTypeForKernel(pModuleInfo->pid);
+	if(res == 0x4000000)
+		goto loc_81007F80;
+
+loc_81007F72:
+	pModuleInfo->flags &= ~0x200;
+	goto loc_81007F4C;
+
+loc_81007F80:
+	if(is_inhibit_shared(pModuleInfo->pid) != 0)
+		goto loc_81007F72;
+
+	pSharedInfo = ksceKernelAlloc(0x10);
+	if(pSharedInfo == NULL)
+		goto loc_81007F4C;
+
+	pSharedInfo->pModuleInfo = pModuleInfo;
+
+	pSharedInfo->info_linked_number  = 0;
+	pSharedInfo->cached_segment_data = NULL;
+
+	if((pModuleInfo->segments[pModuleInfo->segments_num - 1].perms[0] & 2) == 0)
+		goto loc_81007FC0;
+
+	vaddr = pModuleInfo->segments[pModuleInfo->segments_num - 1].vaddr;
+	if(vaddr == NULL)
+		goto loc_81007FC0;
+
+	filesz = pModuleInfo->segments[pModuleInfo->segments_num - 1].filesz;
+	if(filesz != 0)
+		goto loc_81007FEE;
+
+loc_81007FC0:
+	cpu_intr = ksceKernelCpuSuspendIntr((int *)(SceKernelModulemgr_data + 0x310));
+
+	pSharedInfo->next = *(SceModuleSharedInfo **)(SceKernelModulemgr_data + 0x30C);
+	*(SceModuleSharedInfo **)(SceKernelModulemgr_data + 0x30C) = pSharedInfo;
+
+	ksceKernelCpuResumeIntr((int *)(SceKernelModulemgr_data + 0x310), cpu_intr);
+
+	goto loc_81007F4C;
+
+loc_81007FEE:
+	ptr = ksceKernelAlloc(filesz);
+	if(ptr == NULL)
+		goto loc_81007F4C;
+
+	res = ksceKernelMemcpyUserToKernelForPid(pModuleInfo->pid, ptr, (uintptr_t)vaddr, filesz);
+	if(res >= 0){
+		pSharedInfo->cached_segment_data = ptr;
+		goto loc_81007FC0;
+	}
+
+	ksceKernelFree(ptr);
+	goto loc_81007F4C;
 }
