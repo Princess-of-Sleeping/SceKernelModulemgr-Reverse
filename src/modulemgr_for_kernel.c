@@ -16,6 +16,7 @@
 #include "modulemgr_common.h"
 #include "modulemgr_for_driver.h"
 #include "modulemgr_for_kernel.h"
+#include "module_syscall.h"
 #include "import_defs.h"
 
 // return value is previous value
@@ -662,7 +663,7 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKer
 	if (res < 0)
 		return res;
 
-	pObj = get_library_object(pid, libid);
+	pObj = get_library_object(pid, library_id);
 	if(pObj == NULL){
 		release_obj_for_user(pid);
 		return 0x8002D01C;
@@ -670,7 +671,7 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKer
 
 	pLibraryInfo = pObj->pLibraryInfo;
 
-	info->libid              = (pLibraryInfo->libid_kernel != libid) ? pLibraryInfo->libid_user : pLibraryInfo->libid_kernel;
+	info->libid              = (pLibraryInfo->libid_kernel != library_id) ? pLibraryInfo->libid_user : pLibraryInfo->libid_kernel;
 	info->libnid             = pLibraryInfo->pExportInfo->libnid;
 	info->libver[0]          = pLibraryInfo->pExportInfo->libver[0];
 	info->libver[1]          = pLibraryInfo->pExportInfo->libver[1];
