@@ -44,6 +44,7 @@ target_link_libraries(SceKernelModulemgrReverse
   SceCpuForDriver_stub
   SceCpuForKernel_stub
   SceQafMgrForDriver_stub
+  SceProcessmgrForKernel_stub
   taihenForKernel_stub
 
   ${CMAKE_CURRENT_BINARY_DIR}/../extra/libSceSysmem_stub.a
