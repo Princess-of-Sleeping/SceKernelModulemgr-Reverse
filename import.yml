@@ -15,7 +15,7 @@ modules:
         kernel: false
         nid: 0x4E29D3B6
         functions:
-          SceQafMgrForDriver_382C71E8: 0x382C71E8
+          sceSblQafMgrIsAllowKernelDebugForDriver: 0x382C71E8
       SceSysrootForDriver:
         kernel: false
         nid: 0x2ED7F97A
@@ -26,12 +26,12 @@ modules:
         nid: 0x3691DA45
         functions:
           _ksceKernelSysrootGetModulePrivate: 0x37EC12BB
-          SceSysrootForKernel_73522F65: 0x73522F65
-          SceSysrootForKernel_C81B7E2B: 0xC81B7E2B
-          SceSysrootForKernel_CA497324: 0xCA497324
-          SceSysrootForKernel_6050A467: 0x6050A467
-          SceSysrootForKernel_AA8D34EE: 0xAA8D34EE
           SceSysrootForKernel_20D2A0DF: 0x20D2A0DF
+          SceSysrootForKernel_6050A467: 0x6050A467
+          SceSysrootForKernel_73522F65: 0x73522F65
+          SceSysrootForKernel_AA8D34EE: 0xAA8D34EE
+          SceSysrootForKernel_CA497324: 0xCA497324
+          SceSysrootForKernel_C81B7E2B: 0xC81B7E2B
       SceKernelSuspendForDriver:
         kernel: false
         nid: 0x7290B21C
@@ -55,15 +55,17 @@ modules:
         functions:
           sceKernelAllocRemoteProcessHeapForDriver: 0x00B1CA0F
           sceKernelFreeRemoteProcessHeapForDriver: 0x9C28EA9A
-          SceProcessmgrForDriver_D141C076: 0xD141C076
+          sceKernelGetCompiledSdkVersionByPidForDriver: 0xD141C076
       SceProcessmgrForKernel:
         kernel: false
         nid: 0x7A69DE86
         functions:
-          SceProcessmgrForKernel_0A5A2CF1: 0x0A5A2CF1
-          SceProcessmgrForKernel_41815DF2: 0x41815DF2
-          SceProcessmgrForKernel_B75FB970: 0xB75FB970
-          SceProcessmgrForKernel_C1C91BB2: 0xC1C91BB2
+          sceKernelGetProcessBudgetTypeForKernel: 0x2ABFB6C1
+          sceKernelProcessModuleIncForKernel: 0xB75FB970
+          sceKernelProcessModuleDecForKernel: 0x0A5A2CF1
+          sceKernelProcessAllocKernelBudgetHeapMemoryForKernel: 0x3C5E2F08
+          sceKernelFreeRemoteProcessKernelHeapForKernel: 0x41815DF2
+          sceKernelGetProcessModuleInfoForKernel: 0xC1C91BB2
           sceKernelGetProcessClassForKernel: 0xC6820972
   SceKernelThreadMgr:
     nid: 0xF46ED7B2
