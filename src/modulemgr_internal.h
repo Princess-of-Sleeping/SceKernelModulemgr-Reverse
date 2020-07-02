@@ -68,8 +68,8 @@ typedef struct SceModuleExport {
 	uint32_t data_0x0C; // unused?
 	uint32_t libnid;
 	const char *libname;
-	void  *table_nid;
-	void **table_entry;
+	uint32_t *table_nid;
+	void    **table_entry;
 } SceModuleExport;
 
 typedef struct SceModuleLibraryImportInfo {
@@ -119,6 +119,13 @@ typedef struct SceModuleLibraryInfo { // size is 0x2C
 	int data_0x28; // zero?
 } SceModuleLibraryInfo;
 
+typedef struct SceModuleSharedInfo { // size is 0x10
+	struct SceModuleSharedInfo *next;
+	SceModuleInfoInternal *pModuleInfo;
+	SceSize info_linked_number;
+	void *cached_segment_data;
+} SceModuleSharedInfo;
+
 typedef struct SceSegmentInfoInternal { // size is 0x14
 	SceSize filesz;
 	SceSize memsz;
@@ -126,13 +133,6 @@ typedef struct SceSegmentInfoInternal { // size is 0x14
 	void *vaddr;
 	SceUID memblk_id;
 } SceSegmentInfoInternal;
-
-typedef struct SceModuleSharedInfo { // size is 0x10
-	struct SceModuleSharedInfo *next;
-	SceModuleInfoInternal *pModuleInfo;
-	int data_0x08; // ex:1
-	int data_0x0C;
-} SceModuleSharedInfo;
 
 typedef struct SceModuleInfoInternal {
 	struct SceModuleInfoInternal *next;
@@ -187,7 +187,7 @@ typedef struct SceModuleInfoInternal {
 	SceModuleImport *data_0x60;         // first_import?
 	SceModuleImportList *imports;       // allocated by sceKernelAlloc
 	char *path;
-	SceSize segments_num;
+	int segments_num;
 
 	// 0x70
 	SceSegmentInfoInternal segments[3]; // 0x14 * 3 : 0x3C
