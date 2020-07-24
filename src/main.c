@@ -53,7 +53,7 @@ int SceKernelModulemgr_module_start(SceSize args, void *argp){
 
 	SceClass *sysroot_module_cls;
 
-	sysroot_module_cls = (SceClass *)_ksceKernelSysrootGetModulePrivate(9);
+	sysroot_module_cls = (SceClass *)_ksceKernelSysrootGetModulePrivate(9); // size is 0xAC
 
 	pSceUIDModuleClass  = (SceClass *)(&sysroot_module_cls[0]);
 	pSceUIDLibraryClass = (SceClass *)(&sysroot_module_cls[1]);
