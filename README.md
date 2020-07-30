@@ -19,6 +19,11 @@ how to get this value : `((SceModuleInfoInternal *)info_addr)->flags`
 0x0100 : shared child(if not has dipsw 0xD2)
 ```
 
+## Module load flags
+```
+0x20 : Use devkit memory(maybe)
+```
+
 ## Todo list
 
 * [ ] Module load (30% done)
