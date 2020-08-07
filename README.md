@@ -19,6 +19,12 @@ how to get this value : `((SceModuleInfoInternal *)info_addr)->flags`
 0x0100 : shared child(if not has dipsw 0xD2)
 ```
 
+### Other notes
+
+> module entry call stack
+
+If the process is a game program and the module has flag 0x1000 set, then an entry is called with stack size 0x4000, otherwise the stack size is 0x40000.
+
 ## Module load flags
 ```
 0x20 : Use devkit memory(maybe)
