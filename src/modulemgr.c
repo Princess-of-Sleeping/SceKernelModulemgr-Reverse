@@ -70,9 +70,9 @@ loc_8100A214:
 	return res;
 }
 
-int sceKernelGetModuleIdByAddr(const void *module_addr){
+SceUID sceKernelGetModuleIdByAddr(const void *module_addr){
 
-	int res;
+	SceUID res;
 	uint32_t state;
 
 	ENTER_SYSCALL(state);
