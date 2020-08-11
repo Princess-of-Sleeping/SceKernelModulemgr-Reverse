@@ -1,22 +1,23 @@
 # SceKernelModulemgr-Reverse
 
-target version : 3.60
+Target FW version: 3.60.
 
-There is nothing to guarantee perfect operation
+There is nothing to guarantee perfect operation.
 
 ## Module flags
 
-how to get this value : `((SceModuleInfoInternal *)info_addr)->flags`
+How to get this value: `((SceModuleInfoInternal *)info_addr)->flags` or with a DevKit `psp2ctrl pobjects SceWebKitProcess > SceWebKitProcess_pobjects.txt`
 
 ```
 0x8000 : relocatable
 0x4000 : process main module
 0x2000 : has syscall export
-0x1000 : shared
+0x1000 : system module
 0x0800 : unknown
-0x0400 : shared child(if has dipsw 0xD2)
+0x0400 : shared text module (if has dipsw 0xD2)
 0x0200 : shared host
-0x0100 : shared child(if not has dipsw 0xD2)
+0x0100 : shared text module (if not has dipsw 0xD2)
+0x0002 : unknown
 ```
 
 ### Other notes
@@ -26,8 +27,9 @@ how to get this value : `((SceModuleInfoInternal *)info_addr)->flags`
 If the process is a game program and the module has flag 0x1000 set, then an entry is called with stack size 0x4000, otherwise the stack size is 0x40000.
 
 ## Module load flags
+
 ```
-0x20 : Use devkit memory(maybe)
+0x20 : Use devkit memory (maybe)
 ```
 
 ## Todo list
@@ -36,11 +38,12 @@ If the process is a game program and the module has flag 0x1000 set, then an ent
 * [ ] Module start
 * [ ] Module stop
 * [ ] Module unload (30% done)
-* [ ] Get module info/list RE (80% done, These can be easily done because the structure reverse is almost completed.)
-* [ ] elf relocation for Module load
+* [ ] Get module info/list RE (80% done. These can be easily done because the structure reverse is almost completed.)
+* [ ] ELF relocation for Module load
 * [ ] structure RE
 
 ## Tested functions
+
 ```
 sceKernelGetModuleIdByAddrForKernel
 sceKernelGetModuleInfoForKernel
@@ -57,6 +60,7 @@ sceKernelGetLibraryInfoByNID
 ```
 
 ## Partially working function
+
 ```
 sceKernelLoadModuleForKernel
 sceKernelUnloadModuleForKernel
@@ -65,7 +69,9 @@ sceKernelUnloadModuleForPidForKernel
 ```
 
 ## Reverse Completed
+
 ### SceModulemgrForKernel
+
 ```
 0xFDD7F646 : sceKernelFinalizeKblForKernel
 0x66606301 : sceKernelGetModuleEntryPointForKernel
@@ -92,6 +98,7 @@ sceKernelUnloadModuleForPidForKernel
 ```
 
 ### SceModulemgrForDriver
+
 ```
 0x5182E212 : sceKernelGetSystemSwVersionForDriver
 0xBBE1771C : sceKernelSearchModuleByNameForDriver
@@ -99,6 +106,7 @@ sceKernelUnloadModuleForPidForKernel
 ```
 
 ### SceModulemgr
+
 ```
 sceKernelGetAllowedSdkVersionOnSystem
 sceKernelGetModuleIdByAddr
@@ -110,8 +118,10 @@ sceKernelInhibitLoadingModule
 sceKernelIsCalledFromSysModule
 ```
 
-## List of only frame(prototype) reversed
+## List of only frame (prototype) reversed
+
 ### SceModulemgrForKernel
+
 ```
 0xFA21D8CB : sceKernelLoadModuleForPidForKernel
 0x6DF745D5 : sceKernelStartModuleForPidForKernel
@@ -152,6 +162,7 @@ SceModulemgrForKernel_F3CD647F : set two param
 ```
 
 ### SceModulemgrForDriver
+
 ```
 sceKernelLoadModuleForDriver
 sceKernelStartModuleForDriver
@@ -168,6 +179,7 @@ SceModulemgrForDriver_861638AD(ksceKernelRegisterLibary)
 ```
 
 ### SceModulemgr
+
 ```
 _sceKernelOpenModule
 _sceKernelCloseModule
@@ -182,11 +194,14 @@ _sceKernelStopUnloadModule
 ## yet not Reversed List
 
 ### SceModulemgrForDriver
+
 maybe n/a
 
 ### SceModulemgrForKernel
+
 n/a
 
 ### SceModulemgr
+
 n/a
 
