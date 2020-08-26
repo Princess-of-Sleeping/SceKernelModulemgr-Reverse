@@ -753,7 +753,7 @@ int SceModulemgrForKernel_9D20C9BB(int a1)
 	int res;
 
 	if (*(uint32_t *)(SceKernelModulemgr_data + 0x308) == a1){
-		*(uint32_t *)(SceKernelModulemgr_data + 0x308) = a1;
+		*(uint32_t *)(SceKernelModulemgr_data + 0x308) = 0;
 		res = 0;
 	}else{
 		res = 0x8002D01C;
