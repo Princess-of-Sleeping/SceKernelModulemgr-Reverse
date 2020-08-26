@@ -152,7 +152,7 @@ SceModulemgrForKernel_F95D09C2 : (sceKernelGetModuleAppInfoForKernel, temp name)
 SceModulemgrForKernel_FF2264BB : (sceKernelGetModuleNonlinkedListForKernel)
 
 SceModulemgrForKernel_60E176C8 : (sceKernelRegisterDebugCBForKernel, temp name)
-SceModulemgrForKernel_9D20C9BB : (sceKernelRegisterDebugCBCheckForKernel, temp name)
+SceModulemgrForKernel_9D20C9BB : (sceKernelUnregisterDebugCBForKernel, temp name)
 SceModulemgrForKernel_B73BE671 : maybe sceKernelGetModuleLibStubInfoForKernel
 SceModulemgrForKernel_FB251B7A : maybe sceKernelGetModuleLibImportListForKernel
 
