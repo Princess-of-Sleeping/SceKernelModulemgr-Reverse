@@ -49,6 +49,14 @@ int (* _modulemgr_unlock_mutex)(void);
 int (* _set_module_state)(SceModuleInfoInternal *pModuleInfo, uint8_t state);
 void (* _module_unload_some_cleanup)(SceModuleInfoInternal *pModuleInfo);
 
+typedef struct SceKernelModulePrivate9 {
+	SceClass SceUIDModuleClass;
+	SceClass SceUIDLibraryClass;
+	SceClass SceUIDLibStubClass;
+	SceKernelProcessModuleInfo ProcModuleInfo;
+	SceUID ScePsp2BootConfig_modid;
+} SceKernelModulePrivate9;
+
 int SceKernelModulemgr_module_start(SceSize args, void *argp){
 
 	SceClass *sysroot_module_cls;
