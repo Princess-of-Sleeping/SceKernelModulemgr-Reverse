@@ -671,7 +671,7 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKer
 
 	pLibraryInfo = pObj->pLibraryInfo;
 
-	info->libid              = (pLibraryInfo->libid_kernel != library_id) ? pLibraryInfo->libid_user : pLibraryInfo->libid_kernel;
+	info->library_id         = (pLibraryInfo->libid_kernel != library_id) ? pLibraryInfo->libid_user : pLibraryInfo->libid_kernel;
 	info->libnid             = pLibraryInfo->pExportInfo->libnid;
 	info->libver[0]          = pLibraryInfo->pExportInfo->libver[0];
 	info->libver[1]          = pLibraryInfo->pExportInfo->libver[1];
@@ -679,8 +679,8 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKer
 	info->entry_num_variable = pLibraryInfo->pExportInfo->entry_num_variable;
 	info->unk_0x14           = 0;
 
-	info->unk_0x118 = pLibraryInfo->number_of_imported;
-	info->modid2    = (pid != 0x10005) ? pLibraryInfo->pModuleInfo->modid_user : info->libid;
+	info->number_of_imported = pLibraryInfo->number_of_imported;
+	info->modid2             = (pid != 0x10005) ? pLibraryInfo->pModuleInfo->modid_user : info->library_id;
 
 	info->library_name[0xFF] = 0;
 	strncpy(info->library_name, pLibraryInfo->pExportInfo->libname, 0xFF);
