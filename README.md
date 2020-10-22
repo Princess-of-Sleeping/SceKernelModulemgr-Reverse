@@ -29,9 +29,16 @@ If the process is a game program and the module has flag 0x1000 set, then an ent
 ## Module load flags
 
 ```
-0x10   : Bypass inhibit state 0x20
-0x20   : Use devkit memory (maybe)
-0x8000 : Bypass inhibit state 0x10
+0x1     : Load as shared module
+0x4     : Load as process main module
+0x10    : Bypass inhibit state 0x20
+0x20    : Use devkit memory (maybe)
+0x100   : Load as image module
+0x800   : Load as bootfs module
+0x1000  : Load as proc path module(app0: etc)
+0x8000  : Bypass inhibit state 0x10
+0x20000 : Do not call some sysroot functions
+0x40000 : Do not call some sysroot functions
 ```
 
 ## Todo list
