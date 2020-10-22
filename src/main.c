@@ -622,7 +622,7 @@ int cleanup_process_module_info(SceUID pid){
 	if(pProcModuleInfo == NULL)
 		return 0;
 
-	memcpy(data, pProcModuleInfo, 0x24);
+	memcpy(data, pProcModuleInfo, sizeof(SceKernelProcessModuleInfo));
 	memset(pProcModuleInfo, 0, 0x20);
 
 	ksceKernelCpuResumeIntr((int *)(&pProcModuleInfo->cpu_addr), cpu_suspend_intr);
