@@ -261,4 +261,28 @@ typedef struct SceKernelProcessModuleInfo {
 	SceUID ScePsp2BootConfig_modid;                // kernel only
 } SceKernelProcessModuleInfo;
 
+#define SCE_KERNEL_PRELOAD_INHIBIT_LIBC        (0x10000)
+#define SCE_KERNEL_PRELOAD_INHIBIT_LIBDBG      (0x20000)
+#define SCE_KERNEL_PRELOAD_INHIBIT_LIBSHELLSVC (0x80000)
+#define SCE_KERNEL_PRELOAD_INHIBIT_LIBCDLG     (0x100000)
+#define SCE_KERNEL_PRELOAD_INHIBIT_LIBFIOS2    (0x200000)
+#define SCE_KERNEL_PRELOAD_INHIBIT_APPUTIL     (0x400000)
+#define SCE_KERNEL_PRELOAD_INHIBIT_LIBSCEFT2   (0x800000)
+#define SCE_KERNEL_PRELOAD_INHIBIT_LIBPVF      (0x1000000)
+#define SCE_KERNEL_PRELOAD_INHIBIT_LIBPERF     (0x2000000)
+
+// used by sceKernelLoadPreloadingModules
+
+typedef struct SceKernelPreloadModuleInfo { // size is 0x24
+	const char *module_name;
+	const char *path_host0;
+	const char *path_host0_vs0;
+	const char *path_vs0;
+	const char *path_app0;
+	const char *path_sd0;
+	const char *path_os0;
+	SceUInt32 inhibit;
+	int flags;
+} SceKernelPreloadModuleInfo;
+
 #endif /* _PSP2_KERNEL_MODULEMGR_INTERNAL_H_ */
