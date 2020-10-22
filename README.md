@@ -29,7 +29,9 @@ If the process is a game program and the module has flag 0x1000 set, then an ent
 ## Module load flags
 
 ```
-0x20 : Use devkit memory (maybe)
+0x10   : Bypass inhibit state 0x20
+0x20   : Use devkit memory (maybe)
+0x8000 : Bypass inhibit state 0x10
 ```
 
 ## Todo list
