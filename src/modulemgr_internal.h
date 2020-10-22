@@ -244,7 +244,7 @@ typedef struct SceModuleNonlinkedInfo {
 	int data_0x14;
 } SceModuleNonlinkedInfo;
 
-typedef struct SceKernelProcessModuleInfo {
+typedef struct SceKernelProcessModuleInfo { // size is 0x24
 	SceUID pid;
 	SceModuleLibraryInfo *pLibraryInfo;
 	SceUID data_0x08;                              // uid?
@@ -258,7 +258,6 @@ typedef struct SceKernelProcessModuleInfo {
 	void *data_0x1C;
 
 	int cpu_addr;
-	SceUID ScePsp2BootConfig_modid;                // kernel only
 } SceKernelProcessModuleInfo;
 
 #define SCE_KERNEL_PRELOAD_INHIBIT_LIBC        (0x10000)
