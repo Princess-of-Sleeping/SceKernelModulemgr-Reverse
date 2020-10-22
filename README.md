@@ -37,7 +37,7 @@ Flags that are not in the allowed flag can be resolved by calling an internal fu
 0x4     : Load as process main module
 0x10    : Bypass inhibit state 0x20
 0x20    : Use devkit memory (maybe)
-0x100   : Load as image module
+0x100   : Load from image module
 0x800   : Load as bootfs module
 0x1000  : Load as proc path module(app0: etc)
 0x8000  : Bypass inhibit state 0x10(system module)
