@@ -28,7 +28,11 @@ If the process is a game program and the module has flag 0x1000 set, then an ent
 
 ## Module load flags
 
-allowed flag : 0x7D9F0.
+### Allowed flag
+```
+kernel : 0x7D9F0.
+user   : 0xF0.
+```
 
 Flags that are not in the allowed flag can be resolved by calling an internal function.
 
