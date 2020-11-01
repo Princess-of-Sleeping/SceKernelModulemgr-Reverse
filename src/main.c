@@ -1472,13 +1472,13 @@ int module_start(SceSize args, void *argp){
 
 	SceUID modulemgr_uid = search_module_by_name(0x10005, "SceKernelModulemgr");
 
-	uint32_t module_nid = 0;
+	uint32_t fingerprint = 0;
 
-	sceKernelGetModuleNIDForKernel(modulemgr_uid, &module_nid);
+	sceKernelGetModuleFingerprintForKernel(modulemgr_uid, &fingerprint);
 
-	if(module_nid != 0x726C6635){
+	if(fingerprint != 0x726C6635){
 		ksceDebugPrintf("3.60 only\n");
-		ksceDebugPrintf("nid:0x%08X\n", module_nid);
+		ksceDebugPrintf("fingerprint:0x%08X\n", fingerprint);
 
 		return SCE_KERNEL_START_SUCCESS;
 	}

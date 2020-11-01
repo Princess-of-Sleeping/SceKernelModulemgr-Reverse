@@ -12,8 +12,8 @@
 /*
  * Module load, start, stop, unload
  */
-int sceKernelLoadProcessImageForKernel(int a1, int a2, int a3, int a4, int a5, int a6);
-int sceKernelLoadPreloadingModulesForKernel(SceUID pid, void *unk_buf, int flags);
+SceUID sceKernelLoadProcessImageForKernel(SceUID pid, const char *path, int a3, void *auth_info, SceLoadProcessParam *pParam, int a6);
+int sceKernelLoadPreloadingModulesForKernel(SceUID pid, SceLoadProcessParam *pParam, int flags);
 int sceKernelStartPreloadingModulesForKernel(SceUID pid);
 int sceKernelStopUnloadProcessModulesForKernel(SceUID pid);
 
@@ -67,7 +67,7 @@ int SceModulemgrForKernel_FB251B7A(SceUID pid, SceUID libstub_id, void *a3, SceS
  * get info(Big structure)
  */
 int sceKernelGetModuleInfoForKernel(SceUID pid, SceUID modid, SceKernelModuleInfo *info);
-int sceKernelGetModuleInfoMinByAddrForKernel(SceUID pid, const void *module_addr, uint32_t *module_nid, const void **program_text_addr, SceKernelModuleName_fix *module_name);
+int sceKernelGetModuleInfoMinByAddrForKernel(SceUID pid, const void *module_addr, uint32_t *pFingerprint, const void **program_text_addr, SceKernelModuleName_fix *module_name);
 
 int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKernelModuleLibraryInfo *info);
 
@@ -85,7 +85,7 @@ int sceKernelGetModuleAppInfoForKernel(const char *path, uint64_t *pAuthid, SceS
 int sceKernelGetModuleInternalForKernel(SceUID modid, SceModuleInfoInternal **info);
 int sceKernelGetModuleInternalByAddrForKernel(SceUID pid, const void *module_addr, SceModuleInfoInternal **info);
 
-int sceKernelGetModuleNIDForKernel(SceUID modid, uint32_t *module_nid);
+int sceKernelGetModuleFingerprintForKernel(SceUID modid, uint32_t *pFingerprint);
 int sceKernelGetModulePathForKernel(SceUID modid, char *path, SceSize pathlen);
 int sceKernelGetModuleEntryPointForUserForKernel(SceUID pid, SceUID UserUid, SceKernelModuleEntry *start, SceKernelModuleEntry *stop);
 

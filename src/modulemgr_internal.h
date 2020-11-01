@@ -157,7 +157,7 @@ typedef struct SceModuleInfoInternal {
 	void *libstub_btm;
 
 	// 0x30
-	uint32_t module_nid;
+	uint32_t fingerprint;
 	void *tlsInit;
 	SceSize tlsInitSize;
 	SceSize tlsAreaSize;
@@ -283,5 +283,18 @@ typedef struct SceKernelPreloadModuleInfo { // size is 0x24
 	SceUInt32 inhibit;
 	int flags;
 } SceKernelPreloadModuleInfo;
+
+typedef struct SceLoadProcessParam { // maybe size is 0x7C
+	int sdk_version;
+	char thread_name[0x20];
+	int thread_priority;
+	SceSize stack_size;
+	uint8_t data_174[0x8];
+	uint8_t data_17C[0x1C];
+	uint8_t data_198[0x4];
+	char process_name[0x20]; // not titleid
+	uint32_t preload_inhibit;
+	void *module_proc_param;
+} SceLoadProcessParam;
 
 #endif /* _PSP2_KERNEL_MODULEMGR_INTERNAL_H_ */

@@ -22,7 +22,7 @@ ModulemgrRev:
         - sceKernelGetModuleInternalForKernel
         - sceKernelGetModuleInternalByAddrForKernel
         - sceKernelGetModuleListForKernel
-        - sceKernelGetModuleNIDForKernel
+        - sceKernelGetModuleFingerprintForKernel
         - sceKernelGetModulePathForKernel
         - sceKernelGetModuleInhibitStateForKernel
         - sceKernelGetProcessMainModuleForKernel

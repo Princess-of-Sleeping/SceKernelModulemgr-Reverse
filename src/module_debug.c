@@ -14,18 +14,18 @@ const SceKernelDebugMessageContext load_param = {
 	.hex_value0_hi = 0x6C6D2F8B,
 	.hex_value0_lo = 0x6DE580FF,
 	.hex_value1    = 0xFFAC508A,
-	.msg0          = NULL,
-	.num           = 0,
-	.msg1          = NULL
+	.func          = NULL,
+	.line          = 0,
+	.file          = NULL
 };
 
 const SceKernelDebugMessageContext load_param_one_seg = {
 	.hex_value0_hi = 0x6C6D2F8B,
 	.hex_value0_lo = 0x669C9853,
 	.hex_value1    = 0xFFAC508A,
-	.msg0          = NULL,
-	.num           = 0,
-	.msg1          = NULL
+	.func          = NULL,
+	.line          = 0,
+	.file          = NULL
 };
 
 /*

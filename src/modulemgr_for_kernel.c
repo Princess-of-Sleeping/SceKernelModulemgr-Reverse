@@ -226,14 +226,14 @@ SceUID sceKernelGetProcessMainModuleForKernel(SceUID pid){
 }
 
 /**
- * @brief Get the module nid.
+ * @brief Get the module fingerprint.
  *
- * @param[in]  modid - target modid
- * @param[out] nid   - module nid output
+ * @param[in]  modid        - target module id
+ * @param[out] pFingerprint - module fingerprint output
  *
  * @return 0 on success, < 0 on error.
  */
-int sceKernelGetModuleNIDForKernel(SceUID modid, uint32_t *module_nid){
+int sceKernelGetModuleFingerprintForKernel(SceUID modid, uint32_t *pFingerprint){
 
 	SceModuleObject *pObj;
 
@@ -241,15 +241,13 @@ int sceKernelGetModuleNIDForKernel(SceUID modid, uint32_t *module_nid){
 	if(pObj == NULL)
 		return 0x8002D082;
 
-	*module_nid = pObj->obj_base.module_nid;
+	*pFingerprint = pObj->obj_base.fingerprint;
 
 	release_obj(modid);
 	return 0;
 }
 
-// Bigger function
-// https://wiki.henkaku.xyz/vita/SceKernelModulemgr#sceKernelLoadPreloadingModulesForKernel
-int sceKernelLoadPreloadingModulesForKernel(SceUID pid, void *unk_buf, int flags)
+int sceKernelLoadPreloadingModulesForKernel(SceUID pid, SceLoadProcessParam *pParam, int flags)
 {
 	// yet not Reversed
 	return 0;
@@ -455,7 +453,7 @@ label_0x81004B34:
 	goto label_0x81004B30;
 }
 
-int sceKernelLoadProcessImageForKernel(int a1, int a2, int a3, int a4, int a5, int a6)
+SceUID sceKernelLoadProcessImageForKernel(SceUID pid, const char *path, int a3, void *auth_info, SceLoadProcessParam *pParam, int a6)
 {
 	// yet not Reversed
 	return 0;
@@ -693,7 +691,7 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKer
 }
 
 int sceKernelGetModuleInfoMinByAddrForKernel(
-	SceUID pid, const void *module_addr, uint32_t *module_nid, const void **program_text_addr, SceKernelModuleName_fix *module_name
+	SceUID pid, const void *module_addr, uint32_t *pFingerprint, const void **program_text_addr, SceKernelModuleName_fix *module_name
 )
 {
 	int res;
@@ -709,8 +707,8 @@ int sceKernelGetModuleInfoMinByAddrForKernel(
 	if (res < 0)
 		goto loc_81007ED6;
 
-	if (module_nid != NULL)
-		*module_nid = modobj->module_nid;
+	if (pFingerprint != NULL)
+		*pFingerprint = modobj->fingerprint;
 
 	if (program_text_addr != NULL)
 		*program_text_addr = modobj->segments[0].vaddr;

@@ -205,7 +205,35 @@ end:
 	return res;
 }
 
+tai_hook_ref_t sceKernelLoadPreloadingModulesForKernel_ref;
+int sceKernelLoadPreloadingModulesForKernel_patch(SceUID pid, void *pParam, int flags){
+
+	int res;
+
+	res = TAI_CONTINUE(int, sceKernelLoadPreloadingModulesForKernel_ref, pid, pParam, flags);
+
+	ksceDebugPrintf("sceKernelLoadPreloadingModulesForKernel : 0x%08X\n", res);
+
+	char titleid[0x20];
+
+	ksceKernelSysrootGetProcessTitleId(pid, titleid, sizeof(titleid));
+
+	char path[0x40];
+
+	snprintf(path, sizeof(path) - 1, "uma0:preload_%s.bin", titleid);
+
+	write_file(path, pParam - 0x148, 0x4E0);
+
+	return res;
+}
+
+
 int my_debug_start(void){
+
+	HookImport("SceProcessmgr", 0xFFFFFFFF, 0x3AD26B43, sceKernelLoadPreloadingModulesForKernel);
+
+	return 0;
+
 
 	SceUID modulemgr_uid = search_module_by_name(0x10005, "SceKernelModulemgr");
 
