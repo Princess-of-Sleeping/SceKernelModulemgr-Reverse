@@ -14,6 +14,10 @@ include("${VITASDK}/share/vita.cmake" REQUIRED)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wl,-q -Wall -O3 -fno-inline")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -fno-exceptions")
 
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/linker.x")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${CMAKE_CURRENT_SOURCE_DIR}/linker.x -z max-page-size=0x100")
+endif()
+
 enable_language(C ASM)
 
 add_executable(SceKernelModulemgrReverse
@@ -61,3 +65,5 @@ vita_create_self(modulemgr_rev.skprx SceKernelModulemgrReverse
   CONFIG exports.yml
   UNSAFE
 )
+
+vita_create_stubs(stubs SceKernelModulemgrReverse exports.yml KERNEL)
