@@ -18,6 +18,7 @@ How to get this value: `((SceModuleInfoInternal *)info_addr)->flags` or with a D
 0x0200 : shared host
 0x0100 : shared text module (if not has dipsw 0xD2)
 0x0002 : unknown
+0x0001 : module location is in cdialog?
 ```
 
 ### Other notes
@@ -39,7 +40,7 @@ Flags that are not in the allowed flag can be resolved by calling an internal fu
 ```
 0x1     : Load as shared module
 0x4     : Load as process main module
-0x10    : Bypass inhibit state 0x20
+0x10    : Bypass inhibit state 0x20 and load to cdialog
 0x20    : Use devkit memory (maybe)
 0x100   : Load as bootfs module
 0x800   : Load from image module
