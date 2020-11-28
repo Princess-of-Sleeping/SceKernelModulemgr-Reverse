@@ -50,6 +50,16 @@ Flags that are not in the allowed flag can be resolved by calling an internal fu
 0x40000 : Do not call some sysroot functions
 ```
 
+## Inhibit state flags
+```
+0x1    : Inhibit shared
+0x2    : Inhibit ASLR
+0x10   : Inhibit load module level 1
+0x20   : Inhibit load module level 2
+0x30   : Inhibit load module level 3 (cannot bypass by module load flags)
+0x8000 : Inhibit to inhibit ASLR
+```
+
 ## Todo list
 
 * [ ] Module load (30% done)
