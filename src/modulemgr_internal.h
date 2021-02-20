@@ -274,12 +274,7 @@ typedef struct SceKernelProcessModuleInfo { // size is 0x24
 
 typedef struct SceKernelPreloadModuleInfo { // size is 0x24
 	const char *module_name;
-	const char *path_host0;
-	const char *path_host0_vs0;
-	const char *path_vs0;
-	const char *path_app0;
-	const char *path_sd0;
-	const char *path_os0;
+	const char *path[6];
 	SceUInt32 inhibit;
 	int flags;
 } SceKernelPreloadModuleInfo;
