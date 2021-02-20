@@ -90,7 +90,8 @@ typedef struct {
 
 typedef struct {
 	SceSize size;
-	uint16_t libver[2];
+	uint16_t version;
+	uint16_t flags;
 	uint32_t libnid;
 	const char *libname;
 	uint16_t entry_num_function;

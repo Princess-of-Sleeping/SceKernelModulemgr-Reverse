@@ -35,7 +35,8 @@ typedef struct SceModuleImport1 {
 
 typedef struct SceModuleImport2 {
 	uint16_t size; // 0x24
-	uint16_t libver[2];
+	uint16_t version;
+	uint16_t flags;
 	uint16_t entry_num_function;
 	uint16_t entry_num_variable;
 	uint16_t data_0x0A; // unused?
@@ -56,12 +57,11 @@ typedef union SceModuleImport {
 typedef struct SceModuleExport {
 	uint16_t size; // 0x20
 
-	uint16_t libver[2];
 /*
-	uint16_t libver_minor;
-	uint8_t  libver_major;
-	uint8_t  flags; // 0x40:user export
+	uint16_t libver[2];
 */
+	uint16_t version;
+	uint16_t flags; // 0x4000:user export
 	uint16_t entry_num_function;
 	uint16_t entry_num_variable;
 	uint16_t data_0x0A; // unused?

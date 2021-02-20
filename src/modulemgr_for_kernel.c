@@ -671,8 +671,8 @@ int sceKernelGetModuleLibraryInfoForKernel(SceUID pid, SceUID library_id, SceKer
 
 	info->library_id         = (pLibraryInfo->libid_kernel != library_id) ? pLibraryInfo->libid_user : pLibraryInfo->libid_kernel;
 	info->libnid             = pLibraryInfo->pExportInfo->libnid;
-	info->libver[0]          = pLibraryInfo->pExportInfo->libver[0];
-	info->libver[1]          = pLibraryInfo->pExportInfo->libver[1];
+	info->version            = pLibraryInfo->pExportInfo->version;
+	info->flags              = pLibraryInfo->pExportInfo->flags;
 	info->entry_num_function = pLibraryInfo->pExportInfo->entry_num_function;
 	info->entry_num_variable = pLibraryInfo->pExportInfo->entry_num_variable;
 	info->unk_0x14           = 0;

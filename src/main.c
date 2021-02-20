@@ -731,8 +731,8 @@ int get_module_library_info_export(SceUID pid, SceUID modid, uint32_t libnid, Sc
 
 	while(pLibraryInfo != NULL){
 		if((pLibraryInfo->pModuleInfo->modid_kernel == modid) && (pLibraryInfo->pExportInfo->libnid == libnid)){
-			info->libver[0]          = pLibraryInfo->pExportInfo->libver[0];
-			info->libver[1]          = pLibraryInfo->pExportInfo->libver[1];
+			info->version            = pLibraryInfo->pExportInfo->version;
+			info->flags              = pLibraryInfo->pExportInfo->flags;
 			info->libnid             = libnid;
 			info->libname            = pLibraryInfo->pExportInfo->libname;
 			info->entry_num_function = pLibraryInfo->pExportInfo->entry_num_function;
