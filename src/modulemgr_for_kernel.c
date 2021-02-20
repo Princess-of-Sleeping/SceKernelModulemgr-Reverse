@@ -253,49 +253,6 @@ int sceKernelLoadPreloadingModulesForKernel(SceUID pid, SceLoadProcessParam *pPa
 	return 0;
 }
 
-int sceKernelStartPreloadingModulesForKernel(SceUID pid){
-
-	int res = 0;
-	size_t modnum = 0xF;
-	SceUID modlist[0x10];
-	void *pRes;
-
-	if(sceKernelGetModuleListForKernel(pid, 0x80, 1, modlist, &modnum) < 0)
-		goto label_0x810036A4;
-
-	if(modnum == 0)
-		goto label_0x810036A4;
-
-	goto label_0x81003644;
-
-label_0x8100363E:
-	if(modnum == 0)
-		goto label_0x810036B0;
-
-label_0x81003644:
-	modnum -= 1;
-	pRes = get_module_object(modlist[modnum]);
-	if(pRes == NULL)
-		goto label_0x8100363E;
-
-	res = module_start_for_pid(pid, modlist[modnum], 0, 0, (ksceSysrootUseExternalStorage() != 0) ? 0x4000000 : 0, 0, 0);
-
-	ksceKernelUidRelease(modlist[modnum]);
-
-	if(res >= 0)
-		goto label_0x8100363E;
-
-	if(ksceSysrootUseExternalStorage() != 0)
-		goto label_0x8100363E;
-
-label_0x810036A4:
-	return res;
-
-label_0x810036B0:
-	res = 0;
-	goto label_0x810036A4;
-}
-
 int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_addr){
 
 	int res, cpu_intr;
