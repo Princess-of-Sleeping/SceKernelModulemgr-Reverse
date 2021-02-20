@@ -7,13 +7,14 @@ ModulemgrRev:
     start: module_start
   modules:
     SceModulemgrReForDriver:
+      version: 0xFF
       syscall: false
       functions:
         - sceKernelSearchModuleByNameForDriver
     SceModulemgrReForKernel:
       syscall: false
       functions:
-        - sceKernelFinalizeKblForKernel
+        - sceKernelFinalizeKblForKernel: 0xFAFAFAFA
         - sceKernelGetModuleEntryPointForKernel
         - sceKernelGetModuleEntryPointForUserForKernel
         - sceKernelGetModuleIdByAddrForKernel
