@@ -242,69 +242,14 @@ end:
 	return res;
 }
 
-tai_hook_ref_t sceKernelLoadPreloadingModulesForKernel_ref;
-int sceKernelLoadPreloadingModulesForKernel_patch(SceUID pid, SceLoadProcessParam *pParam, int flags){
-
-	int res;
-
-	res = TAI_CONTINUE(int, sceKernelLoadPreloadingModulesForKernel_ref, pid, pParam, flags);
-
-	return res;
-}
-
-typedef struct SceModuleInfoTemp { // size is 0x48
-	int data_0x00;
-	uint32_t *pFuncNid;	// in target module
-	void    **pImportCode;	// in target module
-	uint32_t *pVarNid;	// in target module
-
-	void    **pRelConfng;	// in target module
-	SceSize to_link_entry_number;
-	SceSize to_link_entry_number_for_var;
-	SceModuleImportedInfo *data_0x1C;
-
-	int data_0x20;
-	void *data_0x24; // export func pointer list
-	int data_0x28;
-	void *data_0x2C; // export func pointer list?
-	int data_0x30;
-	SceSize export_entry_number;
-	SceSize export_entry_number_for_var;
-	void *data_0x3C; // export nid list
-	void *data_0x40; // same to data_0x24?
-	SceModuleLibraryInfo *data_0x44;
-} SceModuleInfoTemp;
-
-tai_hook_ref_t func_0x810055E0_ref;
-int func_0x810055E0_patch(SceModuleInfoTemp *a1, int a2){
-
-	int res;
-
-	res = TAI_CONTINUE(int, func_0x810055E0_ref, a1, a2);
-
-	ksceDebugPrintf(
-		"dst pid:0x%08X, src pid:0x%08X, link num(func):0x%08X, link num(var):0x%08X, name:%s\n",
-		a1->data_0x1C->pModuleInfo->pid,
-		a1->data_0x44->pModuleInfo->pid,
-		a1->to_link_entry_number,
-		a1->to_link_entry_number_for_var,
-		a1->data_0x44->pExportInfo->libname
-	);
-
-	return res;
-}
-
-tai_hook_ref_t func_0x810052B0_ref;
-int func_0x810052B0_patch(SceModuleInfoTemp *a1, int a2, int a3){
-
-	int res;
-
-	res = TAI_CONTINUE(int, func_0x810052B0_ref, a1, a2, a3);
-
-	return res;
-}
-
 int my_debug_start(void){
+
+	SceUID modulemgr_uid = search_module_by_name(0x10005, "SceKernelModulemgr");
+
+	HookOffset(modulemgr_uid, 0x5648, 1, create_new_module_class);
+
+	HookOffset(modulemgr_uid, 0x21EC, 1, module_load_for_pid);
+	HookOffset(modulemgr_uid, 0x26BC, 1, module_unload_for_pid);
 
 	SceUID thid = ksceKernelCreateThread("SceKernelModuleTestingThread", module_testing_thread, 0x60, 0x4000, 0, 0, NULL);
 	if(thid > 0)
@@ -312,27 +257,7 @@ int my_debug_start(void){
 
 	return 0;
 
-	SceUID modulemgr_uid = search_module_by_name(0x10005, "SceKernelModulemgr");
-
-	SceUID res = HookOffset(modulemgr_uid, 0x52B0, 1, func_0x810052B0); // cant hook?
-	if(res < 0)
-		res = HookOffset(modulemgr_uid, 0x55E0, 1, func_0x810055E0);
-
-	ksceDebugPrintf("modulemgr_uid : 0x%X\n", modulemgr_uid);
-	ksceDebugPrintf("hook res : 0x%X\n", res);
-
-	return 0;
-
-	HookOffset(modulemgr_uid, 0x5648, 1, create_new_module_class);
-
-	HookOffset(modulemgr_uid, 0x21EC, 1, module_load_for_pid);
-	HookOffset(modulemgr_uid, 0x26BC, 1, module_unload_for_pid);
-
 /*
-	HookImport("SceProcessmgr", 0xFFFFFFFF, 0x3AD26B43, sceKernelLoadPreloadingModulesForKernel);
-
-	return 0;
-
 	ksceKernelSysrootSetProcessHandler((const SceSysrootProcessHandler *)&proc_handler);
 
 	int res;
