@@ -50,7 +50,6 @@ int ksceKernelGetSystemTimeLow(void);
 int ksceKernelSetPermission(int value);		// return value is previous value
 SceUID ksceKernelSetProcessId(SceUID pid);	// return value is previous value
 
-int ksceKernelCheckDipsw(int bit);
 int ksceMt19937GlobalUninit(void *a1, int a2);
 int ksceSblQafMgrIsAllowHost0Access(void);
 SceUID ksceKernelSysrootGetShellPid(void);
