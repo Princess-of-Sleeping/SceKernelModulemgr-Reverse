@@ -26,6 +26,7 @@ add_executable(SceKernelModulemgrReverse
   src/modulemgr.c
   src/modulemgr_for_driver.c
   src/modulemgr_for_kernel.c
+  src/module_preloading_load.c
   src/module_debug.c
   src/module_search.c
   src/module_syscall.c
