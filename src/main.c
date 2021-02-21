@@ -264,16 +264,16 @@ typedef struct SceModuleLoadCtx { // size is 0x44
 	int data_0x14;
 	int data_0x18;
 	int data_0x1C;
+
 	void *text_base; // from elf header
-
 	SceUID data_0x24;
-	int data_0x28;
+	void *data_0x28;
+
 	void *data_base; // from elf header
-
 	SceUID data_0x30;
-	int data_0x34;
-	int data_0x38;
+	void *data_0x34;
 
+	int data_0x38;
 	int data_0x3C;
 	int data_0x40;
 } SceModuleLoadCtx;
