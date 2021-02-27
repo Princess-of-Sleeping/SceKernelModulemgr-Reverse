@@ -5,10 +5,9 @@
 
 #include <psp2kern/kernel/sysmem.h>
 #include <psp2kern/kernel/threadmgr.h>
+#include <psp2kern/kernel/sysclib.h>
 #include <psp2kern/io/fcntl.h>
 #include <taihen.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "import_defs.h"
 #include "modulemgr_types.h"

@@ -4,7 +4,7 @@
  */
 
 #include <psp2kern/kernel/sysmem.h>
-#include <string.h>
+#include <psp2kern/kernel/sysclib.h>
 
 #include "import_defs.h"
 #include "modulemgr_types.h"

@@ -41,8 +41,6 @@ typedef struct SceSblSmCommContext130 { // size is 0x130 as its name indicates.
 	uint32_t unk_12C;
 } SceSblSmCommContext130;
 
-int __stack_chk_fail();
-
 int ksceIoGetMediaType(SceUID pid, const char *path, int ignored, int *media_type);
 SceUID ksceIoOpenForPid(SceUID pid, const char *path, int flags, int mode);
 

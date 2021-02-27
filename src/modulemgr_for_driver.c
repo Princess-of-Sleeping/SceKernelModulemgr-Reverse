@@ -5,9 +5,8 @@
 
 #include <psp2kern/kernel/modulemgr.h>
 #include <psp2kern/kernel/sysmem.h>
+#include <psp2kern/kernel/sysclib.h>
 #include <psp2kern/kernel/cpu.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "import_defs.h"
 #include "modulemgr_internal.h"

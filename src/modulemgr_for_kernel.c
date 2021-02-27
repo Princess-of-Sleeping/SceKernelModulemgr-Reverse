@@ -7,8 +7,8 @@
 #include <psp2kern/kernel/threadmgr.h>
 #include <psp2kern/kernel/processmgr.h>
 #include <psp2kern/kernel/sysmem.h>
+#include <psp2kern/kernel/sysclib.h>
 #include <psp2kern/kernel/cpu.h>
-#include <string.h>
 
 #include "modulemgr_types.h"
 #include "modulemgr_internal.h"
