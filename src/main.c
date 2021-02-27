@@ -25,6 +25,7 @@
 #include "import_defs.h"
 #include "modulemgr_types.h"
 #include "modulemgr_internal.h"
+#include "module_load_types.h"
 #include "modulemgr_for_driver.h"
 #include "modulemgr_for_kernel.h"
 #include "modulemgr_common.h"
@@ -254,22 +255,6 @@ int set_module_state(SceModuleInfoInternal *pModuleInfo, uint8_t state){
 void module_unload_some_cleanup(SceModuleInfoInternal *pModuleInfo){
 	_module_unload_some_cleanup(pModuleInfo);
 }
-
-typedef struct SceModuleLoadCtx { // size is 0x44
-	SceModuleInfoInternal *pModuleInfo;
-	int data_0x04;
-	int data_0x08;
-	int data_0x0C;
-	int data_0x10;
-	int data_0x14;
-	int data_0x18;
-	int data_0x1C;
-	struct {
-		uintptr_t base; // from elf header
-		SceUID data_0x24;
-		void *pKernelMap;
-	} segments[3];
-} SceModuleLoadCtx;
 
 int  (* func_0x81000614)(SceModuleLoadCtx *ctx, SceUID fd, SceSblSmCommContext130 *ctx130, int flags);
 int  (* func_0x81005714)(SceModuleLoadCtx *ctx);
