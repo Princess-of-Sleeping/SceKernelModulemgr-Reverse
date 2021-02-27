@@ -17,7 +17,6 @@
 #include <psp2kern/kernel/sysmem.h>
 #include <psp2kern/kernel/cpu.h>
 #include <psp2kern/io/fcntl.h>
-#include <taihen.h>
 
 #include <stdio.h>
 #include <string.h>
