@@ -8,13 +8,12 @@ modules:
         kernel: false
         nid: 0x63A519E5
         functions:
-          ksceKernelAlloc: 0xC0A4D2F3
-          ksceKernelFree: 0xABAB0FAB
           _ksceKernelCreateUidObj: 0xDF0288D7
       SceQafMgrForDriver:
         kernel: false
         nid: 0x4E29D3B6
         functions:
+          SceQafMgrForDriver_B9770A13: 0xB9770A13
           sceSblQafMgrIsAllowKernelDebugForDriver: 0x382C71E8
       SceSysrootForDriver:
         kernel: false

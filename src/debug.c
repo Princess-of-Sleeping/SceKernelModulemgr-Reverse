@@ -241,9 +241,56 @@ end:
 	return res;
 }
 
+int dump_preloading_list(SceUID moduleid){
+
+	SceKernelPreloadModuleInfo *pPreloadList;
+
+	module_get_offset(0x10005, moduleid, 0, 0xCD94, (uintptr_t *)&pPreloadList);
+
+	ksceDebugPrintf("const SceKernelPreloadModuleInfo preloading_list[0xF] = {\n");
+
+	for(int i=0;i<0xF;i++){
+		ksceDebugPrintf("\t{\n");
+		if(pPreloadList[i].module_name != NULL){
+			ksceDebugPrintf("\t\t.module_name = \"%s\",\n", pPreloadList[i].module_name);
+		}else{
+			ksceDebugPrintf("\t\t.module_name = %s,\n", "NULL");
+		}
+
+		ksceDebugPrintf("\t\t.path = {\n");
+		for(int n=0;n<6;n++){
+			if(pPreloadList[i].path[n] != NULL){
+				ksceDebugPrintf("\t\t\t\"%s\",\n", pPreloadList[i].path[n]);
+			}else{
+				ksceDebugPrintf("\t\t\t%s,\n", "NULL");
+			}
+		}
+		ksceDebugPrintf("\t\t},\n");
+
+		ksceDebugPrintf("\t\t.inhibit = 0x%X,\n", pPreloadList[i].inhibit);
+		ksceDebugPrintf("\t\t.flags   = 0x%X,\n", pPreloadList[i].flags);
+		ksceDebugPrintf("\t},\n");
+	}
+
+	ksceDebugPrintf("};\n");
+
+	return 0;
+}
+
+tai_hook_ref_t ksceKernelLoadPreloadingModules_ref;
+int ksceKernelLoadPreloadingModules_patch(SceUID pid, SceLoadProcessParam *pParam, int flags){
+	return sceKernelLoadPreloadingModules(pid, pParam, flags);
+}
+
 int my_debug_start(void){
 
 	SceUID modulemgr_uid = search_module_by_name(0x10005, "SceKernelModulemgr");
+
+	// dump_preloading_list(modulemgr_uid);
+
+	HookExport("SceKernelModulemgr", ~0, 0x3ad26b43, ksceKernelLoadPreloadingModules);
+
+	return 0;
 
 	HookOffset(modulemgr_uid, 0x5648, 1, create_new_module_class);
 

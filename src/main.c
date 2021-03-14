@@ -533,38 +533,37 @@ label_0x81006D36:
 	return (void *)a1;
 }
 
+/*
+ * func_0x81006d40 / func_0x81006d40(checked)
+ */
+// TODO:optimisation
 void func_0x81006d40(void *a1, SceModuleInfoInternal *pModuleInfo){
 
-	void *ptr, *res;
-	unsigned int vaddr, size1, size2;
+	int *puVar1;
+	uintptr_t uVar3;
+	int iVar4;
+	uint32_t uVar5;
+	void **ppvVar6;
 
-	vaddr = (unsigned int)pModuleInfo->segments[0].vaddr;
+	uVar3 = (uintptr_t)pModuleInfo->segments[0].vaddr;
+	iVar4 = pModuleInfo->segments[0].memsz;
 
-	res = func_0x81006cf4(*(uint32_t *)(a1), a1, (const void *)vaddr, &ptr);
-	if(res == NULL)
-		goto loc_81006D90;
+	ppvVar6 = (void **)func_0x81006cf4(*(uintptr_t *)a1, a1 + 0x10, uVar3, &puVar1);
+	if(ppvVar6 != NULL){
+		uVar3 = uVar3 & 0xfff;
+		uVar5 = iVar4 + uVar3;
 
-	size1 = (vaddr & 0xFFF);
-	size2 = (vaddr + pModuleInfo->segments[0].memsz) & 0xFFF;
-
-	if(size1 >= size2)
-		goto loc_81006D90;
-
-loc_81006D74:
-	if(ptr == 0)
-		goto loc_81006D88;
-
-	*(uint32_t *)(ptr + 0x0) = *(int *)(*(int *)(res) + 0x40);
-	*(uint32_t *)(ptr + 0x4) = *(int *)(*(int *)(res) + 0x44);
-	res += 4;
-	ptr += 8;
-
-loc_81006D88:
-	size1 += 0x1000;
-	if(size2 > size1)
-		goto loc_81006D74;
-
-loc_81006D90:
+		while(uVar3 < uVar5) {
+			*ppvVar6++ = pModuleInfo;
+			// ppvVar6 = ppvVar6 + 1;
+			if(puVar1 != NULL){
+				puVar1 = puVar1 + 2;
+				puVar1[0] = pModuleInfo->exidxTop;
+				puVar1[1] = pModuleInfo->exidxBtm;
+			}
+			uVar3 += 0x1000;
+		}
+	}
 	return;
 }
 

@@ -13,8 +13,6 @@
  * Module load, start, stop, unload
  */
 SceUID sceKernelLoadProcessImageForKernel(SceUID pid, const char *path, int a3, void *auth_info, SceLoadProcessParam *pParam, int a6);
-int sceKernelLoadPreloadingModulesForKernel(SceUID pid, SceLoadProcessParam *pParam, int flags);
-int sceKernelStartPreloadingModulesForKernel(SceUID pid);
 int sceKernelStopUnloadProcessModulesForKernel(SceUID pid);
 
 SceUID sceKernelLoadModuleForPidForKernel(SceUID pid, const char *path, int flags, SceKernelLMOption *option);

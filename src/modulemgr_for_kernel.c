@@ -247,12 +247,6 @@ int sceKernelGetModuleFingerprintForKernel(SceUID modid, uint32_t *pFingerprint)
 	return 0;
 }
 
-int sceKernelLoadPreloadingModulesForKernel(SceUID pid, SceLoadProcessParam *pParam, int flags)
-{
-	// yet not Reversed
-	return 0;
-}
-
 int sceKernelGetModuleIsSharedByAddrForKernel(SceUID pid, const void *module_addr){
 
 	int res, cpu_intr;

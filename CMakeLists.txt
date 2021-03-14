@@ -26,6 +26,7 @@ add_executable(SceKernelModulemgrReverse
   src/modulemgr.c
   src/modulemgr_for_driver.c
   src/modulemgr_for_kernel.c
+  src/module_load.c
   src/module_preloading_load.c
   src/module_preloading_start.c
   src/module_debug.c
@@ -42,7 +43,9 @@ target_link_libraries(SceKernelModulemgrReverse
   SceDipswForDriver_stub
   SceIofilemgrForDriver_stub
   SceThreadmgrForDriver_stub
+  SceSblACMgrForKernel_stub
   SceSysmemForDriver_stub
+  SceSysmemForKernel_stub
   SceSysclibForDriver_stub
   SceSysrootForDriver_stub
   SceSysrootForKernel_stub
@@ -52,6 +55,7 @@ target_link_libraries(SceKernelModulemgrReverse
   SceQafMgrForDriver_stub
   SceProcessmgrForKernel_stub
   taihenForKernel_stub
+  taihenModuleUtils_stub
 
   ${CMAKE_CURRENT_BINARY_DIR}/../extra/libSceSysmem_stub.a
   ${CMAKE_CURRENT_BINARY_DIR}/../extra/libSceKernelIntrMgr_stub.a

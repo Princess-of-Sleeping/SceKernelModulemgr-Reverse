@@ -35,4 +35,6 @@ int is_inhibit_shared(SceUID pid);
 
 void update_shared_info_node(SceModuleInfoInternal *pModuleInfo);
 
+int process_lib_is_nonlinked(SceUID pid, const char *libname);
+
 #endif /* _PSP2_KERNEL_MODULE_MGR_UTILITY_H_ */

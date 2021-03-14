@@ -44,10 +44,6 @@ typedef struct SceSblSmCommContext130 { // size is 0x130 as its name indicates.
 int ksceIoGetMediaType(SceUID pid, const char *path, int ignored, int *media_type);
 SceUID ksceIoOpenForPid(SceUID pid, const char *path, int flags, int mode);
 
-int ksceKernelGetSystemTimeLow(void);
-int ksceKernelSetPermission(int value);		// return value is previous value
-SceUID ksceKernelSetProcessId(SceUID pid);	// return value is previous value
-
 int ksceMt19937GlobalUninit(void *a1, int a2);
 int ksceSblQafMgrIsAllowHost0Access(void);
 SceUID ksceKernelSysrootGetShellPid(void);
@@ -96,13 +92,11 @@ SceKernelProcessModuleInfo *sceKernelGetProcessModuleInfoForKernel(SceUID pid);
 int sceKernelGetCompiledSdkVersionByPidForDriver(SceUID pid, unsigned int *pVersion);
 
 
-
-void *ksceKernelAlloc(int size);
-int ksceKernelFree(void *ptr);
 int _ksceKernelCreateUidObj(SceClass *class, const char *name, SceCreateUidObjOpt *opt, SceObjectBase **obj_base);
 
 int ksceKernelSetObjectForUid(SceUID uid, const char *name);
 
+int SceQafMgrForDriver_B9770A13(void);
 int sceSblQafMgrIsAllowKernelDebugForDriver(void);
 
 int SceKernelSuspendForDriver_4DF40893(int a1);

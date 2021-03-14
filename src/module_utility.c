@@ -326,3 +326,30 @@ loc_81007FEE:
 	ksceKernelFree(ptr);
 	goto loc_81007F4C;
 }
+
+/*
+ * process_lib_is_nonlinked / func_0x810047A4
+ */
+int process_lib_is_nonlinked(SceUID pid, const char *libname){
+
+	int res, cpu_suspend_intr;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
+	SceModuleNonlinkedInfo *pNonlinkedInfo;
+
+	pProcModuleInfo = getProcModuleInfo(pid, &cpu_suspend_intr);
+
+	pNonlinkedInfo = pProcModuleInfo->pNonlinkedInfo;
+
+	res = 0;
+
+	while(pNonlinkedInfo != NULL){
+		if(strncmp(pNonlinkedInfo->pImportInfo->type2.libname, libname, 0x100) == 0){
+			res = 1;
+			break;
+		}
+		pNonlinkedInfo = pNonlinkedInfo->next;
+	}
+
+	resume_cpu_intr(pProcModuleInfo, cpu_suspend_intr);
+	return res;
+}
