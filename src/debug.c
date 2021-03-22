@@ -241,6 +241,47 @@ end:
 	return res;
 }
 
+int sceKernelPrintModuleImports(unsigned int libnid, unsigned int func_nid){
+
+	int res, cpu_intr;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
+	SceModuleLibraryInfo *pLibraryInfo;
+
+	pProcModuleInfo = getProcModuleInfo(0x10005, &cpu_intr);
+	if(pProcModuleInfo == NULL)
+		return -1;
+
+	pLibraryInfo = pProcModuleInfo->pLibraryInfo;
+
+	res = -1;
+
+	ksceDebugPrintf("0x%08X 0x%08X\n", libnid, func_nid);
+
+	while(pLibraryInfo != NULL){
+		if(pLibraryInfo->pExportInfo->libnid == libnid){
+			SceModuleImportedInfo *pImportedInfo = pLibraryInfo->pImportedInfo;
+
+			while(pImportedInfo != NULL){
+				for(int i=0;i<pImportedInfo->pImportInfo->type2.entry_num_function;i++){
+					if(pImportedInfo->pImportInfo->type2.table_func_nid[i] == func_nid){
+
+						ksceDebugPrintf("%s\n", pImportedInfo->pModuleInfo->module_name);
+
+						res = 0;
+					}
+				}
+				pImportedInfo = pImportedInfo->next;
+			}
+		}
+		pLibraryInfo = pLibraryInfo->next;
+	}
+
+end:
+	resume_cpu_intr(pProcModuleInfo, cpu_intr);
+
+	return res;
+}
+
 int dump_preloading_list(SceUID moduleid){
 
 	SceKernelPreloadModuleInfo *pPreloadList;
@@ -283,6 +324,11 @@ int ksceKernelLoadPreloadingModules_patch(SceUID pid, SceLoadProcessParam *pPara
 }
 
 int my_debug_start(void){
+
+	sceKernelPrintModuleImports(0x2ED7F97A, 0x93CD44CD);
+	sceKernelPrintModuleImports(0x2ED7F97A, 0x7C2C10E2);
+
+	return 0;
 
 	SceUID modulemgr_uid = search_module_by_name(0x10005, "SceKernelModulemgr");
 
