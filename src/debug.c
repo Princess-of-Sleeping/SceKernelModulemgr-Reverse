@@ -122,6 +122,52 @@ int print_module_flags(SceUID pid){
 	return 0;
 }
 
+int print_module_info(SceUID pid){
+
+	int cpu_intr;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
+	SceModuleInfoInternal *pModuleInfo;
+
+	pProcModuleInfo = getProcModuleInfo(pid, &cpu_intr);
+	if(pProcModuleInfo == NULL)
+		return -1;
+
+	resume_cpu_intr(pProcModuleInfo, cpu_intr);
+
+	pModuleInfo = pProcModuleInfo->pModuleInfo;
+
+	while(pModuleInfo != NULL){
+		if(pModuleInfo->segments_num > 1){
+			ksceDebugPrintf(
+				"[%-27s]:text=%p(0x%08X), data=%p(0x%08X/0x%08X)\n",
+				pModuleInfo->module_name,
+				pModuleInfo->segments[0].vaddr, pModuleInfo->segments[0].memsz,
+				pModuleInfo->segments[1].vaddr, pModuleInfo->segments[1].filesz, pModuleInfo->segments[1].memsz
+			);
+		}else{
+			ksceDebugPrintf(
+				"[%-27s]:text=%p(0x%08X), (no data)\n",
+				pModuleInfo->module_name,
+				pModuleInfo->segments[0].vaddr, pModuleInfo->segments[0].memsz
+			);
+		}
+
+		ksceDebugPrintf(
+			"\tModule version:%d.%d System version:0x%07X Flags:0x%04X Attr:0x%04X Dbg fingerprint:0x%08X\n",
+			pModuleInfo->major, pModuleInfo->minor, pModuleInfo->version, pModuleInfo->flags, pModuleInfo->attr, pModuleInfo->fingerprint
+		);
+
+		ksceDebugPrintf(
+			"\tPath:%s\n",
+			pModuleInfo->path
+		);
+
+		pModuleInfo = pModuleInfo->next;
+	}
+
+	return 0;
+}
+
 int print_module_nonlinked_import(SceUID pid){
 
 	int cpu_intr;
@@ -324,6 +370,10 @@ int ksceKernelLoadPreloadingModules_patch(SceUID pid, SceLoadProcessParam *pPara
 }
 
 int my_debug_start(void){
+
+	print_module_info(0x10005);
+
+	return 0;
 
 	sceKernelPrintModuleImports(0x2ED7F97A, 0x93CD44CD);
 	sceKernelPrintModuleImports(0x2ED7F97A, 0x7C2C10E2);
