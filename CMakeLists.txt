@@ -22,6 +22,7 @@ enable_language(C ASM)
 
 add_executable(SceKernelModulemgrReverse
   src/main.c
+  src/log.c
   src/module_utility.c
   src/modulemgr.c
   src/modulemgr_for_driver.c

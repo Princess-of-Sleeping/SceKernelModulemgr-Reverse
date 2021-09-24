@@ -18,6 +18,7 @@
 #include "module_utility.h"
 #include "taihen_macro.h"
 #include "debug.h"
+#include "log.h"
 
 extern void *SceKernelModulemgr_data;
 
@@ -328,6 +329,39 @@ end:
 	return res;
 }
 
+int sceKernelPrintModuleImportLibrary(unsigned int libnid){
+
+	int res, cpu_intr;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
+	SceModuleLibraryInfo *pLibraryInfo;
+
+	pProcModuleInfo = getProcModuleInfo(0x10005, &cpu_intr);
+	if(pProcModuleInfo == NULL)
+		return -1;
+
+	pLibraryInfo = pProcModuleInfo->pLibraryInfo;
+
+	res = -1;
+
+	while(pLibraryInfo != NULL){
+		if(pLibraryInfo->pExportInfo->libnid == libnid){
+			SceModuleImportedInfo *pImportedInfo = pLibraryInfo->pImportedInfo;
+
+			while(pImportedInfo != NULL){
+				ksceDebugPrintf("%s\n", pImportedInfo->pModuleInfo->module_name);
+				res = 0;
+				pImportedInfo = pImportedInfo->next;
+			}
+		}
+		pLibraryInfo = pLibraryInfo->next;
+	}
+
+end:
+	resume_cpu_intr(pProcModuleInfo, cpu_intr);
+
+	return res;
+}
+
 int dump_preloading_list(SceUID moduleid){
 
 	SceKernelPreloadModuleInfo *pPreloadList;
@@ -369,14 +403,256 @@ int ksceKernelLoadPreloadingModules_patch(SceUID pid, SceLoadProcessParam *pPara
 	return sceKernelLoadPreloadingModules(pid, pParam, flags);
 }
 
+int get_dump_func_name(char *dst, int max, SceModuleExport *pExportInfo, SceUInt32 funcnid){
+
+	if(pExportInfo->libname != NULL){
+		snprintf(dst, max, "%s_%08X", pExportInfo->libname, funcnid);
+	}else{
+		snprintf(dst, max, "%s_%08X", "noname", funcnid);
+	}
+
+	return 0;
+}
+
+int get_address_strings(char *dst, int max, SceUID pid, const void *address){
+
+	int res;
+	SceModuleInfoInternal *pInfo = NULL;
+
+	res = sceKernelGetModuleInternalByAddrForKernel(pid, address, &pInfo);
+	if(res >= 0){
+		if((address - pInfo->segments[0].vaddr) < pInfo->segments[0].memsz)
+			return snprintf(dst, max, "%s text + 0x%08X", pInfo->module_name, address - pInfo->segments[0].vaddr);
+
+		if((address - pInfo->segments[1].vaddr) < pInfo->segments[1].memsz)
+			return snprintf(dst, max, "%s data + 0x%08X", pInfo->module_name, address - pInfo->segments[1].vaddr);
+	}
+
+	return snprintf(dst, max, "0x%08X", address);
+}
+
+// export only
+int dump_as_yml(void){
+
+	int cpu_intr;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
+	SceModuleLibraryInfo *pLibraryInfo;
+
+
+	SceModuleInfoInternal *pModuleInfo;
+
+	pProcModuleInfo = getProcModuleInfo(0x10005, &cpu_intr);
+	if(pProcModuleInfo == NULL)
+		return -1;
+
+	resume_cpu_intr(pProcModuleInfo, cpu_intr);
+
+	pModuleInfo = pProcModuleInfo->pModuleInfo;
+
+	while(pModuleInfo != NULL){
+
+		char path[0x80];
+		snprintf(path, sizeof(path) - 1, "host0:data/module_yml/%s.yml", pModuleInfo->module_name);
+		LogOpen(path);
+
+		LogWrite("version: %d\n", 2);
+		LogWrite("firmware: %X.%02X\n", 0x3, 0x60);
+		LogWrite("modules:\n");
+		LogWrite("  %s:\n", pModuleInfo->module_name);
+		LogWrite("    nid: 0x%08X\n", pModuleInfo->fingerprint);
+		LogWrite("    libraries:\n");
+
+		if(pModuleInfo->pid == 0x10005){
+
+			SceModuleObject *pObj;
+
+			pObj = get_module_object(pModuleInfo->modid_kernel);
+			if(pObj == NULL)
+				return 0x8002D082;
+
+			pLibraryInfo = pModuleInfo->pLibraryInfo;
+
+			for(int i=0;i<pModuleInfo->lib_export_num;i++){
+
+				SceModuleExport *pExportInfo = &pLibraryInfo->pExportInfo[i];
+
+				LogWrite("      %s:\n", pExportInfo->libname);
+				LogWrite("        version: %d\n", pExportInfo->version);
+				LogWrite("        attr: 0x%04X\n", pExportInfo->flags);
+
+				if(pModuleInfo->pid == 0x10005){
+					if((pExportInfo->flags & 0x4000) == 0){ // not syscall
+						LogWrite("        kernel: %s\n", "true");
+					}else{
+						LogWrite("        kernel: %s\n", "false");
+					}
+				}else{
+				}
+
+				LogWrite("        nid: 0x%08X\n", pExportInfo->libnid);
+				// LogWrite("        data_0x0A: 0x%04X\n", pExportInfo->data_0x0A);
+				// LogWrite("        nid_some_info: 0x%08X\n", pExportInfo->data_0x0C);
+
+				char func_name[0x40];
+
+				if(pExportInfo->entry_num_function != 0){
+					LogWrite("        functions:\n");
+
+					for(int j=0;j<pExportInfo->entry_num_function;j++){
+						int idx = j;
+						get_dump_func_name(func_name, sizeof(func_name) - 1, pExportInfo, pExportInfo->table_nid[idx]);
+						LogWrite("          %s: 0x%08X # ", func_name, pExportInfo->table_nid[idx]);
+						// LogWrite("          %s: 0x%08X\n", func_name, pExportInfo->table_nid[idx]);
+
+						get_address_strings(func_name, sizeof(func_name) - 1, pModuleInfo->pid, pExportInfo->table_entry[idx]);
+
+						LogWrite("%s\n", func_name);
+					}
+				}
+
+				if(pExportInfo->entry_num_variable != 0){
+					LogWrite("        variables:\n");
+
+					for(int j=0;j<pExportInfo->entry_num_variable;j++){
+						int idx = pExportInfo->entry_num_function + j;
+						get_dump_func_name(func_name, sizeof(func_name) - 1, pExportInfo, pExportInfo->table_nid[idx]);
+						LogWrite("          %s: 0x%08X # ", func_name, pExportInfo->table_nid[idx]);
+						// LogWrite("          %s: 0x%08X\n", func_name, pExportInfo->table_nid[idx]);
+
+						get_address_strings(func_name, sizeof(func_name) - 1, pModuleInfo->pid, pExportInfo->table_entry[idx]);
+
+						LogWrite("%s\n", func_name);
+					}
+				}
+			}
+
+			release_obj(pModuleInfo->modid_kernel);
+		}
+
+		LogClose();
+
+		pModuleInfo = pModuleInfo->next;
+	}
+
+	return 0;
+}
+
+
+int get_dump_func_name_for_import(char *dst, int max, SceModuleImport *pImportInfo, SceUInt32 funcnid){
+
+	if(pImportInfo->type2.libname != NULL){
+		snprintf(dst, max, "%s_%08X", pImportInfo->type2.libname, funcnid);
+	}else{
+		snprintf(dst, max, "%s_%08X", "noname", funcnid);
+	}
+
+	return 0;
+}
+
+int dump_as_yml_for_import(void){
+
+	int cpu_intr;
+	SceKernelProcessModuleInfo *pProcModuleInfo;
+	SceModuleLibraryInfo *pLibraryInfo;
+
+
+	SceModuleInfoInternal *pModuleInfo;
+
+	pProcModuleInfo = getProcModuleInfo(0x10005, &cpu_intr);
+	if(pProcModuleInfo == NULL)
+		return -1;
+
+	resume_cpu_intr(pProcModuleInfo, cpu_intr);
+
+	pModuleInfo = pProcModuleInfo->pModuleInfo;
+
+	while(pModuleInfo != NULL){
+
+		char path[0x80];
+		snprintf(path, sizeof(path) - 1, "host0:data/module_yml/%s.yml", pModuleInfo->module_name);
+		LogOpen(path);
+
+		LogWrite("version: %d\n", 2);
+		LogWrite("firmware: %X.%02X\n", 0x3, 0x60);
+		LogWrite("modules:\n");
+		LogWrite("  %s:\n", pModuleInfo->module_name);
+		LogWrite("    nid: 0x%08X\n", pModuleInfo->fingerprint);
+		LogWrite("    libraries:\n");
+
+		if(pModuleInfo->pid == 0x10005){
+
+
+			SceModuleObject *pObj;
+
+			pObj = get_module_object(pModuleInfo->modid_kernel);
+			if(pObj == NULL)
+				return 0x8002D082;
+
+			for(int i=0;i<pModuleInfo->lib_import_num;i++){
+
+				SceModuleImport *pImportInfo = pObj->obj_base.imports->list[i].pImportInfo;
+
+				LogWrite("      %s:\n", pImportInfo->type2.libname);
+				LogWrite("        version: %d\n", pImportInfo->type2.version);
+				LogWrite("        attr: 0x%04X\n", pImportInfo->type2.flags);
+
+				LogWrite("        nid: 0x%08X\n", pImportInfo->type2.libnid);
+
+				char func_name[0x40];
+
+				if(pImportInfo->type2.entry_num_function != 0){
+					LogWrite("        functions:\n");
+
+					for(int j=0;j<pImportInfo->type2.entry_num_function;j++){
+						int idx = j;
+						get_dump_func_name_for_import(func_name, sizeof(func_name) - 1, pImportInfo, pImportInfo->type2.table_func_nid[idx]);
+
+						LogWrite("          %s: 0x%08X\n", func_name, pImportInfo->type2.table_func_nid[idx]);
+					}
+				}
+
+				if(pImportInfo->type2.entry_num_variable != 0){
+					LogWrite("        variables:\n");
+
+					for(int j=0;j<pImportInfo->type2.entry_num_variable;j++){
+						int idx = j;
+						get_dump_func_name_for_import(func_name, sizeof(func_name) - 1, pImportInfo, pImportInfo->type2.table_vars_nid[idx]);
+
+						LogWrite("          %s: 0x%08X\n", func_name, pImportInfo->type2.table_vars_nid[idx]);
+					}
+				}
+			}
+
+			release_obj(pModuleInfo->modid_kernel);
+		}
+
+		LogClose();
+
+		pModuleInfo = pModuleInfo->next;
+	}
+
+	return 0;
+}
+
+
 int my_debug_start(void){
 
-	print_module_info(0x10005);
+	// dump_as_yml_for_import();
+	// dump_as_yml();
 
 	return 0;
 
-	sceKernelPrintModuleImports(0x2ED7F97A, 0x93CD44CD);
-	sceKernelPrintModuleImports(0x2ED7F97A, 0x7C2C10E2);
+	sceKernelPrintModuleImports(0x3691da45, 0x0b79e220); // ksceSysrootGetNidName
+	sceKernelPrintModuleImports(0x3f9bea99, 0x985E2935); // sceNidsymtblSearchNameByNid
+	sceKernelPrintModuleImportLibrary(0x3f9bea99); // SceSyslibTrace
+
+	return 0;
+
+	sceKernelPrintModuleImportLibrary(0x4E29D3B6); // SceQafMgrForDriver
+
+	return 0;
+
+	print_module_info(0x10005);
 
 	return 0;
 

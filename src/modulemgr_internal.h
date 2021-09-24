@@ -72,7 +72,6 @@ typedef struct SceModuleExport {
 	void    **table_entry;
 } SceModuleExport;
 
-// TODO:check and testing this struct
 typedef struct SceModuleLibraryImportInfo {
 	struct SceModuleLibraryImportInfo *next;
 	SceUID stubid;
@@ -82,7 +81,6 @@ typedef struct SceModuleLibraryImportInfo {
 	int data_0x10; // zero?
 } SceModuleLibraryImportInfo;
 
-// TODO:check and testing this struct
 typedef struct SceModuleImportList {
 	SceModuleLibraryImportInfo list[0];
 } SceModuleImportList;
