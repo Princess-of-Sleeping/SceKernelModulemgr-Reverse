@@ -244,22 +244,6 @@ typedef struct SceModuleNonlinkedInfo {
 	int data_0x14;
 } SceModuleNonlinkedInfo;
 
-typedef struct SceKernelProcessModuleInfo { // size is 0x24
-	SceUID pid;
-	SceModuleLibraryInfo *pLibraryInfo;
-	SceUID data_0x08;                              // uid?
-	SceModuleNonlinkedInfo *pNonlinkedInfo;        // allocated by sceKernelAlloc
-
-	// offset:0x10
-	SceModuleInfoInternal *pModuleInfo;
-	SceUID process_main_module_id;
-	uint16_t process_module_count;
-	uint16_t inhibit_state;
-	void *data_0x1C;
-
-	int cpu_addr;
-} SceKernelProcessModuleInfo;
-
 #define SCE_KERNEL_PRELOAD_INHIBIT_LIBC        (0x10000)
 #define SCE_KERNEL_PRELOAD_INHIBIT_LIBDBG      (0x20000)
 #define SCE_KERNEL_PRELOAD_INHIBIT_LIBSHELLSVC (0x80000)
