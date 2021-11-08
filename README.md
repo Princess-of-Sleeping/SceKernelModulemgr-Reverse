@@ -184,7 +184,7 @@ SceModulemgrForKernel_9D20C9BB : (sceKernelUnregisterDebugCBForKernel, temp name
 SceModulemgrForKernel_B73BE671 : maybe sceKernelGetModuleLibStubInfoForKernel
 SceModulemgrForKernel_FB251B7A : maybe sceKernelGetModuleLibImportListForKernel
 
-SceModulemgrForKernel_29CB2771 : Related to process switch?
+SceModulemgrForKernel_29CB2771 : Related to import/export
 SceModulemgrForKernel_4865C72C : Related to non-linked?
 SceModulemgrForKernel_F3CD647F : set two param
 ```
